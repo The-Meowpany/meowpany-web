@@ -1,0 +1,15 @@
+---
+import Simple from "../views/Simple.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import { site, whatsappLink } from "../site";
+const whatsapp = whatsappLink("Hola, quiero consultar por un proyecto.");
+---
+<Simple lang="es" title="Contacto" description="Escríbanos por correo, WhatsApp o mediante el formulario. Respondemos en menos de un día hábil." lead="Respondemos en menos de un día hábil.">
+  <ul>
+    <li>Correo: <a href={`mailto:${site.email}`}>{site.email}</a></li>
+    {whatsapp && <li><a href={whatsapp} rel="noopener">WhatsApp</a></li>}
+    <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
+    <li>{site.city}</li>
+  </ul>
+  <QuoteForm lang="es" preset="website" />
+</Simple>

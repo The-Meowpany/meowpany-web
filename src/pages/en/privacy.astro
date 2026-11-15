@@ -1,0 +1,13 @@
+---
+import Simple from "../../views/Simple.astro";
+import { site } from "../../site";
+---
+<Simple lang="en" title="Privacy policy" description="How The Meowpany handles your personal data under Uruguayan Law 18,331.">
+  <p>The Meowpany ("we") is responsible for the personal data you send through this site. We handle it under Uruguay's Personal Data Protection Law 18,331.</p>
+  <h2>What we collect</h2>
+  <p>Only what you type into the form: name, company, email, phone and your project description. We use no tracking or advertising cookies.</p>
+  <h2>Why</h2>
+  <p>To reply to you, prepare a proposal and, if you hire us, deliver the service. We never sell or share your data.</p>
+  <h2>Your rights</h2>
+  <p>You can ask to access, correct or delete your data at <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+</Simple>

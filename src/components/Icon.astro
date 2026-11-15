@@ -1,0 +1,10 @@
+---
+// Inlines a Lucide icon at build time, so icons cost no JavaScript and no extra requests.
+interface Props { name: string }
+const { name } = Astro.props;
+const icons = import.meta.glob("/node_modules/lucide-static/icons/*.svg", { query: "?raw", import: "default", eager: true });
+const svg = (icons[`/node_modules/lucide-static/icons/${name}.svg`] as string | undefined) ?? "";
+if (!svg) throw new Error(`Unknown Lucide icon: ${name}`);
+const html = svg.replace("<svg", '<svg aria-hidden="true" focusable="false"');
+---
+<Fragment set:html={html} />

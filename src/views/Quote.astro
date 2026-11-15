@@ -1,0 +1,21 @@
+---
+import Base from "../layouts/Base.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: { title: "Cotizar", description: "Solicite un precio estimado para su sitio, tienda o sistema en 2 minutos.", h1: "Cotice su proyecto", lead: "Elija el servicio, indique algunos detalles y reciba un precio estimado al instante." },
+  en: { title: "Get a quote", description: "Get an estimated price for your website, store or system in 2 minutes.", h1: "Get a quote", lead: "Pick a service, add a few details and see an estimated price right away." },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{copy.h1}</h1>
+      <p class="lead">{copy.lead}</p>
+      <QuoteForm lang={lang} />
+    </div>
+  </section>
+</Base>

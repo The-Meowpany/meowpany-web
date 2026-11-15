@@ -1,0 +1,155 @@
+---
+// Book a 30-minute intro call. Slots come from Core and are shown in the visitor's own time zone.
+import Base from "../../layouts/Base.astro";
+import type { Lang } from "../../i18n";
+import { site } from "../../site";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: {
+    title: "Agendar una llamada", description: "Reserve 30 minutos con The Meowpany para hablar de su proyecto, sin ir y venir de correos.",
+    lead: "Elija un horario libre para una videollamada de 30 minutos. Le enviamos la confirmación con la invitación para su calendario.",
+    pick: "Elija un horario", zone: "Horarios en su zona horaria", loading: "Buscando horarios libres...", none: "No hay horarios libres en las próximas dos semanas. Escríbanos a",
+    details: "Sus datos", name: "Nombre", company: "Empresa (opcional)", email: "Correo", topic: "¿De qué quiere hablar? (opcional)",
+    submit: "Confirmar la llamada", sending: "Reservando...", done: "Listo. Su llamada quedó agendada para el",
+    doneMail: "Le enviamos la confirmación y la invitación por correo.", taken: "Ese horario se acaba de ocupar. Elija otro, por favor.",
+    fail: "No pudimos reservar el horario. Escríbanos a", required: "Elija un horario y complete su nombre y un correo válido.",
+    cancelled: "Su llamada fue cancelada. Puede elegir otro horario cuando quiera.", cancelFail: "No encontramos esa reserva o ya estaba cancelada.",
+  },
+  en: {
+    title: "Book a call", description: "Book 30 minutes with The Meowpany to talk about your project, without the email back-and-forth.",
+    lead: "Pick a free slot for a 30-minute video call. We'll send a confirmation with a calendar invitation.",
+    pick: "Pick a time", zone: "Times in your time zone", loading: "Looking for free slots...", none: "No free slots in the next two weeks. Email us at",
+    details: "Your details", name: "Name", company: "Company (optional)", email: "Email", topic: "What would you like to discuss? (optional)",
+    submit: "Confirm the call", sending: "Booking...", done: "Done. Your call is booked for",
+    doneMail: "We've emailed you the confirmation and the invitation.", taken: "That slot was just taken. Please pick another.",
+    fail: "We couldn't book the slot. Email us at", required: "Pick a time and add your name and a valid email.",
+    cancelled: "Your call was cancelled. You can pick another time whenever you like.", cancelFail: "We couldn't find that booking, or it was already cancelled.",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+      <p role="status" aria-live="polite" data-notice></p>
+      <form id="book-form" class="card" novalidate data-base={`${site.coreUrl}/public/`} data-lang={lang}
+        data-email={site.email} data-text={JSON.stringify(copy)}>
+        <fieldset>
+          <legend>{copy.pick}</legend>
+          <p><small data-zone>{copy.zone}</small></p>
+          <div data-slots><p>{copy.loading}</p></div>
+        </fieldset>
+        <fieldset>
+          <legend>{copy.details}</legend>
+          <p><label>{copy.name}<br /><input name="name" autocomplete="name" required maxlength="200" /></label></p>
+          <p><label>{copy.company}<br /><input name="company" autocomplete="organization" maxlength="200" /></label></p>
+          <p><label>{copy.email}<br /><input name="email" type="email" autocomplete="email" required maxlength="254" /></label></p>
+          <p><label>{copy.topic}<br /><textarea name="message" rows="3" maxlength="4000"></textarea></label></p>
+          <p hidden><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></p>
+        </fieldset>
+        <p><button class="btn btn-accent" type="submit">{copy.submit}</button></p>
+        <p role="status" aria-live="polite" data-status></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById("book-form") as HTMLFormElement;
+  const text = JSON.parse(form.dataset.text!);
+  const base = form.dataset.base!;
+  const lang = form.dataset.lang === "es" ? "es-UY" : "en-US";
+  const slotsBox = form.querySelector<HTMLElement>("[data-slots]")!;
+  const status = form.querySelector<HTMLElement>("[data-status]")!;
+  const notice = document.querySelector<HTMLElement>("[data-notice]")!;
+  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  form.querySelector("[data-zone]")!.textContent = `${text.zone} (${zone})`;
+
+  const day = new Intl.DateTimeFormat(lang, { weekday: "long", day: "numeric", month: "long" });
+  const hour = new Intl.DateTimeFormat(lang, { hour: "2-digit", minute: "2-digit" });
+  const full = new Intl.DateTimeFormat(lang, { dateStyle: "full", timeStyle: "short" });
+
+  function emailLink(prefix: string) {
+    const link = document.createElement("a");
+    link.href = `mailto:${form.dataset.email}`;
+    link.textContent = form.dataset.email!;
+    return [document.createTextNode(`${prefix} `), link];
+  }
+
+  // Groups the slots by local day, as one radio group per day.
+  async function loadSlots() {
+    try {
+      const response = await fetch(`${base}slots/?days=14`);
+      const { slots } = await response.json();
+      if (!slots.length) return slotsBox.replaceChildren(...emailLink(text.none));
+      const groups = new Map<string, string[]>();
+      for (const iso of slots) {
+        const key = day.format(new Date(iso));
+        groups.set(key, [...(groups.get(key) ?? []), iso]);
+      }
+      slotsBox.replaceChildren(...[...groups].map(([label, isos]) => {
+        const group = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        legend.textContent = label;
+        group.append(legend, ...isos.map((iso) => {
+          const option = document.createElement("label");
+          const radio = document.createElement("input");
+          radio.type = "radio"; radio.name = "start"; radio.value = iso;
+          option.append(radio, ` ${hour.format(new Date(iso))} `);
+          return option;
+        }));
+        return group;
+      }));
+    } catch {
+      slotsBox.replaceChildren(...emailLink(text.fail));
+    }
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const email = String(data.get("email") ?? "").trim();
+    if (!data.get("start") || !String(data.get("name") ?? "").trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      status.textContent = text.required;
+      return;
+    }
+    const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+    button.disabled = true;
+    status.textContent = text.sending;
+    try {
+      const response = await fetch(`${base}bookings/`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ start: data.get("start"), name: data.get("name"), company: data.get("company"), email,
+          message: data.get("message"), website: data.get("website"), language: form.dataset.lang }),
+      });
+      if (response.status === 409) {
+        status.textContent = text.taken;
+        await loadSlots();
+        return;
+      }
+      if (!response.ok) throw new Error();
+      const booking = await response.json();
+      form.hidden = true;
+      notice.textContent = `${text.done} ${full.format(new Date(booking.start))}. ${text.doneMail}`;
+      notice.setAttribute("tabindex", "-1");
+      notice.focus();
+    } catch {
+      status.replaceChildren(...emailLink(text.fail));
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // The confirmation email links back here with ?cancel=<token>.
+  const cancel = new URLSearchParams(location.search).get("cancel");
+  if (cancel && /^[0-9a-f-]{36}$/.test(cancel)) {
+    fetch(`${base}bookings/${cancel}/cancel/`, { method: "POST" })
+      .then((r) => { notice.textContent = r.ok ? text.cancelled : text.cancelFail; history.replaceState(null, "", location.pathname); loadSlots(); })
+      .catch(() => { notice.textContent = text.cancelFail; });
+  } else {
+    loadSlots();
+  }
+</script>

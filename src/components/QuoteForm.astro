@@ -1,0 +1,202 @@
+---
+// Three-step quote form. It shows an estimate from the published price list and sends the request
+// to Core, where it lands as a new lead. If Core cannot be reached, it offers email instead.
+import { type Lang } from "../i18n";
+import { prices } from "../pricing";
+import { site } from "../site";
+
+interface Props { lang: Lang; preset?: string }
+const { lang, preset = "" } = Astro.props;
+
+const copy = {
+  es: {
+    step1: "¿Qué necesita?", step2: "Algunos detalles", step3: "¿Cómo lo contactamos?",
+    services: { website: "Sitio institucional", store: "Tienda en línea", custom: "Sistema a medida", support: "Plan de soporte", hours: "Desarrolladores para el exterior" },
+    pages: "¿Cuántas páginas? (incluye 6)", products: "¿Cuántos productos aproximadamente?", payments: "Medios de pago extra (además de Mercado Pago)",
+    plan: "Plan", plans: { basic: "Básico", pro: "Profesional", premium: "Premium" }, hoursMonth: "Horas por mes",
+    customHint: "Cuéntenos qué quiere resolver: turnos, gestión, un portal, una integración...",
+    name: "Nombre", company: "Empresa", email: "Correo", phone: "Teléfono o WhatsApp (opcional)", message: "Mensaje",
+    estimate: "Precio estimado", from: "desde", perMonth: "por mes", note: "Es una estimación de la lista de precios. El precio final, cerrado, va en la propuesta. Clientes de Uruguay: + IVA.",
+    next: "Siguiente", back: "Atrás", send: "Enviar pedido",
+    sending: "Enviando...", ok: "Recibimos su pedido. Le responderemos en menos de un día hábil.",
+    fail: "No pudimos enviar el formulario. Escríbanos a", required: "Complete su nombre y un correo válido.",
+    privacy: "Usamos sus datos solo para responderle. Ver la política de privacidad.",
+  },
+  en: {
+    step1: "What do you need?", step2: "A few details", step3: "How can we reach you?",
+    services: { website: "Business website", store: "Online store", custom: "Custom system", support: "Support plan", hours: "Developers for hire" },
+    pages: "How many pages? (6 included)", products: "Roughly how many products?", payments: "Extra payment methods",
+    plan: "Plan", plans: { basic: "Basic", pro: "Pro", premium: "Premium" }, hoursMonth: "Hours per month",
+    customHint: "Tell us what you want to solve: bookings, back office, a portal, an integration...",
+    name: "Name", company: "Company", email: "Email", phone: "Phone or WhatsApp (optional)", message: "Message",
+    estimate: "Estimated price", from: "from", perMonth: "per month", note: "This is an estimate from our price list. The final, fixed price goes in the proposal.",
+    next: "Next", back: "Back", send: "Send request",
+    sending: "Sending...", ok: "Done! We got your request and will reply within one business day.",
+    fail: "We couldn't send the form. Please email us at", required: "Please add your name and a valid email.",
+    privacy: "We only use your details to reply to you. See our privacy policy.",
+  },
+}[lang];
+const privacyHref = lang === "es" ? "/privacidad/" : "/en/privacy/";
+---
+<form class="quote card" novalidate
+  data-endpoint={`${site.coreUrl}/sales/api/leads/`}
+  data-lang={lang} data-email={site.email}
+  data-prices={JSON.stringify(prices)}
+  data-text={JSON.stringify({ from: copy.from, perMonth: copy.perMonth, sending: copy.sending, ok: copy.ok, fail: copy.fail, required: copy.required, send: copy.send })}>
+
+  <fieldset data-step="1">
+    <legend>{copy.step1}</legend>
+    <div class="options">
+      {Object.entries(copy.services).map(([value, label], index) => (
+        <label class="option"><input type="radio" name="service" value={value} checked={preset ? preset === value : index === 0} /><span>{label}</span></label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset data-step="2" hidden>
+    <legend>{copy.step2}</legend>
+    <div data-for="website"><label>{copy.pages}<input type="number" name="pages" min="1" max="40" value="6" inputmode="numeric" /></label></div>
+    <div data-for="store">
+      <label>{copy.products}<input type="number" name="products" min="1" max="100000" value="50" inputmode="numeric" /></label>
+      <label>{copy.payments}<input type="number" name="extraPayments" min="0" max="5" value="0" inputmode="numeric" /></label>
+    </div>
+    <div data-for="support"><label>{copy.plan}
+      <select name="supportPlan">{Object.entries(copy.plans).map(([v, l]) => <option value={v}>{l}</option>)}</select></label></div>
+    <div data-for="hours"><label>{copy.hoursMonth}<input type="number" name="hoursPerMonth" min="10" max="480" step="10" value="80" inputmode="numeric" /></label></div>
+    <div data-for="custom"><p class="muted">{copy.customHint}</p></div>
+    <label>{copy.message}<textarea name="message" rows="4" maxlength="4000"></textarea></label>
+  </fieldset>
+
+  <fieldset data-step="3" hidden>
+    <legend>{copy.step3}</legend>
+    <label>{copy.name}<input name="name" autocomplete="name" required maxlength="200" /></label>
+    <label>{copy.company}<input name="company" autocomplete="organization" maxlength="200" /></label>
+    <label>{copy.email}<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+    <label>{copy.phone}<input name="phone" type="tel" autocomplete="tel" maxlength="40" /></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+    <p class="muted small"><a href={privacyHref}>{copy.privacy}</a></p>
+  </fieldset>
+
+  <div class="estimate" aria-live="polite">
+    <span class="muted">{copy.estimate}</span>
+    <strong data-estimate>-</strong>
+    <p class="muted small">{copy.note}</p>
+  </div>
+
+  <p class="status" role="status" aria-live="polite"></p>
+
+  <div class="nav-buttons">
+    <button type="button" class="btn btn-ghost" data-back hidden>{copy.back}</button>
+    <button type="button" class="btn btn-primary" data-next>{copy.next}</button>
+    <button type="submit" class="btn btn-accent" data-submit hidden>{copy.send}</button>
+  </div>
+</form>
+
+<script>
+  import { estimate, type QuoteInput, type ServiceKey } from "../pricing";
+
+  for (const form of document.querySelectorAll<HTMLFormElement>("form.quote")) {
+    const text = JSON.parse(form.dataset.text ?? "{}");
+    const lang = form.dataset.lang ?? "es";
+    const steps = [...form.querySelectorAll<HTMLFieldSetElement>("fieldset[data-step]")];
+    const back = form.querySelector<HTMLButtonElement>("[data-back]")!;
+    const next = form.querySelector<HTMLButtonElement>("[data-next]")!;
+    const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!;
+    const status = form.querySelector<HTMLElement>(".status")!;
+    const output = form.querySelector<HTMLElement>("[data-estimate]")!;
+    let step = 0;
+
+    const value = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? "";
+    const service = () => (form.querySelector<HTMLInputElement>("input[name=service]:checked")?.value ?? "website") as ServiceKey;
+
+    const current = (): ReturnType<typeof estimate> => {
+      const input: QuoteInput = {
+        service: service(),
+        pages: Number(value("pages")),
+        products: Number(value("products")),
+        extraPayments: Number(value("extraPayments")),
+        supportPlan: value("supportPlan") as QuoteInput["supportPlan"],
+        hoursPerMonth: Number(value("hoursPerMonth")),
+      };
+      return estimate(input);
+    };
+
+    const render = () => {
+      steps.forEach((fieldset, index) => (fieldset.hidden = index !== step));
+      for (const block of form.querySelectorAll<HTMLElement>("[data-for]")) block.hidden = block.dataset.for !== service();
+      back.hidden = step === 0;
+      next.hidden = step === steps.length - 1;
+      submit.hidden = step !== steps.length - 1;
+      const result = current();
+      const amount = `USD ${result.amount.toLocaleString(lang === "es" ? "es-UY" : "en-US")}`;
+      output.textContent = `${result.from ? `${text.from} ` : ""}${amount}${result.monthly ? ` ${text.perMonth}` : ""}`;
+    };
+
+    form.addEventListener("input", render);
+    next.addEventListener("click", () => { step = Math.min(step + 1, steps.length - 1); render(); steps[step].querySelector<HTMLElement>("input, select, textarea")?.focus(); });
+    back.addEventListener("click", () => { step = Math.max(step - 1, 0); render(); });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = value("email").trim();
+      if (!value("name").trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = text.required;
+        status.className = "status error";
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = text.sending;
+      const payload = {
+        name: value("name"), company: value("company"), email, phone: value("phone"),
+        message: value("message"), service: service(), estimated_price_usd: current().amount,
+        language: lang, website: value("website"),
+      };
+      try {
+        const response = await fetch(form.dataset.endpoint!, {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        form.querySelectorAll("fieldset, .nav-buttons, .estimate").forEach((el) => el.setAttribute("hidden", ""));
+        status.textContent = text.ok;
+        status.className = "status ok";
+      } catch {
+        status.innerHTML = "";
+        status.append(`${text.fail} `);
+        const link = document.createElement("a");
+        link.href = `mailto:${form.dataset.email}`;
+        link.textContent = form.dataset.email ?? "";
+        status.append(link);
+        status.className = "status error";
+        submit.disabled = false;
+        submit.textContent = text.send;
+      }
+    });
+
+    render();
+  }
+</script>
+
+<style>
+  .quote { max-width: 720px; display: grid; gap: 1.25rem; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  legend { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.35rem; margin-bottom: 0.75rem; }
+  label { display: grid; gap: 0.35rem; font-weight: 550; }
+  input, select, textarea {
+    font: inherit; font-weight: 400; padding: 0.75rem 0.85rem; min-height: 48px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+  .options { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .option { display: flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; min-height: 56px; }
+  .option:has(input:checked) { border-color: var(--primary); background: var(--soft); }
+  .option input { width: 20px; height: 20px; min-height: 0; accent-color: var(--primary); }
+  .estimate { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.2rem; }
+  .estimate strong { font-family: "Space Grotesk", sans-serif; font-size: 1.8rem; }
+  .small { font-size: 0.9rem; margin: 0; }
+  .nav-buttons { display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap; }
+  .status:empty { display: none; }
+  .status.ok { color: #15803d; font-weight: 600; font-size: 1.1rem; }
+  .status.error { color: #b91c1c; }
+  @media (prefers-color-scheme: dark) { .status.ok { color: #4ade80; } .status.error { color: #f87171; } }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+</style>

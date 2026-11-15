@@ -1,0 +1,117 @@
+---
+// Return-on-investment calculator. Runs entirely in the browser with the tested function in lib/roi.ts.
+import Base from "../../layouts/Base.astro";
+import { path, type Lang } from "../../i18n";
+import { prices } from "../../pricing";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: {
+    title: "Calcular el retorno", description: "Calcule cuánto le cuesta hoy trabajar a mano y en cuántos meses se paga un sistema o una tienda en línea.",
+    lead: "Cuánto le cuesta hoy hacer las cosas a mano, y en cuántos meses se paga el software que lo resuelve. El cálculo ocurre en su navegador: no se envía ningún dato.",
+    today: "Cómo trabaja hoy", hours: "Horas por semana que su equipo dedica a tareas que el software haría solo", cost: "Costo de una hora de ese equipo (USD)",
+    errors: "Errores por mes por trabajar a mano (pedidos mal cargados, turnos perdidos...)", errorCost: "Lo que cuesta cada error (USD)",
+    sales: "Margen de las ventas que pierde por mes (por ejemplo, por no vender en línea) (USD)",
+    solution: "La solución", service: "Servicio", price: "Precio del proyecto (USD)", support: "Soporte mensual (USD)",
+    services: { website: "Sitio institucional", store: "Tienda en línea", custom: "Sistema a medida" },
+    result: "Resultado", loss: "Lo que pierde hoy por mes", net: "Ahorro neto por mes (después del soporte)", payback: "Se paga en",
+    months: "meses", never: "Con estos números, el proyecto no se paga: el ahorro no cubre el soporte.", net12: "Ganancia neta en 12 meses", net36: "Ganancia neta en 36 meses",
+    breakdown: "De dónde sale la pérdida", time: "Tiempo del equipo", errorsLabel: "Errores", salesLabel: "Ventas perdidas",
+    cta: "Estimar mi proyecto con precisión", book: "Agendar una llamada",
+  },
+  en: {
+    title: "Calculate the return", description: "See what manual work costs you today and how many months a system or online store takes to pay for itself.",
+    lead: "What doing things by hand costs you today, and how many months the software that fixes it takes to pay for itself. The math runs in your browser: no data is sent.",
+    today: "How you work today", hours: "Hours a week your team spends on work software would do", cost: "Cost of one hour of that team (USD)",
+    errors: "Mistakes a month caused by manual work (wrong orders, lost bookings...)", errorCost: "What each mistake costs (USD)",
+    sales: "Margin on sales lost each month (for example, from not selling online) (USD)",
+    solution: "The solution", service: "Service", price: "Project price (USD)", support: "Monthly support (USD)",
+    services: { website: "Business website", store: "Online store", custom: "Custom system" },
+    result: "Result", loss: "What you lose each month today", net: "Net monthly savings (after support)", payback: "Pays for itself in",
+    months: "months", never: "With these numbers the project doesn't pay off: savings don't cover support.", net12: "Net gain over 12 months", net36: "Net gain over 36 months",
+    breakdown: "Where the loss comes from", time: "Team time", errorsLabel: "Mistakes", salesLabel: "Lost sales",
+    cta: "Estimate my project precisely", book: "Book a call",
+  },
+}[lang];
+const servicePrices = { website: prices.website.from, store: prices.store.from, custom: prices.custom.typical };
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+      <form id="roi-form" class="card" data-lang={lang} data-prices={JSON.stringify(servicePrices)} data-text={JSON.stringify(copy)}>
+        <fieldset>
+          <legend>{copy.today}</legend>
+          <p><label>{copy.hours}<br /><input type="number" name="hoursLostPerWeek" min="0" step="0.5" value="10" inputmode="decimal" /></label></p>
+          <p><label>{copy.cost}<br /><input type="number" name="hourlyCost" min="0" step="0.5" value="6" inputmode="decimal" /></label></p>
+          <p><label>{copy.errors}<br /><input type="number" name="errorsPerMonth" min="0" value="4" inputmode="numeric" /></label></p>
+          <p><label>{copy.errorCost}<br /><input type="number" name="costPerError" min="0" value="25" inputmode="decimal" /></label></p>
+          <p><label>{copy.sales}<br /><input type="number" name="salesLostPerMonth" min="0" value="300" inputmode="decimal" /></label></p>
+        </fieldset>
+        <fieldset>
+          <legend>{copy.solution}</legend>
+          <p><label>{copy.service}<br /><select name="service">{Object.entries(copy.services).map(([v, l]) => <option value={v} selected={v === "store"}>{l}</option>)}</select></label></p>
+          <p><label>{copy.price}<br /><input type="number" name="projectPrice" min="0" value={prices.store.from} inputmode="decimal" /></label></p>
+          <p><label>{copy.support}<br /><input type="number" name="monthlySupport" min="0" value={prices.support.basic} inputmode="decimal" /></label></p>
+        </fieldset>
+      </form>
+
+      <section aria-labelledby="roi-result-title" aria-live="polite">
+        <h2 id="roi-result-title">{copy.result}</h2>
+        <dl>
+          <dt>{copy.loss}</dt><dd data-out="monthlyLoss"></dd>
+          <dt>{copy.net}</dt><dd data-out="monthlyNet"></dd>
+          <dt>{copy.payback}</dt><dd data-out="payback"></dd>
+          <dt>{copy.net12}</dt><dd data-out="net12"></dd>
+          <dt>{copy.net36}</dt><dd data-out="net36"></dd>
+        </dl>
+        <h3>{copy.breakdown}</h3>
+        <ul>
+          <li>{copy.time}: <span data-out="time"></span></li>
+          <li>{copy.errorsLabel}: <span data-out="errors"></span></li>
+          <li>{copy.salesLabel}: <span data-out="sales"></span></li>
+        </ul>
+        <p><a class="btn btn-accent" href={path("estimate", lang)}>{copy.cta}</a> <a class="btn btn-ghost" href={path("book", lang)}>{copy.book}</a></p>
+      </section>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { roi, type RoiInput } from "../../lib/roi";
+
+  const form = document.getElementById("roi-form") as HTMLFormElement;
+  const text = JSON.parse(form.dataset.text!);
+  const servicePrices = JSON.parse(form.dataset.prices!);
+  const lang = form.dataset.lang!;
+  const money = (n: number) => `USD ${n.toLocaleString(lang === "es" ? "es-UY" : "en-US", { maximumFractionDigits: 0 })}`;
+  const out = (key: string, value: string) => { document.querySelector(`[data-out=${key}]`)!.textContent = value; };
+
+  function update() {
+    const value = (name: keyof RoiInput) => Number((form.elements.namedItem(name) as HTMLInputElement).value);
+    const result = roi({
+      hoursLostPerWeek: value("hoursLostPerWeek"), hourlyCost: value("hourlyCost"), errorsPerMonth: value("errorsPerMonth"),
+      costPerError: value("costPerError"), salesLostPerMonth: value("salesLostPerMonth"),
+      projectPrice: value("projectPrice"), monthlySupport: value("monthlySupport"),
+    });
+    out("monthlyLoss", money(result.monthlyLoss));
+    out("monthlyNet", money(result.monthlyNet));
+    out("payback", result.paybackMonths === null ? text.never : `${result.paybackMonths.toLocaleString(lang === "es" ? "es-UY" : "en-US")} ${text.months}`);
+    out("net12", money(result.net12));
+    out("net36", money(result.net36));
+    out("time", money(result.breakdown.time));
+    out("errors", money(result.breakdown.errors));
+    out("sales", money(result.breakdown.sales));
+  }
+
+  // Picking a service fills in its list price; the visitor can still type their own.
+  form.elements.namedItem("service")!.addEventListener("change", (event) => {
+    const service = (event.target as HTMLSelectElement).value;
+    (form.elements.namedItem("projectPrice") as HTMLInputElement).value = String(servicePrices[service]);
+    update();
+  });
+  form.addEventListener("input", update);
+  update();
+</script>

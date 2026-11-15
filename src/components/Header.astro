@@ -1,0 +1,70 @@
+---
+import Logo from "./Logo.astro";
+import { alternate, path, type Lang, t } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = t(lang);
+const current = Astro.url.pathname;
+const links = lang === "es"
+  ? (["services", "pricing", "audit", "estimate", "process"] as const)
+  : (["services", "pricing", "hire", "audit", "estimate"] as const);
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a href={path("home", lang)} class="home" aria-label={`The Meowpany · ${copy.tagline}`}><Logo /></a>
+    <button class="toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-open={copy.menu} data-close={copy.close}>
+      <span class="toggle-label">{copy.menu}</span>
+    </button>
+    <nav id="site-nav" class="nav" aria-label={copy.menu}>
+      <ul>
+        {links.map((key) => {
+          const href = path(key, lang);
+          return <li><a href={href} aria-current={current === href ? "page" : undefined}>{copy.nav[key]}</a></li>;
+        })}
+      </ul>
+      <a class="lang" href={alternate(current, lang)} hreflang={lang === "es" ? "en" : "es"} lang={lang === "es" ? "en" : "es"} aria-label={copy.switchLabel}>{copy.switchTo}</a>
+      <a class="btn btn-accent" href={path("quote", lang)}>{copy.quote}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // A small menu toggle for phones; on wider screens the navigation is always visible.
+  const toggle = document.querySelector<HTMLButtonElement>(".toggle");
+  const nav = document.getElementById("site-nav");
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", String(open));
+    nav?.classList.toggle("open", open);
+    const label = toggle.querySelector(".toggle-label");
+    if (label) label.textContent = open ? toggle.dataset.close ?? "" : toggle.dataset.open ?? "";
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
+  });
+</script>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; }
+  .home { text-decoration: none; }
+  .nav { display: flex; align-items: center; gap: 1.25rem; }
+  .nav ul { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+  .nav ul a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.7rem; border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 500; }
+  .nav ul a:hover, .nav ul a[aria-current="page"] { background: var(--soft); }
+  .lang { color: var(--muted); font-size: 0.95rem; min-height: 44px; display: inline-flex; align-items: center; }
+  .toggle { display: none; min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+
+  @media (max-width: 960px) {
+    .toggle { display: inline-flex; align-items: center; }
+    .nav {
+      display: none; position: fixed; inset: 68px 0 0 0; background: var(--bg); padding: 1.5rem 16px 6rem;
+      flex-direction: column; align-items: stretch; gap: 1rem; overflow-y: auto;
+    }
+    .nav.open { display: flex; }
+    .nav ul { flex-direction: column; }
+    .nav ul a { font-size: 1.2rem; min-height: 52px; }
+    .nav .btn { position: fixed; left: 16px; right: 16px; bottom: 16px; }
+  }
+</style>

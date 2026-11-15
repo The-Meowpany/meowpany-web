@@ -1,0 +1,13 @@
+---
+import Simple from "../../views/Simple.astro";
+import QuoteForm from "../../components/QuoteForm.astro";
+import { site } from "../../site";
+---
+<Simple lang="en" title="Contact" description="Email us or use the form. We reply within one business day." lead="We reply within one business day.">
+  <ul>
+    <li>Email: <a href={`mailto:${site.email}`}>{site.email}</a></li>
+    <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
+    <li>{site.city}</li>
+  </ul>
+  <QuoteForm lang="en" preset="hours" />
+</Simple>

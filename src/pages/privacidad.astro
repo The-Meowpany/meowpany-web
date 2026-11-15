@@ -1,0 +1,15 @@
+---
+import Simple from "../views/Simple.astro";
+import { site } from "../site";
+---
+<Simple lang="es" title="Política de privacidad" description="Cómo The Meowpany trata sus datos personales según la Ley 18.331.">
+  <p>The Meowpany (en adelante, "nosotros") es responsable de los datos personales que usted nos envía a través de este sitio. Los tratamos según la Ley 18.331 de Protección de Datos Personales de Uruguay.</p>
+  <h2>Qué datos recogemos</h2>
+  <p>Solo los que usted escribe en los formularios: nombre, empresa, correo, teléfono, la descripción de su proyecto y, en la auditoría, la dirección del sitio analizado. No usamos cookies de seguimiento ni publicidad.</p>
+  <h2>Para qué los usamos</h2>
+  <p>Para responder su consulta, preparar una propuesta, agendar llamadas y, si nos contrata, prestar el servicio. No vendemos ni cedemos sus datos.</p>
+  <h2>Cuánto tiempo los guardamos</h2>
+  <p>Mientras dure la relación comercial y el tiempo que exijan las obligaciones legales y contables.</p>
+  <h2>Sus derechos</h2>
+  <p>Usted puede solicitar el acceso, la rectificación, la actualización o la supresión de sus datos escribiendo a <a href={`mailto:${site.email}`}>{site.email}</a>. También puede presentar un reclamo ante la Unidad Reguladora y de Control de Datos Personales (URCDP).</p>
+</Simple>

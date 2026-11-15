@@ -1,0 +1,19 @@
+---
+// The Meowpany cat: pointed ears like the brackets < and > turned upward, eyes in sun gold.
+interface Props { size?: number; withText?: boolean }
+const { size = 36, withText = true } = Astro.props;
+---
+<span class="logo">
+  <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+    <path d="M11 31 L16 7 L29 21 M53 31 L48 7 L35 21" fill="var(--primary)" stroke="var(--primary)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M10 32 C10 52 22 60 32 60 C42 60 54 52 54 32 C54 25 45 21 32 21 C19 21 10 25 10 32 Z" fill="var(--primary)" />
+    <circle cx="24" cy="38" r="4.2" fill="var(--accent)" />
+    <circle cx="40" cy="38" r="4.2" fill="var(--accent)" />
+    <path d="M29 47 L32 50 L35 47" fill="none" stroke="var(--bg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  {withText && <span class="logo-text">The Meowpany</span>}
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 0.55rem; }
+  .logo-text { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.01em; }
+</style>

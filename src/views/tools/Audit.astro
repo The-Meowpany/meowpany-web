@@ -1,0 +1,143 @@
+---
+// Free website audit. Core runs the checks; this page sends the URL and renders the report.
+import Base from "../../layouts/Base.astro";
+import { path, type Lang } from "../../i18n";
+import { site } from "../../site";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: {
+    title: "Auditoría web gratuita", description: "Analice su sitio en 30 segundos: velocidad, seguridad, posicionamiento en Google y uso en celulares, con las correcciones ordenadas por impacto.",
+    lead: "Escriba la dirección de su sitio. En unos 30 segundos recibe un informe con lo que está bien, lo que falla y qué corregir primero.",
+    url: "Dirección del sitio", urlHint: "Por ejemplo: mitienda.com.uy", email: "Correo (opcional)", emailHint: "Le enviamos una copia y podemos ayudarle con las correcciones.",
+    submit: "Analizar mi sitio", running: "Analizando... puede tardar hasta 30 segundos.",
+    score: "Puntaje general", fixes: "Qué corregir primero", passed: "Lo que ya está bien", impact: { 3: "Impacto alto", 2: "Impacto medio", 1: "Impacto bajo" },
+    status: { fail: "Falla", warn: "Mejorable", pass: "Bien" }, value: "Valor medido",
+    share: "Enlace a este informe", cta: "¿Quiere que lo corrijamos por usted?", ctaText: "Cotice la corrección o agende una llamada de 30 minutos para revisar el informe juntos.",
+    quote: "Cotizar la corrección", book: "Agendar una llamada", fail: "No pudimos completar el análisis.", again: "Analizar otro sitio",
+    measured: "Medido el",
+  },
+  en: {
+    title: "Free website audit", description: "Check your site in 30 seconds: speed, security, search visibility and mobile use, with fixes ranked by impact.",
+    lead: "Type your site's address. In about 30 seconds you get a report of what works, what fails and what to fix first.",
+    url: "Website address", urlHint: "For example: mystore.com", email: "Email (optional)", emailHint: "We'll send you a copy and can help with the fixes.",
+    submit: "Audit my site", running: "Auditing... this can take up to 30 seconds.",
+    score: "Overall score", fixes: "What to fix first", passed: "Already in good shape", impact: { 3: "High impact", 2: "Medium impact", 1: "Low impact" },
+    status: { fail: "Fails", warn: "Could improve", pass: "Good" }, value: "Measured value",
+    share: "Link to this report", cta: "Want us to fix it for you?", ctaText: "Get a quote for the fixes or book a 30-minute call to go through the report together.",
+    quote: "Get a quote", book: "Book a call", fail: "We couldn't finish the audit.", again: "Audit another site",
+    measured: "Measured on",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+
+      <form id="audit-form" class="card" novalidate
+        data-endpoint={`${site.coreUrl}/public/audits/`} data-lang={lang}
+        data-text={JSON.stringify(copy)} data-quote={path("quote", lang)} data-book={path("book", lang)}>
+        <p><label>{copy.url}<br /><input name="url" type="text" inputmode="url" autocomplete="url" required placeholder={copy.urlHint} maxlength="500" /></label></p>
+        <p><label>{copy.email}<br /><input name="email" type="email" autocomplete="email" maxlength="254" /></label><br /><small>{copy.emailHint}</small></p>
+        <p hidden><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></p>
+        <p><button class="btn btn-accent" type="submit">{copy.submit}</button></p>
+        <p role="status" aria-live="polite" data-status></p>
+      </form>
+
+      <article id="audit-report" hidden aria-live="polite"></article>
+    </div>
+  </section>
+</Base>
+
+<script>
+  type Check = { id: string; category: string; status: "pass" | "warn" | "fail"; impact: 1 | 2 | 3; title: string; value: string; fix: string };
+  type Report = { id: string; url: string; score: number; created: string; categories: Record<string, number>;
+    category_labels: Record<string, string>; checks: Check[]; fixes: string[] };
+
+  const form = document.getElementById("audit-form") as HTMLFormElement;
+  const output = document.getElementById("audit-report") as HTMLElement;
+  const status = form.querySelector<HTMLElement>("[data-status]")!;
+  const text = JSON.parse(form.dataset.text!);
+  const endpoint = form.dataset.endpoint!;
+
+  // Builds DOM nodes from text only, so nothing from the audited site can inject markup.
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, content?: string | Node[], attrs: Record<string, string> = {}) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+    if (typeof content === "string") node.textContent = content;
+    else if (content) node.append(...content);
+    return node;
+  }
+
+  function render(report: Report) {
+    const byId = new Map(report.checks.map((c) => [c.id, c]));
+    const fixes = report.fixes.map((id) => byId.get(id)!).filter(Boolean);
+    const passed = report.checks.filter((c) => c.status === "pass");
+    const shareUrl = `${location.origin}${location.pathname}?id=${report.id}`;
+
+    output.replaceChildren(
+      el("h2", report.url),
+      el("p", `${text.measured} ${new Date(report.created).toLocaleString(form.dataset.lang)}`),
+      el("p", [el("strong", `${text.score}: ${report.score}/100`)]),
+      el("table", [
+        el("tbody", Object.entries(report.categories).map(([key, value]) =>
+          el("tr", [el("th", report.category_labels[key] ?? key, { scope: "row" }), el("td", `${value}/100`)]))),
+      ]),
+      el("h2", text.fixes),
+      el("ol", fixes.map((c) => el("li", [
+        el("h3", `${c.title}: ${text.status[c.status]}`),
+        el("p", `${text.impact[c.impact]} · ${report.category_labels[c.category] ?? c.category}${c.value ? ` · ${text.value}: ${c.value}` : ""}`),
+        el("p", c.fix),
+      ]))),
+      el("details", [el("summary", `${text.passed} (${passed.length})`),
+        el("ul", passed.map((c) => el("li", `${c.title}${c.value ? `: ${c.value}` : ""}`)))]),
+      el("p", [el("label", [document.createTextNode(`${text.share}: `), el("input", undefined, { type: "text", readonly: "", value: shareUrl, size: "60" })])]),
+      el("h2", text.cta),
+      el("p", text.ctaText),
+      el("p", [el("a", text.quote, { href: form.dataset.quote!, class: "btn btn-accent" }), document.createTextNode(" "),
+        el("a", text.book, { href: form.dataset.book!, class: "btn btn-ghost" })]),
+      el("p", [el("button", text.again, { type: "button", class: "btn btn-ghost", "data-again": "" })]),
+    );
+    output.hidden = false;
+    form.hidden = true;
+    history.replaceState(null, "", `?id=${report.id}`);
+    output.querySelector("[data-again]")?.addEventListener("click", () => {
+      output.hidden = true; form.hidden = false; history.replaceState(null, "", location.pathname);
+      form.querySelector<HTMLInputElement>("input[name=url]")?.focus();
+    });
+    output.querySelector("h2")?.setAttribute("tabindex", "-1");
+    output.querySelector<HTMLElement>("h2")?.focus();
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    if (!String(data.get("url") ?? "").trim()) return form.querySelector<HTMLInputElement>("input[name=url]")?.focus();
+    const button = form.querySelector("button")!;
+    button.disabled = true;
+    status.textContent = text.running;
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: data.get("url"), email: data.get("email"), website: data.get("website"), language: form.dataset.lang }),
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message ?? text.fail);
+      status.textContent = "";
+      render(body);
+    } catch (error) {
+      status.textContent = error instanceof Error && error.message !== "Failed to fetch" ? error.message : text.fail;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // A shared link (?id=...) reopens a saved report without running the audit again.
+  const saved = new URLSearchParams(location.search).get("id");
+  if (saved && /^[0-9a-f-]{36}$/.test(saved)) {
+    fetch(`${endpoint}${saved}/`).then((r) => (r.ok ? r.json() : null)).then((report) => report && render(report)).catch(() => {});
+  }
+</script>
