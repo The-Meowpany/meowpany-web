@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      # Placeholder origin already allowed by public/_headers; the real one is set in the host's build settings.
+      PUBLIC_CORE_URL: https://core.meowpany.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Known vulnerabilities in dependencies
+        run: npm audit --audit-level=moderate

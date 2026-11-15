@@ -6,7 +6,7 @@ export const site = {
   whatsapp: "", // International format without "+" or spaces, e.g. "598991234567".
   linkedin: "https://www.linkedin.com/company/meowpany",
   city: "Montevideo, Uruguay",
-  // Core receives quote requests. Set PUBLIC_CORE_URL when building for production.
+  // Core receives quote requests. A production build refuses to run without PUBLIC_CORE_URL (astro.config.mjs).
   coreUrl: import.meta.env.PUBLIC_CORE_URL ?? "http://127.0.0.1:8000",
 };
 
