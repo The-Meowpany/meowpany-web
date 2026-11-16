@@ -7,10 +7,21 @@ The public website of The Meowpany: a static, bilingual (Spanish and English) si
 ## Run it
 
 ```sh
-npm install          # also switches to Astro's WebAssembly compiler on CPUs without AVX2
+npm ci --force       # see below; also switches to the WebAssembly compiler on CPUs without AVX2
 npm run dev          # http://localhost:4321
-npm run build        # static site in dist/
+npm run build:local  # static site in dist/, with forms pointing at a local Core
 npm run preview      # serves dist/ in the background; `npx astro preview stop` stops it
+```
+
+`--force` is required: the WebAssembly compiler package declares `cpu: wasm32`, and npm refuses to
+install it on x64 without it. It changes nothing else in this project (0 vulnerabilities, no peer
+dependency conflicts), but a new peer conflict would also be silenced, so check `npm ls` after
+adding a dependency.
+
+A production build needs Core's address and refuses to run without it:
+
+```sh
+PUBLIC_CORE_URL=https://core.meowpany.com npm run build   # origin must be allowed in public/_headers
 ```
 
 Run Core at the same time (`http://127.0.0.1:8000`) to test the quote form end to end.

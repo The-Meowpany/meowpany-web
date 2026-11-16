@@ -8,7 +8,10 @@ reads `public/_headers` and has a free plan.
 3. In Cloudflare Pages, create a project from that repository:
    - Build command: `npm run build`
    - Output directory: `dist`
-   - Environment variable: `PUBLIC_CORE_URL=https://core.meowpany.com`
+   - Environment variables: `PUBLIC_CORE_URL=https://core.meowpany.com` and `NPM_FLAGS=--force`
+     (the install needs `--force`, see README). The build fails on purpose if `PUBLIC_CORE_URL` is
+     missing, is not https, or is not allowed by `connect-src` in `public/_headers`.
+     The domain `core.meowpany.com` is a placeholder until the owner confirms Core's real domain.
 4. Add `meowpany.com` as a custom domain. HTTPS is issued automatically.
 5. Redirect `themeowpany.com` and `www.meowpany.com` to `https://meowpany.com`.
 6. Turn on DNSSEC, and add SPF, DKIM and DMARC records for the email provider.
