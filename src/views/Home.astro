@@ -264,7 +264,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
 </Base>
 
 <style>
-  .hero { position: relative; overflow: hidden; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
+  .hero { position: relative; overflow: hidden; padding: clamp(2.25rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 4.5rem); }
   .glow {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
@@ -276,7 +276,47 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   }
   .hero-grid { display: grid; grid-template-columns: 1.25fr 0.85fr; gap: clamp(2rem, 4vw, 4rem); align-items: center; }
   .hero h1 { font-size: clamp(2.35rem, 4.4vw, 3.7rem); }
-  .highlight { color: var(--primary); }
+  .highlight {
+    color: var(--primary);
+    background: linear-gradient(var(--brand-line), var(--brand-line)) 0 92% / 0% 0.18em no-repeat;
+    animation: underline 900ms 650ms var(--ease) forwards;
+  }
+  @keyframes underline { to { background-size: 100% 0.18em; } }
+  /* The opening appears in reading order, then the project panel plays its timeline. */
+  .hero-copy > * { animation: rise 700ms var(--ease) both; }
+  .hero-copy > :nth-child(2) { animation-delay: 80ms; }
+  .hero-copy > :nth-child(3) { animation-delay: 160ms; }
+  .hero-copy > :nth-child(4) { animation-delay: 240ms; }
+  .hero-copy > :nth-child(5) { animation-delay: 320ms; }
+  .panel { animation: rise 800ms 250ms var(--ease) both; }
+  .timeline li { animation: rise 500ms var(--ease) both; }
+  .timeline li:nth-child(1) { animation-delay: 550ms; }
+  .timeline li:nth-child(2) { animation-delay: 700ms; }
+  .timeline li:nth-child(3) { animation-delay: 850ms; }
+  .timeline li:nth-child(4) { animation-delay: 1000ms; }
+  .done .dot { animation: check 400ms var(--ease) both; }
+  .timeline li:nth-child(1) .dot { animation-delay: 750ms; }
+  .timeline li:nth-child(2) .dot { animation-delay: 900ms; }
+  @keyframes check { from { transform: scale(0.4); background: var(--bg); } to { transform: scale(1); } }
+  .now .dot::after {
+    content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--brand);
+    animation: ping 2.4s 1.3s var(--ease) infinite; opacity: 0;
+  }
+  @keyframes ping { 0% { transform: scale(0.6); opacity: 0.7; } 80%, 100% { transform: scale(1.5); opacity: 0; } }
+  .chart span { transform-origin: bottom; animation: grow 700ms var(--ease) both; }
+  .chart span:nth-child(1) { animation-delay: 1100ms; }
+  .chart span:nth-child(2) { animation-delay: 1160ms; }
+  .chart span:nth-child(3) { animation-delay: 1220ms; }
+  .chart span:nth-child(4) { animation-delay: 1280ms; }
+  .chart span:nth-child(5) { animation-delay: 1340ms; }
+  .chart span:nth-child(6) { animation-delay: 1400ms; }
+  .chart span:nth-child(7) { animation-delay: 1460ms; }
+  @keyframes grow { from { transform: scaleY(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .highlight { background-size: 100% 0.18em; }
+    .now .dot::after { display: none; }
+    .hero-copy > *, .panel, .timeline li, .done .dot, .chart span, .highlight { animation: none !important; }
+  }
   .trust { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; color: var(--muted); font-size: 0.92rem; }
   .trust li { display: inline-flex; align-items: center; gap: 0.4rem; }
   .trust :global(svg) { width: 16px; height: 16px; color: var(--primary); }

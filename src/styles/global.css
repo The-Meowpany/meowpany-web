@@ -98,16 +98,18 @@ strong { font-weight: 650; }
 
 .wrap { width: min(100% - 40px, var(--max)); margin-inline: auto; }
 .narrow { max-width: 760px; }
-.section { padding: clamp(4rem, 9vw, 7rem) 0; }
+.section { padding: clamp(3.25rem, 7vw, 5.5rem) 0; }
 .section.soft { background: var(--soft); border-block: 1px solid var(--line); }
 .section.tight { padding: clamp(2.5rem, 5vw, 4rem) 0; }
 .section-head { max-width: 720px; margin-bottom: clamp(2rem, 4vw, 3rem); }
 .section-head.center { margin-inline: auto; }
 .section-head h2 { margin-bottom: 0.4em; }
-.page-head { padding: clamp(3rem, 7vw, 5rem) 0 clamp(2rem, 4vw, 3rem); border-bottom: 1px solid var(--line); background: linear-gradient(to bottom, var(--soft), var(--bg)); }
+.page-head { padding: clamp(1.75rem, 3.5vw, 2.75rem) 0 clamp(1.5rem, 3vw, 2.25rem); border-bottom: 1px solid var(--line); background: linear-gradient(to bottom, var(--soft), var(--bg)); }
 .page-head h1 { font-size: clamp(2.1rem, 4.4vw, 3.4rem); max-width: 22ch; margin-bottom: 0.35em; }
 .page-head .lead { margin: 0; }
 .page-head .actions { margin-top: 1.25rem; }
+/* The first section after a page header starts close to it: the header already opens the page. */
+.page-head + .section, .page-head + .page-body { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); }
 
 .eyebrow {
   display: inline-flex; align-items: center; gap: 0.5rem; margin: 0 0 1rem; padding: 0.3rem 0.8rem 0.3rem 0.65rem;
@@ -219,11 +221,50 @@ article table { border-collapse: collapse; width: 100%; margin: 0 0 1.5rem; }
 article th, article td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
 
 /* Sections fade in once while scrolling; nothing moves for people who ask for less motion. */
-.reveal { opacity: 0; transform: translateY(12px); transition: opacity 400ms var(--ease), transform 400ms var(--ease); }
+.reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
 .reveal.visible { opacity: 1; transform: none; }
+
+/* Motion that carries the brand: short, soft, and always in service of reading. */
+.card { transition: border-color 200ms var(--ease), box-shadow 250ms var(--ease), transform 250ms var(--ease); }
+a.card:hover, .service:hover, .model:hover, .plan:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.btn svg { transition: transform 200ms var(--ease); }
+.btn:hover svg { transform: translateX(3px); }
+.btn-primary, .btn-accent { position: relative; overflow: hidden; isolation: isolate; }
+.btn-primary::after, .btn-accent::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 28%) 50%, transparent 70%);
+  transform: translateX(-120%); transition: transform 700ms var(--ease);
+}
+.btn-primary:hover::after, .btn-accent:hover::after { transform: translateX(120%); }
+.check-list li::before { transition: transform 300ms var(--ease); }
+.card:hover .check-list li::before { transform: scale(1.08); }
+
+/* Answers open smoothly where the browser supports animating to auto height. */
+:root { interpolate-size: allow-keywords; }
+.faq details::details-content { height: 0; overflow: hidden; transition: height 300ms var(--ease), content-visibility 300ms allow-discrete; }
+.faq details[open]::details-content { height: auto; }
+
+/* Pages fade into each other on browsers with cross-document view transitions. */
+@view-transition { navigation: auto; }
+.site-header { view-transition-name: site-header; }
+::view-transition-old(root) { animation: 160ms var(--ease) both page-out; }
+::view-transition-new(root) { animation: 260ms var(--ease) both page-in; }
+@keyframes page-out { to { opacity: 0; } }
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } }
+
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-2deg); } }
+
 @media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+  /* No motion at all, not just zero-length motion: a delayed animation could otherwise keep
+     content hidden. */
+  *, *::before, *::after { transition: none !important; animation: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
 @media print {

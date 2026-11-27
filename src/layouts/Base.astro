@@ -86,6 +86,12 @@ const contentPolicy = [
     <script>
       // Reveal sections once as they scroll into view. Without JavaScript everything stays visible.
       const items = document.querySelectorAll<HTMLElement>(".reveal");
+      // Siblings appear one after another rather than all at once.
+      items.forEach((item) => {
+        const siblings = [...(item.parentElement?.children ?? [])].filter((el) => el.classList.contains("reveal"));
+        const index = Math.min(siblings.indexOf(item), 6);
+        if (index > 0) item.style.setProperty("--reveal-delay", `${index * 80}ms`);
+      });
       if ("IntersectionObserver" in window) {
         const observer = new IntersectionObserver((entries) => {
           for (const entry of entries) {

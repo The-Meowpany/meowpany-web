@@ -1,4 +1,6 @@
 ---
+// Header: four destinations and one action. Everything else lives in the footer, and in the phone
+// menu, which has room for it.
 import Logo from "./Logo.astro";
 import { alternate, path, type Lang, t } from "../i18n";
 import { withoutBase } from "../lib/url";
@@ -8,11 +10,14 @@ const { lang } = Astro.props;
 const copy = t(lang);
 const current = Astro.url.pathname;
 const links = lang === "es"
-  ? (["services", "firstVersion", "process", "pricing", "news", "about"] as const)
-  : (["services", "firstVersion", "hire", "pricing", "news", "about"] as const);
+  ? (["services", "process", "pricing", "news"] as const)
+  : (["services", "hire", "pricing", "news"] as const);
+// Only in the phone menu.
+const extra = (["firstVersion", "about", "quote"] as const);
 const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
+const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as keyof typeof copy.nav]);
 ---
-<header class="site-header">
+<header class="site-header" data-header>
   <div class="wrap bar">
     <a href={path("home", lang)} class="home" aria-label={`The Meowpany · ${copy.tagline}`}><Logo size={30} /></a>
     <button class="toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-open={copy.menu} data-close={copy.close}>
@@ -24,11 +29,11 @@ const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
           const href = path(key, lang);
           return <li><a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{copy.nav[key]}</a></li>;
         })}
+        {extra.map((key) => <li class="phone-only"><a href={path(key, lang)}>{label(key)}</a></li>)}
       </ul>
       <div class="end">
         <a class="lang" href={alternate(current, lang)} hreflang={lang === "es" ? "en" : "es"} lang={lang === "es" ? "en" : "es"} aria-label={copy.switchLabel}>{lang === "es" ? "EN" : "ES"}</a>
-        <a class="btn btn-ghost btn-sm" href={path("quote", lang)}>{copy.quote}</a>
-        <a class="btn btn-primary btn-sm" href={`${path("book", lang)}?for=prototype`}>{copy.nav.book}</a>
+        <a class="btn btn-primary btn-sm cta" href={`${path("book", lang)}?for=prototype`}>{copy.nav.book}</a>
       </div>
     </nav>
   </div>
@@ -36,6 +41,7 @@ const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
 
 <script>
   // A small menu toggle for phones; on wider screens the navigation is always visible.
+  const header = document.querySelector<HTMLElement>("[data-header]");
   const toggle = document.querySelector<HTMLButtonElement>(".toggle");
   const nav = document.getElementById("site-nav");
   toggle?.addEventListener("click", () => {
@@ -52,49 +58,69 @@ const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
   nav?.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest("a") && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
   });
+  // The header gains a shadow once the page scrolls under it.
+  const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 8);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 </script>
 
 <style>
   /* The blur lives on a pseudo-element: on the header itself it would make the header the
      containing block of the fixed mobile menu and clip it. */
-  .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--line); }
+  .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease); }
   .site-header::before {
     content: ""; position: absolute; inset: 0; z-index: -1;
-    background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(180%) blur(14px);
+    background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: saturate(180%) blur(14px);
   }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 66px; }
+  .site-header.scrolled { border-bottom-color: var(--line); box-shadow: 0 6px 24px -18px rgb(43 40 45 / 35%); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 64px; }
   .home { display: inline-flex; text-decoration: none; flex: none; }
-  .nav { display: flex; align-items: center; gap: 1.5rem; flex: 1; justify-content: space-between; }
-  .nav ul { display: flex; gap: 0.1rem; list-style: none; margin: 0 auto; padding: 0; }
+  .home :global(.mark) { transition: transform 300ms var(--ease); transform-origin: 50% 80%; }
+  .home:hover :global(.mark) { transform: rotate(-8deg) scale(1.06); }
+  .nav { display: flex; align-items: center; gap: 1rem; flex: 1; justify-content: space-between; }
+  .nav ul { display: flex; gap: 0.25rem; list-style: none; margin: 0 auto; padding: 0; }
   .nav ul a {
-    display: inline-flex; align-items: center; min-height: 38px; padding: 0 0.75rem; border-radius: 9px;
-    color: var(--muted); text-decoration: none; font-size: 0.93rem; font-weight: 500; white-space: nowrap; transition: color 150ms, background-color 150ms;
+    position: relative; display: inline-flex; align-items: center; min-height: 38px; padding: 0 0.85rem;
+    color: var(--muted); text-decoration: none; font-size: 0.94rem; font-weight: 550; white-space: nowrap; transition: color 150ms;
   }
-  .nav ul a:hover { color: var(--ink); background: var(--soft); }
+  /* A pink underline that grows from the centre on hover and stays on the current page. */
+  .nav ul a::after {
+    content: ""; position: absolute; left: 0.85rem; right: 0.85rem; bottom: 4px; height: 2px; border-radius: 2px;
+    background: var(--brand); transform: scaleX(0); transition: transform 250ms var(--ease);
+  }
+  .nav ul a:hover { color: var(--ink); }
+  .nav ul a:hover::after, .nav ul a[aria-current="page"]::after { transform: scaleX(1); }
   .nav ul a[aria-current="page"] { color: var(--ink); }
-  .end { display: flex; align-items: center; gap: 0.5rem; }
-  .lang { color: var(--muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; min-height: 38px; padding: 0 0.6rem; display: inline-flex; align-items: center; text-decoration: none; border-radius: 9px; }
+  .phone-only { display: none; }
+  .end { display: flex; align-items: center; gap: 0.4rem; }
+  .lang { color: var(--muted); font-size: 0.82rem; font-weight: 650; letter-spacing: 0.06em; min-height: 36px; padding: 0 0.6rem; display: inline-flex; align-items: center; text-decoration: none; border-radius: 8px; }
   .lang:hover { color: var(--ink); background: var(--soft); }
   .toggle {
     display: none; align-items: center; gap: 0.55rem; min-height: 40px; padding: 0 0.9rem; border-radius: 10px;
     border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); font: inherit; font-size: 0.92rem; font-weight: 600; cursor: pointer;
   }
-  .bars, .bars::before, .bars::after { display: block; width: 14px; height: 1.6px; background: currentColor; border-radius: 2px; position: relative; }
+  .bars, .bars::before, .bars::after { display: block; width: 14px; height: 1.6px; background: currentColor; border-radius: 2px; position: relative; transition: transform 200ms var(--ease), background-color 200ms; }
   .bars::before, .bars::after { content: ""; position: absolute; left: 0; }
   .bars::before { top: -4.5px; }
   .bars::after { top: 4.5px; }
+  .toggle[aria-expanded="true"] .bars { background: transparent; }
+  .toggle[aria-expanded="true"] .bars::before { transform: translateY(4.5px) rotate(45deg); }
+  .toggle[aria-expanded="true"] .bars::after { transform: translateY(-4.5px) rotate(-45deg); }
 
-  @media (max-width: 1180px) {
+  @media (max-width: 880px) {
     .toggle { display: inline-flex; }
     .nav {
-      display: none; position: fixed; inset: 66px 0 0 0; background: var(--bg); padding: 1.25rem 20px 2rem;
+      display: none; position: fixed; inset: 64px 0 0 0; background: var(--bg); padding: 1rem 20px 2rem;
       flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 1.5rem; overflow-y: auto;
     }
-    .nav.open { display: flex; }
-    .nav ul { flex-direction: column; margin: 0; }
-    .nav ul a { display: flex; font-size: 1.15rem; min-height: 54px; color: var(--ink); border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; }
+    .nav.open { display: flex; animation: menu-in 220ms var(--ease); }
+    .nav ul { flex-direction: column; margin: 0; gap: 0; }
+    .phone-only { display: block; }
+    .nav ul a { display: flex; font-size: 1.15rem; min-height: 54px; color: var(--ink); border-bottom: 1px solid var(--line); padding: 0; }
+    .nav ul a::after { display: none; }
     .end { flex-direction: column; align-items: stretch; margin-top: auto; }
     .end .btn { min-height: 50px; font-size: 1rem; }
     .lang { justify-content: center; }
   }
+  @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 </style>

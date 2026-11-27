@@ -6,7 +6,7 @@ import { path } from "../i18n";
 <Base lang="es" title="Página no encontrada" description="Esta página no existe." noindex>
   <section class="section center">
     <div class="wrap">
-      <Logo size={96} withText={false} />
+      <span class="lost"><Logo size={96} withText={false} /></span>
       <h1>Este gato se perdió</h1>
       <p class="lead">La página que busca no existe o cambió de lugar. <span lang="en">This page doesn't exist.</span></p>
       <div class="actions" style="justify-content:center">
@@ -16,3 +16,6 @@ import { path } from "../i18n";
     </div>
   </section>
 </Base>
+<style>
+  .lost { display: inline-block; animation: float 5s ease-in-out infinite; }
+</style>

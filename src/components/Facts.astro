@@ -10,7 +10,7 @@ const sourceLabel = lang === "es" ? "Fuente" : "Source";
 <dl class="facts">
   {facts[lang].map((fact) => (
     <div class="fact reveal">
-      <dt>{fact.value}</dt>
+      <dt data-count={fact.value}>{fact.value}</dt>
       <dd>
         <p>{fact.text}</p>
         <a class="sources" href={fact.url} rel="noopener" target="_blank">{sourceLabel}: {fact.source}</a>
@@ -18,10 +18,43 @@ const sourceLabel = lang === "es" ? "Fuente" : "Source";
     </div>
   ))}
 </dl>
+<script>
+  // Figures count up from zero the first time they come into view, keeping their format
+  // ("33,8 %", "+32 %", "7 de 10"): only the first number in the text moves.
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const figures = document.querySelectorAll<HTMLElement>("[data-count]");
+  if (!still && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        const el = entry.target as HTMLElement;
+        const text = el.dataset.count ?? "";
+        const match = text.match(/\d+(?:[.,]\d+)?/);
+        if (!match) continue;
+        const raw = match[0];
+        const separator = raw.includes(",") ? "," : ".";
+        const decimals = raw.split(/[.,]/)[1]?.length ?? 0;
+        const target = Number(raw.replace(",", "."));
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / 1200, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          const value = (target * eased).toFixed(decimals).replace(".", separator);
+          el.textContent = text.replace(raw, value);
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+    }, { threshold: 0.6 });
+    figures.forEach((figure) => observer.observe(figure));
+  }
+</script>
+
 <style>
   .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin: 0; border-top: 1px solid var(--line); }
   .fact { padding: 1.6rem 1.5rem 0 0; }
-  dt { font-size: clamp(2rem, 3.6vw, 2.75rem); font-weight: 720; letter-spacing: -0.035em; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  dt { font-family: var(--font-display); font-size: clamp(2rem, 3.6vw, 2.75rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
   dt::after { content: ""; display: block; width: 28px; height: 3px; border-radius: 2px; background: var(--brand); margin-top: 0.9rem; }
   dd { margin: 0.9rem 0 0; }
   dd p { margin: 0 0 0.5rem; color: var(--ink-2); }

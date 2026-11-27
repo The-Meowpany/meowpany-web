@@ -30,6 +30,7 @@ const whatsapp = whatsappLink(copy.whatsappText);
   .cta { padding: clamp(3rem, 7vw, 5.5rem) 0; }
   /* Same cat as the rest of the page: it follows the theme. */
   .mark-dark { display: none; }
+  .mark { animation: float 5s var(--ease) infinite; transform-origin: 50% 80%; }
   @media (prefers-color-scheme: dark) { .mark-light { display: none; } .mark-dark { display: block; } }
   .panel {
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
