@@ -12,7 +12,8 @@ const whatsapp = whatsappLink(copy.whatsappText);
 <section class="cta">
   <div class="wrap">
     <div class="panel reveal">
-      <img class="mark" src={withBase("/brand/mark-dark.svg")} width="76" height="60" alt="" />
+      <img class="mark mark-light" src={withBase("/brand/mark.svg")} width="76" height="60" alt="" />
+      <img class="mark mark-dark" src={withBase("/brand/mark-dark.svg")} width="76" height="60" alt="" />
       <div class="text">
         <h2>{title}</h2>
         <p>{text}</p>
@@ -27,6 +28,9 @@ const whatsapp = whatsappLink(copy.whatsappText);
 </section>
 <style>
   .cta { padding: clamp(3rem, 7vw, 5.5rem) 0; }
+  /* Same cat as the rest of the page: it follows the theme. */
+  .mark-dark { display: none; }
+  @media (prefers-color-scheme: dark) { .mark-light { display: none; } .mark-dark { display: block; } }
   .panel {
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
     padding: clamp(1.75rem, 4vw, 3rem); border-radius: 24px; color: #f3f0f2;
