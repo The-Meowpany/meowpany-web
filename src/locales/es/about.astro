@@ -1,17 +1,38 @@
 ---
 import Simple from "../../views/Simple.astro";
+import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="es" title="Nosotros" description="The Meowpany es un estudio de desarrollo de software en Montevideo para pymes de Uruguay y clientes del exterior." lead="Somos un estudio de desarrollo en Montevideo. Hacemos software para pymes de Uruguay y equipos del exterior, con precios claros y trato directo.">
+<Simple lang="es" title="Nosotros" eyebrow="Nosotros" description="The Meowpany es un estudio de desarrollo de sitios web, tiendas en línea y software a medida en Montevideo, para pymes de Uruguay y equipos del exterior." lead="Somos un estudio de desarrollo de Montevideo. Hacemos sitios web, tiendas en línea y software a medida para pymes de Uruguay, y sumamos capacidad a equipos del exterior.">
+  <h2>Cómo estamos organizados</h2>
+  <p>The Meowpany está formada por socios desarrolladores que trabajan por proyecto: quien le presenta la propuesta es quien construye su sistema. Para el diseño de interfaces se suma un diseñador por proyecto, y la contabilidad está a cargo de un contador externo.</p>
+  <p>Trabajamos en forma totalmente remota. Las reuniones son por videollamada; si prefiere conversar en persona, vamos a su empresa.</p>
+
   <h2>Misión</h2>
-  <p>Desarrollar sitios, tiendas en línea y software a medida que ayuden a las pymes a vender más y trabajar mejor, con precios claros, plazos cumplidos y soporte cercano.</p>
+  <p>Desarrollar sitios, tiendas en línea y software a medida que aumenten las ventas y la productividad de nuestros clientes, con precios transparentes, plazos cumplidos y soporte cercano.</p>
+
   <h2>Valores</h2>
   <ul>
-    <li><strong>Transparencia:</strong> presupuestos cerrados y avances visibles.</li>
-    <li><strong>Calidad:</strong> código probado, seguro y documentado.</li>
-    <li><strong>Cumplimiento:</strong> la fecha prometida se cumple.</li>
-    <li><strong>Aprendizaje continuo:</strong> incluida la inteligencia artificial aplicada.</li>
-    <li><strong>Responsabilidad:</strong> cuidamos los datos de nuestros clientes.</li>
+    <li><strong>Transparencia:</strong> presupuestos cerrados y un avance que el cliente puede ver.</li>
+    <li><strong>Calidad verificable:</strong> código probado, seguro y documentado.</li>
+    <li><strong>Cumplimiento:</strong> la fecha comprometida se respeta y los riesgos se informan con anticipación.</li>
+    <li><strong>Mejora continua:</strong> formación permanente, incluida la inteligencia artificial aplicada.</li>
+    <li><strong>Responsabilidad:</strong> protección de los datos de los clientes conforme a la Ley 18.331.</li>
   </ul>
-  <h2>Tecnología</h2>
-  <p>Elegimos la tecnología según el problema: desde plataformas de comercio electrónico hasta aplicaciones web, integraciones y automatización con IA. Lo que no cambia es el proceso: especificación, pruebas, documentación y código versionado.</p>
+
+  <h2>Cómo trabajamos por dentro</h2>
+  <p>Operamos con una plataforma propia que reúne en un solo lugar todo lo de cada proyecto. Eso nos permite ofrecer, sin costo extra:</p>
+  <ul>
+    <li>Estimaciones por puntos de función (norma IFPUG), con el detalle de cada función.</li>
+    <li>Especificaciones de requisitos con criterios de aceptación, siguiendo la estructura de la norma ISO/IEC/IEEE 29148.</li>
+    <li>Planificación con camino crítico, para anticipar atrasos antes de que ocurran.</li>
+    <li>Pruebas vinculadas a cada requisito, con un informe en cada entrega.</li>
+    <li>Un informe semanal con horas, tareas cumplidas y próximas, revisado por una persona antes de enviarlo.</li>
+    <li>Una mesa de soporte que registra cada pedido, su plazo de respuesta y las horas usadas.</li>
+  </ul>
+  <p>Además, reutilizamos una biblioteca propia de módulos ya probados (cobros, auditoría de cambios, manejo exacto de importes, entre otros). Cada sistema se diseña a medida, pero sin empezar de cero, lo que baja los plazos y los errores.</p>
+
+  <h2>Método</h2>
+  <p>Una etapa corta de análisis al principio fija el alcance y el precio cerrado. Después construimos en ciclos de 2 semanas, cada uno con una demostración, para absorber los cambios sin perder el control del plazo.</p>
+
+  <CtaBand slot="after" lang="es" title="Conózcanos con su propio proyecto" text="La mejor forma de evaluarnos es ver su idea funcionando. En 72 horas y sin pagar nada." />
 </Simple>

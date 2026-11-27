@@ -1,15 +1,13 @@
 ---
-import { path } from "../../i18n";
 import Simple from "../../views/Simple.astro";
+import Tools from "../../components/Tools.astro";
 ---
-<Simple lang="es" title="Recursos" description="Guías y una auditoría web gratuita para pymes." lead="Guías prácticas para pymes y una auditoría gratuita de su sitio actual.">
-  <h2>Auditoría web gratuita</h2>
-  <p>Analice su sitio en 30 segundos: velocidad, uso en celulares, posicionamiento en Google y seguridad, con las correcciones ordenadas por impacto. Sin registro y sin compromiso.</p>
-  <p><a class="btn btn-accent" href={path("audit", "es")}>Analizar mi sitio</a></p>
+<Simple lang="es" wide title="Recursos" eyebrow="Recursos" description="Herramientas gratuitas para pymes: auditoría web, estimador de proyectos, calculadora de retorno y llamada de 30 minutos." lead="Cuatro herramientas gratuitas que le dan un resultado concreto sobre su sitio o su proyecto, sin registrarse.">
+  <Tools lang="es" />
   <h2>Próximas guías</h2>
   <ul>
     <li>5 errores frecuentes al abrir una tienda en línea.</li>
     <li>Cómo conectar su tienda con la facturación electrónica de la DGI.</li>
-    <li>Sitio propio o solo redes sociales: qué conviene a cada pyme.</li>
+    <li>Sitio propio o solo redes sociales: qué le conviene a cada pyme.</li>
   </ul>
 </Simple>

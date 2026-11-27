@@ -1,0 +1,28 @@
+---
+// The four free tools, linked from the home page and the resources page.
+import Icon from "./Icon.astro";
+import { tools } from "../content";
+import { path, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const open = lang === "es" ? "Abrir" : "Open";
+---
+<div class="tools">
+  {tools[lang].map((tool) => (
+    <a class="card tool reveal" href={path(tool.key, lang)}>
+      <span class="icon"><Icon name={tool.icon} /></span>
+      <h3>{tool.title}</h3>
+      <p class="muted">{tool.text}</p>
+      <span class="go">{open}<Icon name="arrow-right" /></span>
+    </a>
+  ))}
+</div>
+<style>
+  .tools { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+  .tool { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+  .tool p { font-size: 0.95rem; }
+  .go { margin-top: auto; padding-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.3rem; color: var(--primary); font-weight: 600; font-size: 0.92rem; }
+  .go :global(svg) { width: 15px; height: 15px; transition: transform 150ms var(--ease); }
+  .tool:hover .go :global(svg) { transform: translateX(3px); }
+</style>

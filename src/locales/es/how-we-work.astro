@@ -1,18 +1,31 @@
 ---
 import Simple from "../../views/Simple.astro";
 import ProcessSteps from "../../components/ProcessSteps.astro";
+import Commitments from "../../components/Commitments.astro";
 import Faq from "../../components/Faq.astro";
+import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="es" title="Cómo trabajamos" description="El proceso de The Meowpany en 6 pasos: descubrimiento, propuesta, diseño, desarrollo, entrega y soporte." lead="Primero fijamos el alcance y el precio; después construimos en ciclos de 2 semanas que usted puede ver y probar.">
+<Simple lang="es" wide title="Cómo trabajamos" eyebrow="Proceso" description="El proceso de The Meowpany: llamada inicial, primera versión gratis en 72 horas, propuesta con precio cerrado, diseño, desarrollo en ciclos de 2 semanas, pruebas y entrega." lead="Primero le mostramos su idea funcionando. Después fijamos el alcance y el precio cerrado, y construimos en ciclos de 2 semanas que usted puede ver y probar.">
   <ProcessSteps lang="es" />
-  <h2>Lo que siempre recibís</h2>
-  <ul>
-    <li>Una especificación escrita de lo que vamos a construir, antes de empezar.</li>
-    <li>Una demostración cada 2 semanas y acceso a un entorno de prueba.</li>
-    <li>Pruebas antes de cada entrega y un informe de lo probado.</li>
-    <li>Manuales de uso, el código, los accesos y una capacitación al terminar.</li>
-    <li>Garantía de 60 días sobre lo entregado.</li>
-  </ul>
+
+  <h2>Lo que recibe en cada proyecto</h2>
+  <Commitments lang="es" />
+
+  <h2>Cómo nos comunicamos</h2>
+  <div class="table-wrap">
+    <table class="compare">
+      <thead><tr><th scope="col">Qué</th><th scope="col">Cuándo</th><th scope="col">Para qué</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Informe de avance</th><td>Cada semana</td><td>Horas usadas, tareas cumplidas y próximas, decisiones pendientes y fecha prevista.</td></tr>
+        <tr><th scope="row">Demostración</th><td>Cada 2 semanas</td><td>Ve y prueba lo construido en un entorno de prueba, y aprueba o pide cambios.</td></tr>
+        <tr><th scope="row">Acta de reunión</th><td>Después de cada reunión</td><td>Lo que se decidió queda por escrito para su aprobación.</td></tr>
+        <tr><th scope="row">Pedido de cambio</th><td>Cuando lo necesite</td><td>Lo que esté fuera del alcance se cotiza antes de hacerlo, nunca después.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2>Preguntas frecuentes</h2>
   <Faq lang="es" />
+
+  <CtaBand slot="after" lang="es" title="Empecemos por la primera versión" text="Una llamada de 30 minutos y, en 72 horas, su idea funcionando." />
 </Simple>

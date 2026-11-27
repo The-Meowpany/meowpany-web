@@ -1,30 +1,35 @@
 ---
 import Logo from "./Logo.astro";
 import { alternate, path, type Lang, t } from "../i18n";
+import { withoutBase } from "../lib/url";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = t(lang);
 const current = Astro.url.pathname;
 const links = lang === "es"
-  ? (["firstVersion", "services", "pricing", "audit", "estimate"] as const)
-  : (["firstVersion", "services", "pricing", "hire", "audit"] as const);
+  ? (["services", "firstVersion", "process", "pricing", "about"] as const)
+  : (["services", "firstVersion", "hire", "pricing", "about"] as const);
+const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
 ---
 <header class="site-header">
   <div class="wrap bar">
-    <a href={path("home", lang)} class="home" aria-label={`The Meowpany · ${copy.tagline}`}><Logo /></a>
+    <a href={path("home", lang)} class="home" aria-label={`The Meowpany · ${copy.tagline}`}><Logo size={30} /></a>
     <button class="toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-open={copy.menu} data-close={copy.close}>
-      <span class="toggle-label">{copy.menu}</span>
+      <span class="bars" aria-hidden="true"></span><span class="toggle-label">{copy.menu}</span>
     </button>
     <nav id="site-nav" class="nav" aria-label={copy.menu}>
       <ul>
         {links.map((key) => {
           const href = path(key, lang);
-          return <li><a href={href} aria-current={current === href ? "page" : undefined}>{copy.nav[key]}</a></li>;
+          return <li><a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{copy.nav[key]}</a></li>;
         })}
       </ul>
-      <a class="lang" href={alternate(current, lang)} hreflang={lang === "es" ? "en" : "es"} lang={lang === "es" ? "en" : "es"} aria-label={copy.switchLabel}>{copy.switchTo}</a>
-      <a class="btn btn-accent" href={path("quote", lang)}>{copy.quote}</a>
+      <div class="end">
+        <a class="lang" href={alternate(current, lang)} hreflang={lang === "es" ? "en" : "es"} lang={lang === "es" ? "en" : "es"} aria-label={copy.switchLabel}>{lang === "es" ? "EN" : "ES"}</a>
+        <a class="btn btn-ghost btn-sm" href={path("quote", lang)}>{copy.quote}</a>
+        <a class="btn btn-primary btn-sm" href={`${path("book", lang)}?for=prototype`}>{copy.nav.book}</a>
+      </div>
     </nav>
   </div>
 </header>
@@ -37,34 +42,59 @@ const links = lang === "es"
     const open = toggle.getAttribute("aria-expanded") !== "true";
     toggle.setAttribute("aria-expanded", String(open));
     nav?.classList.toggle("open", open);
+    document.body.classList.toggle("menu-open", open);
     const label = toggle.querySelector(".toggle-label");
     if (label) label.textContent = open ? toggle.dataset.close ?? "" : toggle.dataset.open ?? "";
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
   });
+  nav?.addEventListener("click", (event) => {
+    if ((event.target as HTMLElement).closest("a") && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
+  });
 </script>
 
 <style>
-  .site-header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 68px; }
-  .home { text-decoration: none; }
-  .nav { display: flex; align-items: center; gap: 1.25rem; }
-  .nav ul { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
-  .nav ul a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.7rem; border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 500; }
-  .nav ul a:hover, .nav ul a[aria-current="page"] { background: var(--soft); }
-  .lang { color: var(--muted); font-size: 0.95rem; min-height: 44px; display: inline-flex; align-items: center; }
-  .toggle { display: none; min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+  /* The blur lives on a pseudo-element: on the header itself it would make the header the
+     containing block of the fixed mobile menu and clip it. */
+  .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--line); }
+  .site-header::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(180%) blur(14px);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 66px; }
+  .home { display: inline-flex; text-decoration: none; flex: none; }
+  .nav { display: flex; align-items: center; gap: 1.5rem; flex: 1; justify-content: space-between; }
+  .nav ul { display: flex; gap: 0.1rem; list-style: none; margin: 0 auto; padding: 0; }
+  .nav ul a {
+    display: inline-flex; align-items: center; min-height: 38px; padding: 0 0.75rem; border-radius: 9px;
+    color: var(--muted); text-decoration: none; font-size: 0.94rem; font-weight: 500; transition: color 150ms, background-color 150ms;
+  }
+  .nav ul a:hover { color: var(--ink); background: var(--soft); }
+  .nav ul a[aria-current="page"] { color: var(--ink); }
+  .end { display: flex; align-items: center; gap: 0.5rem; }
+  .lang { color: var(--muted); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; min-height: 38px; padding: 0 0.6rem; display: inline-flex; align-items: center; text-decoration: none; border-radius: 9px; }
+  .lang:hover { color: var(--ink); background: var(--soft); }
+  .toggle {
+    display: none; align-items: center; gap: 0.55rem; min-height: 40px; padding: 0 0.9rem; border-radius: 10px;
+    border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); font: inherit; font-size: 0.92rem; font-weight: 600; cursor: pointer;
+  }
+  .bars, .bars::before, .bars::after { display: block; width: 14px; height: 1.6px; background: currentColor; border-radius: 2px; position: relative; }
+  .bars::before, .bars::after { content: ""; position: absolute; left: 0; }
+  .bars::before { top: -4.5px; }
+  .bars::after { top: 4.5px; }
 
-  @media (max-width: 960px) {
-    .toggle { display: inline-flex; align-items: center; }
+  @media (max-width: 1020px) {
+    .toggle { display: inline-flex; }
     .nav {
-      display: none; position: fixed; inset: 68px 0 0 0; background: var(--bg); padding: 1.5rem 16px 6rem;
-      flex-direction: column; align-items: stretch; gap: 1rem; overflow-y: auto;
+      display: none; position: fixed; inset: 66px 0 0 0; background: var(--bg); padding: 1.25rem 20px 2rem;
+      flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 1.5rem; overflow-y: auto;
     }
     .nav.open { display: flex; }
-    .nav ul { flex-direction: column; }
-    .nav ul a { font-size: 1.2rem; min-height: 52px; }
-    .nav .btn { position: fixed; left: 16px; right: 16px; bottom: 16px; }
+    .nav ul { flex-direction: column; margin: 0; }
+    .nav ul a { display: flex; font-size: 1.15rem; min-height: 54px; color: var(--ink); border-bottom: 1px solid var(--line); border-radius: 0; padding: 0; }
+    .end { flex-direction: column; align-items: stretch; margin-top: auto; }
+    .end .btn { min-height: 50px; font-size: 1rem; }
+    .lang { justify-content: center; }
   }
 </style>

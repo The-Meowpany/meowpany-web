@@ -1,15 +1,23 @@
 ---
 import Simple from "../../views/Simple.astro";
 import QuoteForm from "../../components/QuoteForm.astro";
+import { path } from "../../i18n";
 import { site, whatsappLink } from "../../site";
 const whatsapp = whatsappLink("Hola, quiero consultar por un proyecto.");
 ---
-<Simple lang="es" title="Contacto" description="Escríbanos por correo, WhatsApp o mediante el formulario. Respondemos en menos de un día hábil." lead="Respondemos en menos de un día hábil.">
-  <ul>
-    <li>Correo: <a href={`mailto:${site.email}`}>{site.email}</a></li>
-    {whatsapp && <li><a href={whatsapp} rel="noopener">WhatsApp</a></li>}
-    <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
-    <li>{site.city}</li>
-  </ul>
+<Simple lang="es" wide title="Contacto" eyebrow="Contacto" description="Escríbanos por correo, agende una llamada o pida una cotización. Respondemos en menos de un día hábil." lead="Respondemos en menos de un día hábil. Elija el canal que le quede más cómodo.">
+  <div class="channels">
+    <a class="card channel" href={`mailto:${site.email}`}><strong>Correo</strong><span>{site.email}</span><small class="muted">Consultas generales. Menos de un día hábil.</small></a>
+    <a class="card channel" href={path("book", "es")}><strong>Llamada de 30 minutos</strong><span>Agendar</span><small class="muted">Por videollamada, sin compromiso.</small></a>
+    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>WhatsApp</strong><span>Escribir</span><small class="muted">Consultas rápidas en horario laboral.</small></a>}
+    <a class="card channel" href={site.linkedin} rel="noopener"><strong>LinkedIn</strong><span>The Meowpany</span><small class="muted">Empresas y clientes del exterior.</small></a>
+  </div>
+  <p class="muted small">Trabajamos en forma remota desde Montevideo, sin local de atención al público. Si prefiere reunirse en persona, vamos a su empresa.</p>
+  <h2>Pedir una cotización</h2>
   <QuoteForm lang="es" preset="website" />
 </Simple>
+<style>
+  .channels { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin-bottom: 1rem; }
+  .channel { display: grid; gap: 0.2rem; text-decoration: none; color: inherit; }
+  .channel span { color: var(--primary); font-weight: 600; word-break: break-word; }
+</style>

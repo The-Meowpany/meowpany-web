@@ -11,6 +11,17 @@ export const prices = {
   hours: { rate: 35 },
 } as const;
 
+// Launch prices for the first 5 clients, in exchange for publishing the case and a testimonial
+// (business plan, section 11). Support starts with the first month free.
+export const launch = { website: 800, store: 1900, hourly: 32, clients: 5 } as const;
+
+/** Support plans: only commitments the team can keep today (response times are tracked in Core). */
+export const supportPlans = [
+  { key: "basic", price: prices.support.basic, responseHours: { es: "2 días hábiles", en: "2 business days" }, improvementHours: 0 },
+  { key: "pro", price: prices.support.pro, responseHours: { es: "1 día hábil", en: "1 business day" }, improvementHours: 2 },
+  { key: "premium", price: prices.support.premium, responseHours: { es: "4 horas hábiles", en: "4 business hours" }, improvementHours: 5 },
+] as const;
+
 export type QuoteInput = {
   service: ServiceKey;
   pages?: number;

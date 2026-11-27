@@ -1,38 +1,62 @@
 ---
+// Services with what each includes, what it doesn't, its timeline and its list and launch prices.
+// `detailed` shows the full card (services page); without it the card is a summary.
 import Icon from "./Icon.astro";
 import { services } from "../content";
-import { money, type Lang, t } from "../i18n";
+import { money, path, type Lang, t } from "../i18n";
 
 interface Props { lang: Lang; detailed?: boolean; only?: string[] }
 const { lang, detailed = false, only } = Astro.props;
-const copy = t(lang);
+const ui = t(lang);
 const list = services[lang].filter((s) => !only || only.includes(s.key));
-const unitLabel = { from: copy.price.from, perMonth: copy.price.perMonth, perHour: copy.price.perHour };
+const copy = {
+  es: { includes: "Incluye", excludes: "Aparte", forWho: "Para", launch: "Precio de lanzamiento", more: "Ver detalle", quote: "Cotizar" },
+  en: { includes: "Includes", excludes: "Not included", forWho: "For", launch: "Launch price", more: "See details", quote: "Get a quote" },
+}[lang];
+const unitLabel = { from: ui.price.from, perMonth: ui.price.perMonth, perHour: ui.price.perHour, fixed: "" };
+const anchor = (key: string) => (key === "hours" ? "exterior" : key);
 ---
-<div class="grid services">
+<div class:list={["services", { detailed }]}>
   {list.map((s) => (
-    <article class="card reveal" id={s.key === "hours" ? "exterior" : s.key}>
-      <div class="icon"><Icon name={s.icon} /></div>
+    <article class="card service reveal" id={detailed ? anchor(s.key) : undefined}>
+      <div class="top">
+        <div class="icon"><Icon name={s.icon} /></div>
+        <span class="badge"><Icon name="clock" />{s.time}</span>
+      </div>
       <h3>{s.title}</h3>
-      <p class="muted">{s.summary}</p>
-      {detailed && (
-        <ul class="checks">
-          {s.includes.map((item) => <li><Icon name="check" />{item}</li>)}
-        </ul>
-      )}
-      <p class="price">
-        {s.unit === "from" && <small>{unitLabel.from} </small>}{money(s.price, lang)}
-        {s.unit !== "from" && <small> {unitLabel[s.unit]}</small>}
-      </p>
-      {detailed && <p class="muted small-time"><Icon name="clock" /> {s.time}</p>}
+      <p class="muted summary">{s.summary}</p>
+      {detailed && <p class="for"><strong>{copy.forWho}:</strong> {s.forWho}</p>}
+      {detailed && <h4>{copy.includes}</h4>}
+      {detailed && <ul class="check-list">{s.includes.map((item) => <li><span>{item}</span></li>)}</ul>}
+      {detailed && s.notIncluded.length > 0 && <h4>{copy.excludes}</h4>}
+      {detailed && s.notIncluded.length > 0 && <ul class="dash-list">{s.notIncluded.map((item) => <li>{item}</li>)}</ul>}
+      <div class="bottom">
+        <div>
+          <p class="price">
+            {s.unit === "from" && <small>{unitLabel.from} </small>}{money(s.price, lang)}
+            {(s.unit === "perMonth" || s.unit === "perHour") && <small> {unitLabel[s.unit]}</small>}
+          </p>
+          {s.launchPrice && <p class="launch small">{copy.launch}: <strong>{money(s.launchPrice, lang)}</strong></p>}
+        </div>
+        <a class="more" href={detailed ? path("quote", lang) : `${path("services", lang)}#${anchor(s.key)}`}>{detailed ? copy.quote : copy.more}<Icon name="arrow-right" /></a>
+      </div>
     </article>
   ))}
 </div>
 <style>
-  .services { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
-  .checks { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: 0.4rem; }
-  .checks li { display: flex; gap: 0.5rem; align-items: flex-start; }
-  .checks :global(svg) { width: 18px; height: 18px; color: var(--primary); flex: none; margin-top: 0.25rem; }
-  .small-time { display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; margin: 0; }
-  .small-time :global(svg) { width: 16px; height: 16px; }
+  .services { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+  .service { display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .top .badge :global(svg) { width: 13px; height: 13px; }
+  .summary { margin-bottom: 1.25rem; }
+  .for { font-size: 0.95rem; color: var(--ink-2); }
+  h4 { margin: 1.1rem 0 0.6rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+  .check-list { font-size: 0.95rem; }
+  .dash-list { font-size: 0.92rem; }
+  .bottom { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--line); display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .detailed .bottom { margin-top: 1.5rem; }
+  .launch { margin: 0.2rem 0 0; color: var(--primary); }
+  .more { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; white-space: nowrap; }
+  .more :global(svg) { width: 15px; height: 15px; transition: transform 150ms var(--ease); }
+  .more:hover :global(svg) { transform: translateX(2px); }
 </style>

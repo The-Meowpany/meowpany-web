@@ -67,10 +67,15 @@ const copy = {
 const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.complexities, entityName: copy.entityName, size: copy.size, reportName: copy.reportName, complexity: copy.complexity, integrationName: copy.integrationName };
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
-  <section class="section">
+  <header class="page-head">
     <div class="wrap">
+      <p class="eyebrow">{lang === "es" ? "Herramienta gratuita" : "Free tool"}</p>
       <h1>{copy.title}</h1>
       <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
 
       <form id="estimate-form" class="card" novalidate data-email={site.email} data-inbox={services.web3formsKey}
         data-lang={lang} data-rows={JSON.stringify(rowText)}>

@@ -1,32 +1,51 @@
 ---
 import Base from "../layouts/Base.astro";
 import ServiceCards from "../components/ServiceCards.astro";
+import Commitments from "../components/Commitments.astro";
 import CtaBand from "../components/CtaBand.astro";
-import { type Lang, t } from "../i18n";
+import { path, type Lang, t } from "../i18n";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const ui = t(lang);
 const copy = {
   es: {
-    title: "Servicios", description: "Sitios institucionales, tiendas en línea, sistemas a medida, soporte mensual y desarrolladores para el exterior.",
-    h1: "Servicios", lead: "Cinco servicios con alcance claro, plazo escrito y precio de lista publicado.",
-    ctaTitle: "¿No sabe cuál necesita?", ctaText: "Cuéntenos el problema y le recomendaremos la opción más simple que lo resuelva.",
+    title: "Servicios", description: "Sitios web institucionales, tiendas en línea, software y aplicaciones a medida, soporte mensual y desarrolladores para el exterior: qué incluye cada uno, plazos y precios.",
+    eyebrow: "Servicios", h1: "Webs, tiendas y software, con alcance y precio por escrito",
+    lead: "Cinco servicios con lo que incluyen, lo que se cobra aparte, el plazo y el precio de lista. Todos empiezan con una primera versión funcional gratis en 72 horas.",
+    commitTitle: "Reglas que aplican a todos los servicios",
+    ctaTitle: "¿No sabe cuál necesita?", ctaText: "Cuéntenos el problema y le recomendamos la opción más simple que lo resuelva. Si conviene, se la mostramos funcionando en 72 horas.",
+    pricing: "Comparar precios",
   },
   en: {
-    title: "Services", description: "Business websites, online stores, custom systems, monthly support and developers for hire.",
-    h1: "Services", lead: "Five services with a clear scope, a written timeline and a published list price.",
-    ctaTitle: "Not sure which one you need?", ctaText: "Tell us the problem and we'll recommend the simplest option that solves it.",
+    title: "Services", description: "Business websites, online stores, custom software and apps, monthly support and developers for hire: what each includes, timelines and prices.",
+    eyebrow: "Services", h1: "Websites, stores and software, with scope and price in writing",
+    lead: "Five services with what they include, what costs extra, the timeline and the list price. Each one starts with a free first working version in 72 hours.",
+    commitTitle: "Rules that apply to every service",
+    ctaTitle: "Not sure which one you need?", ctaText: "Tell us the problem and we'll recommend the simplest option that solves it, and show it working within 72 hours if it makes sense.",
+    pricing: "Compare prices",
   },
 }[lang];
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
-  <section class="section">
+  <header class="page-head">
     <div class="wrap">
+      <p class="eyebrow">{copy.eyebrow}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
+      <div class="actions"><a class="btn btn-ghost btn-sm" href={path("pricing", lang)}>{copy.pricing}</a></div>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
       <ServiceCards lang={lang} detailed />
-      <p class="muted" style="margin-top:1rem">{ui.price.vat}</p>
+      <p class="muted small" style="margin-top:1.25rem">{ui.price.vat}.</p>
+    </div>
+  </section>
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.commitTitle}</h2></div>
+      <Commitments lang={lang} />
     </div>
   </section>
   <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />

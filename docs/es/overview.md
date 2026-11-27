@@ -41,10 +41,12 @@ Web3Forms y el correo como respaldo. Sumar un proveedor es sumar un adaptador, s
 | Ruta | Qué contiene |
 | --- | --- |
 | `src/i18n.ts` | Las rutas en ambos idiomas y los textos compartidos de la interfaz |
-| `src/content.ts` | Servicios, pasos del proceso, preguntas frecuentes y la oferta de primera versión en ambos idiomas |
+| `src/content.ts` | Todo dato que afirma el sitio, en ambos idiomas: servicios, proceso, garantías, cifras de mercado con su fuente, herramientas, preguntas frecuentes y la oferta de primera versión. Las cifras salen del plan de negocio (revisión 99) |
 | `src/pricing.ts` | Precios de lista y la estimación de la cotización. Los precios se cambian solo aquí |
 | `src/site.ts` | Correo, número de WhatsApp, LinkedIn y las claves públicas de los servicios de formularios, agenda y auditoría |
-| `src/lib/` | Lógica del navegador con pruebas unitarias: estimador, auditoría, envío de solicitudes, retorno, enlaces con ruta base |
+| `src/lib/` | Lógica del navegador con pruebas unitarias. `leads.ts`, `audit.ts` y `estimator.ts` son los módulos `web-leads`, `web-audit` y `estimator` de meowpany-engineering (0.1.0); se cambian primero allí |
+| `src/styles/global.css` | El sistema de diseño, sobre los colores de la marca: rosa capucha #CA678E, carbón #433F45 y gris cálido |
+| `public/brand/` | Los activos reales de la marca, tomados de Core: el gato (SVG) y el logotipo (PNG, con una copia clara para fondos oscuros) |
 | `src/views/` | Diseños de página compartidos por las rutas en español y en inglés |
 | `src/locales/es/` | Las páginas en español, con nombre en inglés según la página que reflejan; sus URL en español salen de `src/i18n.ts` |
 | `src/pages/` | La página de inicio en español y las rutas en inglés bajo `/en/` |

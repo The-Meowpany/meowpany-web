@@ -41,10 +41,12 @@ an email fallback. Adding a provider means adding an adapter, not touching the f
 | Path | What it holds |
 | --- | --- |
 | `src/i18n.ts` | Routes in both languages and shared interface text |
-| `src/content.ts` | Services, process steps, FAQ and the first-version offer in both languages |
+| `src/content.ts` | Every fact the site states, in both languages: services, process, guarantees, market figures with sources, tools, FAQ and the first-version offer. Figures come from the business plan (revision 99) |
 | `src/pricing.ts` | List prices and the quote estimate. Change prices here only |
 | `src/site.ts` | Email, WhatsApp number, LinkedIn and the public keys of the form, booking and audit services |
-| `src/lib/` | Browser logic with unit tests: estimator, audit, lead delivery, ROI, base-path links |
+| `src/lib/` | Browser logic with unit tests. `leads.ts`, `audit.ts` and `estimator.ts` are the `web-leads`, `web-audit` and `estimator` modules of meowpany-engineering (0.1.0); change them there first |
+| `src/styles/global.css` | The design system, built on the brand colours: hood pink #CA678E, charcoal #433F45, warm grey |
+| `public/brand/` | The real brand assets from Core: the cat mark (SVG) and the wordmark (PNG, plus a light copy for dark backgrounds) |
 | `src/views/` | Page layouts shared by the Spanish and English routes |
 | `src/locales/es/` | Spanish pages, named in English after the page they mirror; their Spanish URLs come from `src/i18n.ts` |
 | `src/pages/` | The Spanish home page and the English routes under `/en/` |

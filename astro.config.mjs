@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { routes } from "./src/i18n.ts";
 
 // Spanish pages keep their Spanish URLs (/agendar/) while their files are named in English, after the
@@ -11,7 +12,8 @@ const localizedRoutes = {
   name: "localized-routes",
   hooks: {
     "astro:config:setup": ({ injectRoute }) => {
-      const files = new Set(readdirSync("src/locales/es").filter((f) => f.endsWith(".astro")));
+      const dir = fileURLToPath(new URL("./src/locales/es", import.meta.url));
+      const files = new Set(readdirSync(dir).filter((f) => f.endsWith(".astro")));
       for (const { es, en } of Object.values(routes)) {
         if (!/^\/[a-z-]+\/$/.test(es)) continue; // the home page and in-page anchors have no file of their own
         const file = `${en.split("/").filter(Boolean).pop()}.astro`;

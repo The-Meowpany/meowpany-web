@@ -8,17 +8,23 @@ const { lang } = Astro.props;
 const copy = t(lang);
 const year = new Date().getFullYear();
 const whatsapp = whatsappLink(copy.whatsappText);
+const about = {
+  es: "Estudio de desarrollo de sitios web, tiendas en línea y software a medida para pymes de Uruguay y equipos del exterior. Trabajamos en forma remota desde Montevideo.",
+  en: "A studio building websites, online stores and custom software for businesses in Uruguay and teams abroad. We work remotely from Montevideo.",
+}[lang];
 ---
 <footer class="site-footer">
   <div class="wrap cols">
-    <div>
-      <Logo />
-      <p class="muted">{copy.tagline}<br />{site.city}</p>
+    <div class="brand">
+      <Logo size={30} tone="light" />
+      <p>{about}</p>
+      <p class="mail"><a href={`mailto:${site.email}`}>{site.email}</a></p>
     </div>
     <nav aria-label={copy.footer.services}>
       <h2>{copy.footer.services}</h2>
       <ul>
         <li><a href={path("services", lang)}>{copy.nav.services}</a></li>
+        <li><a href={path("firstVersion", lang)}>{copy.nav.firstVersion}</a></li>
         <li><a href={path("pricing", lang)}>{copy.nav.pricing}</a></li>
         <li><a href={path("hire", lang)}>{copy.nav.hire}</a></li>
         <li><a href={path("quote", lang)}>{copy.quote}</a></li>
@@ -37,34 +43,33 @@ const whatsapp = whatsappLink(copy.whatsappText);
       <h2>{copy.footer.company}</h2>
       <ul>
         <li><a href={path("about", lang)}>{copy.nav.about}</a></li>
-        <li><a href={path("work", lang)}>{copy.nav.work}</a></li>
         <li><a href={path("process", lang)}>{copy.nav.process}</a></li>
+        <li><a href={path("work", lang)}>{copy.nav.work}</a></li>
         <li><a href={path("resources", lang)}>{copy.nav.resources}</a></li>
+        <li><a href={path("contact", lang)}>{copy.nav.contact}</a></li>
+        {whatsapp && <li><a href={whatsapp} rel="noopener">{copy.whatsapp}</a></li>}
       </ul>
     </nav>
-    <div>
-      <h2>{copy.footer.reach}</h2>
-      <ul>
-        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-        {whatsapp && <li><a href={whatsapp} rel="noopener">{copy.whatsapp}</a></li>}
-        <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
-        <li><a href={path("contact", lang)}>{copy.nav.contact}</a></li>
-      </ul>
-    </div>
   </div>
   <div class="wrap legal">
-    <p>© {year} The Meowpany. {copy.footer.rights}</p>
-    <p><a href={path("privacy", lang)}>{copy.footer.privacy}</a> · <a href={path("terms", lang)}>{copy.footer.terms}</a> · {copy.footer.cookies}</p>
+    <p>© {year} The Meowpany™ · {site.city}</p>
+    <p><a href={path("privacy", lang)}>{copy.footer.privacy}</a><span aria-hidden="true"> · </span><a href={path("terms", lang)}>{copy.footer.terms}</a><span aria-hidden="true"> · </span>{copy.footer.cookies}</p>
   </div>
 </footer>
 <style>
-  .site-footer { border-top: 1px solid var(--line); background: var(--soft); padding: 3rem 0 1.5rem; margin-top: 0; }
-  .cols { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
-  h2 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.75rem; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
-  ul a { color: var(--ink); text-decoration: none; display: inline-block; min-height: 32px; }
-  ul a:hover { color: var(--primary); text-decoration: underline; }
-  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  .site-footer { background: #1d1b1f; color: #c9c3cb; padding: 4.5rem 0 2rem; }
+  .cols { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr repeat(3, 1fr); }
+  .brand p { font-size: 0.93rem; line-height: 1.6; max-width: 26rem; margin: 1.1rem 0 0; color: #a9a2ab; }
+  .brand .mail a { color: #f3f0f2; font-weight: 600; text-decoration: none; border-bottom: 1px solid #4a454c; }
+  .brand .mail a:hover { border-color: var(--brand); }
+  h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b848d; margin: 0.3rem 0 1rem; font-weight: 650; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.15rem; }
+  ul a { color: #ddd7de; text-decoration: none; font-size: 0.94rem; display: inline-block; padding: 0.3rem 0; }
+  ul a:hover { color: #ffffff; }
+  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid #332f35; color: #8b848d; font-size: 0.85rem; }
   .legal p { margin: 0; }
-  .legal a { color: var(--muted); }
+  .legal a { color: #a9a2ab; text-decoration: none; }
+  .legal a:hover { color: #ffffff; }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .cols { grid-template-columns: 1fr; } }
 </style>

@@ -11,10 +11,15 @@ const copy = {
 }[lang];
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
-  <section class="section">
+  <header class="page-head">
     <div class="wrap">
+      <p class="eyebrow">{lang === "es" ? "Cotizar" : "Quote"}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
       <QuoteForm lang={lang} />
     </div>
   </section>

@@ -2,7 +2,8 @@
 // while it is empty the WhatsApp buttons are hidden instead of pointing nowhere.
 export const site = {
   name: "The Meowpany",
-  email: "hola@meowpany.com",
+  // The company inbox until the meowpany.com domain and its mailboxes exist.
+  email: "themeowpany@gmail.com",
   whatsapp: "", // International format without "+" or spaces, e.g. "598991234567".
   linkedin: "https://www.linkedin.com/company/meowpany",
   city: "Montevideo, Uruguay",

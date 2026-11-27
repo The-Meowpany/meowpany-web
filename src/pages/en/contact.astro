@@ -1,13 +1,21 @@
 ---
 import Simple from "../../views/Simple.astro";
 import QuoteForm from "../../components/QuoteForm.astro";
+import { path } from "../../i18n";
 import { site } from "../../site";
 ---
-<Simple lang="en" title="Contact" description="Email us or use the form. We reply within one business day." lead="We reply within one business day.">
-  <ul>
-    <li>Email: <a href={`mailto:${site.email}`}>{site.email}</a></li>
-    <li><a href={site.linkedin} rel="noopener">LinkedIn</a></li>
-    <li>{site.city}</li>
-  </ul>
+<Simple lang="en" wide title="Contact" eyebrow="Contact" description="Email us, book a call or ask for a quote. We reply within one business day." lead="We reply within one business day. Pick whichever channel suits you.">
+  <div class="channels">
+    <a class="card channel" href={`mailto:${site.email}`}><strong>Email</strong><span>{site.email}</span><small class="muted">Any question. Within one business day.</small></a>
+    <a class="card channel" href={path("book", "en")}><strong>30-minute call</strong><span>Book</span><small class="muted">By video, no strings attached.</small></a>
+    <a class="card channel" href={site.linkedin} rel="noopener"><strong>LinkedIn</strong><span>The Meowpany</span><small class="muted">For companies and teams abroad.</small></a>
+  </div>
+  <p class="muted small">We work remotely from Montevideo, Uruguay.</p>
+  <h2>Ask for a quote</h2>
   <QuoteForm lang="en" preset="hours" />
 </Simple>
+<style>
+  .channels { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin-bottom: 1rem; }
+  .channel { display: grid; gap: 0.2rem; text-decoration: none; color: inherit; }
+  .channel span { color: var(--primary); font-weight: 600; word-break: break-word; }
+</style>

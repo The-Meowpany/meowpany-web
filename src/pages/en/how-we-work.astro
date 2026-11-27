@@ -1,18 +1,31 @@
 ---
 import Simple from "../../views/Simple.astro";
 import ProcessSteps from "../../components/ProcessSteps.astro";
+import Commitments from "../../components/Commitments.astro";
 import Faq from "../../components/Faq.astro";
+import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="en" title="How we work" description="The Meowpany process in 6 steps: discovery, proposal, design, development, launch and support." lead="We fix the scope and the price first, then build in 2-week cycles you can see and test.">
+<Simple lang="en" wide title="How we work" eyebrow="Process" description="The Meowpany process: first call, free first version in 72 hours, fixed-price proposal, design, two-week development cycles, testing and launch." lead="First we show you your idea working. Then we fix the scope and the price, and build in two-week cycles you can see and try.">
   <ProcessSteps lang="en" />
-  <h2>What you always get</h2>
-  <ul>
-    <li>A written specification of what we'll build, before we start.</li>
-    <li>A demo every 2 weeks and access to a staging environment.</li>
-    <li>Testing before every delivery, with a report of what was tested.</li>
-    <li>User manuals, the code, every credential and training at hand-over.</li>
-    <li>A 60-day warranty on what we deliver.</li>
-  </ul>
+
+  <h2>What you get on every project</h2>
+  <Commitments lang="en" />
+
+  <h2>How we keep you informed</h2>
+  <div class="table-wrap">
+    <table class="compare">
+      <thead><tr><th scope="col">What</th><th scope="col">When</th><th scope="col">Why</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Progress report</th><td>Weekly</td><td>Hours used, finished and upcoming work, pending decisions and expected date.</td></tr>
+        <tr><th scope="row">Demo</th><td>Every 2 weeks</td><td>You see and try what was built on a staging environment, and approve or ask for changes.</td></tr>
+        <tr><th scope="row">Meeting minutes</th><td>After every meeting</td><td>What was decided is written down for your approval.</td></tr>
+        <tr><th scope="row">Change request</th><td>Whenever you need</td><td>Anything outside the scope is quoted before it is done, never after.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2>Frequently asked questions</h2>
   <Faq lang="en" />
+
+  <CtaBand slot="after" lang="en" title="Start with the first version" text="A 30-minute call and, within 72 hours, your idea working." />
 </Simple>

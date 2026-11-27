@@ -1,118 +1,238 @@
-// Content reused across pages, in both languages. Prices come from pricing.ts so they never drift.
+// Every fact the site states, in both languages, in one place. Figures come from the business plan
+// (revision 99, 17 Nov 2026) and prices from pricing.ts, so a page can never contradict another.
 import type { Lang } from "./i18n";
-import { prices } from "./pricing";
+import { launch, prices } from "./pricing";
 
 export type Service = {
   key: "website" | "store" | "custom" | "support" | "hours";
   icon: string;
   title: string;
   summary: string;
+  forWho: string;
   includes: string[];
+  notIncluded: string[];
   price: number;
-  unit: "from" | "perMonth" | "perHour";
+  launchPrice?: number;
+  unit: "from" | "perMonth" | "perHour" | "fixed";
   time: string;
 };
 
 export const services: Record<Lang, Service[]> = {
   es: [
     {
-      key: "website", icon: "layout-template", title: "Sitio institucional",
-      summary: "Su empresa en internet con un sitio rápido, propio y fácil de encontrar en Google.",
-      includes: ["Hasta 6 páginas adaptadas a móviles", "SEO básico y Google Business Profile", "Formulario, WhatsApp y analítica", "Garantía de 60 días"],
-      price: prices.website.from, unit: "from", time: "2 a 3 semanas",
+      key: "website", icon: "layout-template", title: "Sitio web institucional",
+      summary: "Un sitio propio, rápido y fácil de encontrar en Google, que presenta su empresa y convierte visitas en consultas.",
+      forWho: "Empresas que hoy dependen solo de redes sociales o tienen un sitio desactualizado.",
+      includes: [
+        `Hasta ${prices.website.includedPages} páginas, diseñadas primero para celulares`,
+        "Textos ordenados y SEO básico: títulos, descripciones, mapa del sitio y datos estructurados",
+        "Ficha de Google Business Profile",
+        "Formulario de contacto, botón de WhatsApp y analítica",
+        "Dominio y certificado HTTPS configurados",
+        "Capacitación para editar los contenidos",
+      ],
+      notIncluded: [`Cada página adicional: USD ${prices.website.extraPage}`, "Redacción de textos largos y fotografía profesional", "El costo del dominio y del alojamiento, que se paga a cada proveedor"],
+      price: prices.website.from, launchPrice: launch.website, unit: "fixed", time: "2 a 3 semanas",
     },
     {
       key: "store", icon: "shopping-bag", title: "Tienda en línea",
-      summary: "Venda las 24 horas con pagos, envíos y facturación electrónica conectados.",
-      includes: ["Catálogo, carrito y pagos (Mercado Pago, tarjetas)", "Integración con facturación electrónica (CFE)", "Envíos y stock", "Capacitación para su equipo"],
-      price: prices.store.from, unit: "from", time: "4 a 6 semanas",
+      summary: "Venta las 24 horas con pagos, envíos y facturación electrónica conectados, sin cargar cada venta a mano.",
+      forWho: "Comercios que venden por WhatsApp o Instagram y quieren cobrar en línea.",
+      includes: [
+        `Catálogo de hasta ${prices.store.largeCatalogThreshold} productos, carrito y cuentas de clientes`,
+        "Cobro con Mercado Pago y tarjetas",
+        "Envíos, retiro en local y control de stock",
+        "Integración con la facturación electrónica (CFE) de la DGI a través de su proveedor",
+        "Avisos por correo de cada pedido",
+        "Capacitación para su equipo",
+      ],
+      notIncluded: [`Catálogo de más de ${prices.store.largeCatalogThreshold} productos: + USD ${prices.store.largeCatalog}`, `Cada medio de pago adicional: + USD ${prices.store.extraPayment}`, "Las comisiones de las pasarelas de pago y del proveedor de facturación"],
+      price: prices.store.from, launchPrice: launch.store, unit: "fixed", time: "4 a 6 semanas",
     },
     {
-      key: "custom", icon: "workflow", title: "Sistemas a medida",
-      summary: "Turnos, gestión, portales e integraciones que reemplazan planillas y papeles.",
-      includes: ["Relevamiento y especificación", "Diseño, desarrollo y pruebas", "Entregas cada 2 semanas", "Manuales y traspaso del código"],
+      key: "custom", icon: "workflow", title: "Software y aplicaciones a medida",
+      summary: "Sistemas de gestión, turnos, portales de clientes, integraciones y automatizaciones que reemplazan planillas y papeles.",
+      forWho: "Empresas con procesos que hoy viven en planillas, correos o sistemas que no se hablan entre sí.",
+      includes: [
+        "Relevamiento y especificación de requisitos con criterios de aceptación",
+        "Estimación por puntos de función (norma IFPUG), con el detalle de cada función",
+        "Diseño de pantallas, desarrollo y pruebas automatizadas",
+        "Una demostración cada 2 semanas en un entorno de prueba",
+        "Manuales, capacitación y traspaso del código y de los accesos",
+      ],
+      notIncluded: ["Licencias o servicios de terceros que el sistema use", "Cambios fuera del alcance aprobado, que se cotizan aparte"],
       price: prices.custom.from, unit: "from", time: "2 a 4 meses",
     },
     {
-      key: "support", icon: "shield-check", title: "Soporte y mantenimiento",
-      summary: "Hosting, copias de seguridad, actualizaciones y mejoras, con un precio fijo por mes.",
-      includes: ["Hosting y certificado de seguridad", "Copias de seguridad automáticas", "Actualizaciones y monitoreo", "Horas de mejoras según el plan"],
-      price: prices.support.basic, unit: "perMonth", time: "Continuo",
+      key: "support", icon: "life-buoy", title: "Soporte y mantenimiento",
+      summary: "Un equipo que responde con plazos por escrito, mantiene su sitio o sistema al día y le dedica horas de mejoras cada mes.",
+      forWho: "Cualquier cliente que quiera seguir creciendo después de la entrega sin contratar a nadie.",
+      includes: ["Tres planes, con plazo de respuesta y horas de mejoras definidos", "Actualizaciones de seguridad", "Registro de cada pedido y de las horas usadas"],
+      notIncluded: [`Horas de mejoras por encima de las del plan: USD ${prices.hours.rate} por hora`],
+      price: prices.support.basic, unit: "perMonth", time: "Mes a mes",
     },
     {
-      key: "hours", icon: "globe", title: "Equipo para el exterior",
-      summary: "Desarrolladores uruguayos en su zona horaria, por hora o con dedicación completa.",
-      includes: ["Horario compatible con EE. UU.", "Contratos y facturación en dólares", "Repositorios y procesos ordenados", "Amplíe o reduzca el equipo cuando lo necesite"],
-      price: prices.hours.rate, unit: "perHour", time: "Continuo",
+      key: "hours", icon: "globe", title: "Desarrolladores para el exterior",
+      summary: "Desarrolladores uruguayos en un horario compatible con Estados Unidos, por hora o con dedicación completa.",
+      forWho: "Equipos y agencias del exterior que necesitan sumar capacidad.",
+      includes: ["Horario superpuesto con la costa este de EE. UU.", "Contratos y facturación en dólares", "Informe semanal de horas y de trabajo", "Dos semanas de prueba sin penalidad"],
+      notIncluded: [],
+      price: prices.hours.rate, launchPrice: launch.hourly, unit: "perHour", time: "Continuo",
     },
   ],
   en: [
     {
       key: "website", icon: "layout-template", title: "Business website",
-      summary: "A fast website you own, built to be found on Google.",
-      includes: ["Up to 6 mobile-friendly pages", "Basic SEO and Google Business Profile", "Contact form, WhatsApp and analytics", "60-day warranty"],
-      price: prices.website.from, unit: "from", time: "2 to 3 weeks",
+      summary: "A fast website you own, easy to find on Google, that presents your business and turns visits into enquiries.",
+      forWho: "Businesses that rely only on social media or have an outdated site.",
+      includes: [
+        `Up to ${prices.website.includedPages} pages, designed for phones first`,
+        "Clear copy and basic SEO: titles, descriptions, sitemap and structured data",
+        "Google Business Profile listing",
+        "Contact form, WhatsApp button and analytics",
+        "Domain and HTTPS certificate set up",
+        "Training to edit the content",
+      ],
+      notIncluded: [`Each extra page: USD ${prices.website.extraPage}`, "Long-form copywriting and professional photography", "Domain and hosting fees, paid to each provider"],
+      price: prices.website.from, launchPrice: launch.website, unit: "fixed", time: "2 to 3 weeks",
     },
     {
       key: "store", icon: "shopping-bag", title: "Online store",
-      summary: "Sell around the clock with payments, shipping and e-invoicing wired in.",
-      includes: ["Catalog, cart and payments", "Uruguayan e-invoicing (CFE) integration", "Shipping and stock", "Training for your team"],
-      price: prices.store.from, unit: "from", time: "4 to 6 weeks",
+      summary: "Sell around the clock with payments, shipping and e-invoicing connected, without entering each sale by hand.",
+      forWho: "Shops that sell through WhatsApp or Instagram and want to take payments online.",
+      includes: [
+        `Catalog of up to ${prices.store.largeCatalogThreshold} products, cart and customer accounts`,
+        "Payments with Mercado Pago and cards",
+        "Shipping, pick-up and stock control",
+        "Uruguayan e-invoicing (DGI CFE) through your provider",
+        "Email notice of every order",
+        "Training for your team",
+      ],
+      notIncluded: [`Catalogs over ${prices.store.largeCatalogThreshold} products: + USD ${prices.store.largeCatalog}`, `Each extra payment method: + USD ${prices.store.extraPayment}`, "Payment gateway and e-invoicing provider fees"],
+      price: prices.store.from, launchPrice: launch.store, unit: "fixed", time: "4 to 6 weeks",
     },
     {
-      key: "custom", icon: "workflow", title: "Custom systems",
-      summary: "Booking, back-office tools, portals and integrations that replace spreadsheets.",
-      includes: ["Discovery and specification", "Design, development and testing", "A demo every 2 weeks", "Manuals and full code hand-over"],
+      key: "custom", icon: "workflow", title: "Custom software and apps",
+      summary: "Back-office systems, booking, customer portals, integrations and automations that replace spreadsheets and paperwork.",
+      forWho: "Businesses whose processes live in spreadsheets, email or systems that don't talk to each other.",
+      includes: [
+        "Requirements discovery and a written specification with acceptance criteria",
+        "Function point estimate (IFPUG), itemized function by function",
+        "Interface design, development and automated tests",
+        "A demo every 2 weeks on a staging environment",
+        "Manuals, training and hand-over of the code and every credential",
+      ],
+      notIncluded: ["Third-party licences or services the system uses", "Changes outside the approved scope, quoted separately"],
       price: prices.custom.from, unit: "from", time: "2 to 4 months",
     },
     {
-      key: "support", icon: "shield-check", title: "Support and maintenance",
-      summary: "Hosting, backups, updates and improvements for a fixed monthly fee.",
-      includes: ["Hosting and TLS certificate", "Automatic backups", "Updates and monitoring", "Improvement hours by plan"],
-      price: prices.support.basic, unit: "perMonth", time: "Ongoing",
+      key: "support", icon: "life-buoy", title: "Support and maintenance",
+      summary: "A team that replies within written response times, keeps your site or system up to date and spends improvement hours on it every month.",
+      forWho: "Any client who wants to keep growing after launch without hiring.",
+      includes: ["Three plans with set response times and improvement hours", "Security updates", "A record of every request and the hours used"],
+      notIncluded: [`Improvement hours beyond the plan: USD ${prices.hours.rate} an hour`],
+      price: prices.support.basic, unit: "perMonth", time: "Month to month",
     },
     {
       key: "hours", icon: "globe", title: "Developers for hire",
-      summary: "Uruguayan developers in your time zone, by the hour or full time.",
-      includes: ["Overlaps with US business hours", "Contracts and invoices in USD", "Clean repositories and process", "Scale up or down anytime"],
-      price: prices.hours.rate, unit: "perHour", time: "Ongoing",
+      summary: "Uruguayan developers whose working day overlaps with yours, by the hour or full time.",
+      forWho: "Teams and agencies abroad that need more capacity.",
+      includes: ["Overlap with US Eastern business hours", "Contracts and invoices in USD", "Weekly report of hours and work", "A two-week trial with no penalty"],
+      notIncluded: [],
+      price: prices.hours.rate, launchPrice: launch.hourly, unit: "perHour", time: "Ongoing",
     },
   ],
 };
 
-export const process: Record<Lang, { title: string; text: string }[]> = {
+/** The project steps, with the durations the plan commits to. */
+export const process: Record<Lang, { title: string; time: string; text: string }[]> = {
   es: [
-    { title: "Llamada", text: "30 minutos para entender su negocio y acordar por escrito qué incluye la primera versión." },
-    { title: "Primera versión en 72 horas", text: "La prueba funcionando antes de pagar nada. Si no lo convence, termina ahí." },
-    { title: "Propuesta", text: "Si decide avanzar: precio cerrado, cronograma y contrato. 50 % al continuar." },
-    { title: "Desarrollo", text: "Una demostración cada 2 semanas: usted ve el avance real." },
-    { title: "Pruebas y entrega", text: "Pruebas, capacitación y puesta en producción." },
-    { title: "Soporte", text: "Garantía de 60 días y planes mensuales si los necesita." },
+    { title: "Llamada inicial", time: "30 minutos", text: "Entendemos el problema, quién va a usar la solución y qué tiene que hacer la primera versión. Le enviamos ese alcance por escrito." },
+    { title: "Primera versión", time: "72 horas", text: "Una versión funcional, sin costo, que prueba con un enlace privado. Si no lo convence, termina ahí." },
+    { title: "Propuesta", time: "2 días", text: "Si decide avanzar: especificación, precio cerrado, cronograma y contrato. Se paga el 50 % para continuar." },
+    { title: "Diseño", time: "1 a 2 semanas", text: "Pantallas y recorridos para su aprobación antes de construir el resto." },
+    { title: "Desarrollo", time: "2 a 8 semanas", text: "Ciclos de 2 semanas, cada uno con una demostración y un informe de avance." },
+    { title: "Pruebas y entrega", time: "1 semana", text: "Pruebas, capacitación, puesta en producción y el 50 % restante. Empiezan los 60 días de garantía." },
   ],
   en: [
-    { title: "Call", text: "30 minutes to understand your business and agree in writing on what the first version includes." },
-    { title: "First version in 72 hours", text: "You try it working before paying anything. If it doesn't convince you, that's the end of it." },
-    { title: "Proposal", text: "If you go ahead: fixed price, timeline and contract. 50 % to continue." },
-    { title: "Development", text: "A demo every 2 weeks, so you see real progress." },
-    { title: "Testing and launch", text: "Testing, training and going live." },
-    { title: "Support", text: "A 60-day warranty and monthly plans if you need them." },
+    { title: "First call", time: "30 minutes", text: "We understand the problem, who will use the solution and what the first version must do. You get that scope in writing." },
+    { title: "First version", time: "72 hours", text: "A working version, free of charge, that you try through a private link. If it doesn't convince you, that's the end of it." },
+    { title: "Proposal", time: "2 days", text: "If you go ahead: specification, fixed price, timeline and contract. You pay 50 % to continue." },
+    { title: "Design", time: "1 to 2 weeks", text: "Screens and flows for your approval before the rest is built." },
+    { title: "Development", time: "2 to 8 weeks", text: "Two-week cycles, each with a demo and a progress report." },
+    { title: "Testing and launch", time: "1 week", text: "Testing, training, go-live and the remaining 50 %. The 60-day warranty starts." },
+  ],
+};
+
+/** What every client gets, whatever the service. */
+export const commitments: Record<Lang, { icon: string; title: string; text: string }[]> = {
+  es: [
+    { icon: "file-check", title: "Alcance por escrito", text: "Antes de cada etapa sabe exactamente qué se construye, con criterios para darlo por terminado." },
+    { icon: "badge-dollar-sign", title: "Precio cerrado", text: "El precio de la propuesta no cambia, salvo que usted pida algo fuera del alcance aprobado." },
+    { icon: "presentation", title: "Avance que se puede ver", text: "Una demostración cada 2 semanas y un informe semanal con horas, tareas cumplidas y próximas." },
+    { icon: "flask-conical", title: "Pruebas documentadas", text: "Cada requisito tiene sus pruebas; recibe un informe de lo probado en cada entrega." },
+    { icon: "shield-check", title: "Garantía de 60 días", text: "Corregimos sin costo los errores de lo entregado durante 60 días desde la puesta en producción." },
+    { icon: "key-round", title: "Todo es suyo", text: "Al terminar le entregamos el código, los accesos, los manuales y la documentación." },
+  ],
+  en: [
+    { icon: "file-check", title: "Scope in writing", text: "Before each stage you know exactly what gets built, with criteria to call it done." },
+    { icon: "badge-dollar-sign", title: "Fixed price", text: "The proposal price doesn't change unless you ask for something outside the approved scope." },
+    { icon: "presentation", title: "Progress you can see", text: "A demo every 2 weeks and a weekly report with hours, finished and upcoming work." },
+    { icon: "flask-conical", title: "Documented testing", text: "Every requirement has its tests; each delivery comes with a report of what was tested." },
+    { icon: "shield-check", title: "60-day warranty", text: "We fix defects in what we delivered at no cost for 60 days after go-live." },
+    { icon: "key-round", title: "You own everything", text: "At the end you get the code, every credential, the manuals and the documentation." },
+  ],
+};
+
+/** Public figures behind the offer, each with its source (business plan, section 2). */
+export const facts: Record<Lang, { value: string; text: string; source: string; url: string }[]> = {
+  es: [
+    { value: "33,8 %", text: "de las pequeñas empresas uruguayas tiene sitio web propio.", source: "ANDE, encuestas a micro y pequeñas empresas 2023", url: "https://ande.org.uy/images/2025/Encuestas_a_Micro_y_Pequenas_Empresas_2023.pdf" },
+    { value: "53,8 %", text: "de 1.311 pymes evaluadas tiene una intensidad digital baja.", source: "ANDE, Chequeo Digital", url: "https://ande.org.uy/reflexiones-para-el-desarrollo/item/digitalizacion-mipymes-y-por-que-la-politica-publica-importa.html?category_id=225" },
+    { value: "+32 %", text: "creció el comercio electrónico en Uruguay en 2025, hasta unos USD 2.550 millones.", source: "CEDU y Exante", url: "https://www.ambito.com/uruguay/el-comercio-electronico-supero-los-100000-millones-ventas-2025-y-crecio-32-el-ano-n6306222" },
+    { value: "7 de 10", text: "adultos en Uruguay compran por internet.", source: "Factum, Consumo Digital 2026", url: "https://www.elobservador.com.uy/ciencia-y-tecnologia/comercio-electronico/el-valor-del-comercio-electronico-uruguay-se-acerca-los-us-3000-millones-y-el-efecto-temu-es-apenas-una-fraccion-n6052553" },
+  ],
+  en: [
+    { value: "33.8%", text: "of small businesses in Uruguay have a website of their own.", source: "ANDE, micro and small business surveys 2023", url: "https://ande.org.uy/images/2025/Encuestas_a_Micro_y_Pequenas_Empresas_2023.pdf" },
+    { value: "53.8%", text: "of 1,311 assessed small businesses have low digital intensity.", source: "ANDE, Chequeo Digital", url: "https://ande.org.uy/reflexiones-para-el-desarrollo/item/digitalizacion-mipymes-y-por-que-la-politica-publica-importa.html?category_id=225" },
+    { value: "+32%", text: "growth of e-commerce in Uruguay in 2025, to about USD 2.55 billion.", source: "CEDU and Exante", url: "https://www.ambito.com/uruguay/el-comercio-electronico-supero-los-100000-millones-ventas-2025-y-crecio-32-el-ano-n6306222" },
+    { value: "7 in 10", text: "adults in Uruguay shop online.", source: "Factum, Consumo Digital 2026", url: "https://www.elobservador.com.uy/ciencia-y-tecnologia/comercio-electronico/el-valor-del-comercio-electronico-uruguay-se-acerca-los-us-3000-millones-y-el-efecto-temu-es-apenas-una-fraccion-n6052553" },
+  ],
+};
+
+/** The four free tools, each one giving a concrete result before any sale. */
+export const tools: Record<Lang, { key: "audit" | "estimate" | "roi" | "book"; icon: string; title: string; text: string }[]> = {
+  es: [
+    { key: "audit", icon: "gauge", title: "Auditoría web", text: "Velocidad, accesibilidad, buenas prácticas y SEO de su sitio en celulares, con las correcciones ordenadas por impacto." },
+    { key: "estimate", icon: "calculator", title: "Estimador de proyectos", text: "Describa su sistema y reciba una propuesta imprimible con alcance, horas, plazo y rango de precio." },
+    { key: "roi", icon: "trending-up", title: "Calculadora de retorno", text: "Cuánto le cuesta por mes el trabajo manual y en cuántos meses se paga el proyecto." },
+    { key: "book", icon: "calendar-check", title: "Llamada de 30 minutos", text: "Hable de su idea con quien la va a construir, sin compromiso." },
+  ],
+  en: [
+    { key: "audit", icon: "gauge", title: "Website audit", text: "Speed, accessibility, best practices and SEO of your site on phones, with fixes ranked by impact." },
+    { key: "estimate", icon: "calculator", title: "Project estimator", text: "Describe your system and get a printable proposal with scope, hours, timeline and price range." },
+    { key: "roi", icon: "trending-up", title: "Return calculator", text: "What manual work costs you every month and how many months the project takes to pay for itself." },
+    { key: "book", icon: "calendar-check", title: "30-minute call", text: "Talk about your idea with the people who will build it, no strings attached." },
   ],
 };
 
 export const faq: Record<Lang, { q: string; a: string }[]> = {
   es: [
-    { q: "¿Cuánto tarda un proyecto?", a: "Un sitio, de 2 a 3 semanas; una tienda, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
-    { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos de más de USD 6.000 se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta." },
-    { q: "¿Quién es dueño del código y del dominio?", a: "Usted. Al terminar le entregamos el código, los accesos y los manuales." },
-    { q: "¿Qué pasa después de la entrega?", a: "Tiene 60 días de garantía. Después puede continuar con un plan de soporte mensual o sin él." },
-    { q: "¿Trabajan con empresas de fuera de Uruguay?", a: "Sí. Facturamos en dólares y trabajamos en horario compatible con Estados Unidos." },
+    { q: "¿Cuánto tarda un proyecto?", a: "La primera versión, 72 horas desde que acordamos su alcance. Después: un sitio, de 2 a 3 semanas; una tienda, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
+    { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos de más de USD 6.000 se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta, también en 3 cuotas. Los precios son en dólares; los clientes de Uruguay suman IVA (22 %)." },
+    { q: "¿Qué es el precio de lanzamiento?", a: `Los primeros 5 clientes pagan USD ${launch.website} por un sitio (en lugar de USD ${prices.website.from}) y USD ${launch.store} por una tienda (en lugar de USD ${prices.store.from}), y tienen el primer mes de soporte gratis, a cambio de que publiquemos el caso y un testimonio.` },
+    { q: "¿Quién es dueño del código y del dominio?", a: "Usted. El dominio se registra a su nombre y, al terminar, le entregamos el código, los accesos y los manuales." },
+    { q: "¿Qué cubre la garantía?", a: "Durante 60 días desde la puesta en producción corregimos sin costo cualquier error de lo entregado, es decir, lo que no funciona como dice el alcance aprobado. Los cambios o funciones nuevas se cotizan aparte o se cubren con un plan de soporte." },
+    { q: "¿Qué pasa después de la entrega?", a: "Puede seguir con un plan de soporte mensual, sin permanencia mínima, o sin él. Si no contrata soporte, el sistema sigue siendo suyo y puede mantenerlo quien usted elija." },
+    { q: "¿Trabajan con empresas de fuera de Uruguay?", a: "Sí. Trabajamos en forma remota, facturamos en dólares y nuestro horario se superpone con el de la costa este de Estados Unidos." },
   ],
   en: [
-    { q: "How long does a project take?", a: "A website takes 2 to 3 weeks, a store 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
-    { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; projects over USD 6,000 are paid by milestones. We bill in USD." },
+    { q: "How long does a project take?", a: "The first version, 72 hours from agreeing on its scope. Then a website takes 2 to 3 weeks, a store 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
+    { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; projects over USD 6,000 are paid by milestones. We bill in US dollars." },
     { q: "Who owns the code?", a: "You do. At hand-over you get the code, every credential and the manuals." },
-    { q: "What happens after launch?", a: "You get a 60-day warranty, then an optional monthly support plan." },
-    { q: "Do you overlap with US hours?", a: "Yes. Uruguay is 1 to 2 hours ahead of US Eastern time, so most of the day overlaps." },
+    { q: "What does the warranty cover?", a: "For 60 days after go-live we fix, at no cost, anything delivered that doesn't work as the approved scope says. Changes and new features are quoted separately or covered by a support plan." },
+    { q: "What happens after launch?", a: "You can continue with a monthly support plan, with no minimum term, or without one. Either way the system is yours." },
+    { q: "How much do your working hours overlap with mine?", a: "Uruguay is 1 to 2 hours ahead of US Eastern time, so most of the working day overlaps." },
   ],
 };
 
@@ -151,23 +271,19 @@ export const firstVersion = {
   },
   faq: {
     es: [
-      { q: "¿Cómo funciona la propuesta?", a: "Desarrollamos una primera versión funcional de su App o Software para que la vea y la pruebe antes de decidir si quiere avanzar. Usted no paga nada hasta entonces." },
-      { q: "¿En cuánto tiempo puedo ver mi App o Software?", a: "En 72 horas desde que acordamos por escrito, después de la llamada, qué va a incluir la primera versión." },
-      { q: "¿Qué tipo de proyectos desarrollan?", a: "Aplicaciones web y móviles, sistemas de gestión, portales para clientes, tiendas, automatizaciones e integraciones entre sistemas. Si su idea es muy grande, la primera versión cubre la parte más importante." },
-      { q: "¿Qué pasa en la llamada?", a: "Hablamos de su idea, del problema que quiere resolver, de quién la va a usar y de qué tiene que hacer la primera versión. Con eso le enviamos el alcance por escrito." },
+      { q: "¿Cómo funciona la propuesta?", a: "Desarrollamos una primera versión funcional de su sitio, aplicación o sistema para que la vea y la pruebe antes de decidir si quiere avanzar. Usted no paga nada hasta entonces." },
+      { q: "¿En cuánto tiempo puedo ver la primera versión?", a: "En 72 horas desde que acordamos por escrito, después de la llamada, qué va a incluir." },
+      { q: "¿Qué tipo de proyectos desarrollan?", a: "Sitios web, tiendas en línea, aplicaciones web y móviles, sistemas de gestión, portales para clientes, automatizaciones e integraciones entre sistemas. Si su idea es muy grande, la primera versión cubre la parte más importante." },
       { q: "¿Qué incluye la primera versión y qué no?", a: "Incluye las funciones principales acordadas, funcionando con datos de ejemplo y accesible con un enlace privado. Todavía no incluye la carga de sus datos reales, la publicación en tiendas de aplicaciones ni servicios de terceros con costo." },
-      { q: "¿Tengo que pagar antes de verla funcionando?", a: "No. Ni anticipo ni tarjeta. Si no lo convence, no sigue con el desarrollo y no nos debe nada." },
-      { q: "¿Y si después de verla quiero avanzar?", a: "Le enviamos un precio cerrado y un cronograma. Se paga 50 % al continuar y 50 % en la entrega, y lo ya construido es la base del proyecto." },
+      { q: "¿Tengo que pagar antes de verla funcionando?", a: "No. Ni anticipo ni tarjeta. Si no lo convence, no sigue y no nos debe nada. Hacemos una primera versión por cliente y proyecto." },
       { q: "¿Qué pasa con mi idea si no seguimos?", a: "Es suya y es confidencial: no la usamos ni la compartimos. Si lo pide, borramos la versión y sus datos." },
     ],
     en: [
-      { q: "How does the offer work?", a: "We build a first working version of your app or software so you can see it and try it before deciding whether to go ahead. You pay nothing until then." },
-      { q: "How soon can I see my app or software?", a: "Within 72 hours of agreeing in writing, after the call, on what the first version will include." },
-      { q: "What kind of projects do you build?", a: "Web and mobile apps, back-office systems, customer portals, stores, automations and integrations between systems. If your idea is big, the first version covers its most important part." },
-      { q: "What happens on the call?", a: "We talk about your idea, the problem you want to solve, who will use it and what the first version must do. Then we send you the scope in writing." },
+      { q: "How does the offer work?", a: "We build a first working version of your website, app or system so you can see it and try it before deciding whether to go ahead. You pay nothing until then." },
+      { q: "How soon can I see the first version?", a: "Within 72 hours of agreeing in writing, after the call, on what it will include." },
+      { q: "What kind of projects do you build?", a: "Websites, online stores, web and mobile apps, back-office systems, customer portals, automations and integrations. If your idea is big, the first version covers its most important part." },
       { q: "What does the first version include, and what not?", a: "The main agreed features, working with sample data and reachable through a private link. It doesn't yet include loading your real data, publishing to app stores or paid third-party services." },
-      { q: "Do I have to pay before seeing it work?", a: "No. No deposit, no card. If it doesn't convince you, you stop there and owe us nothing." },
-      { q: "What if I want to go ahead after seeing it?", a: "We send you a fixed price and a timeline. You pay 50 % to continue and 50 % on delivery, and what's already built becomes the base of the project." },
+      { q: "Do I have to pay before seeing it work?", a: "No. No deposit, no card. If it doesn't convince you, you stop there and owe us nothing. We build one first version per client and project." },
       { q: "What happens to my idea if we don't continue?", a: "It's yours and it stays confidential: we don't use it or share it. If you ask, we delete the version and your data." },
     ],
   },

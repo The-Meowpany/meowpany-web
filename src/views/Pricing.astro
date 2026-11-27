@@ -2,63 +2,129 @@
 import Base from "../layouts/Base.astro";
 import SupportPlans from "../components/SupportPlans.astro";
 import CtaBand from "../components/CtaBand.astro";
-import { money, type Lang, t } from "../i18n";
-import { prices } from "../pricing";
+import { money, path, type Lang, t } from "../i18n";
+import { launch, prices } from "../pricing";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const ui = t(lang);
+const m = (n: number) => money(n, lang);
 const copy = {
   es: {
-    title: "Precios", description: "Precios de lista de The Meowpany: sitios desde USD 1.000, tiendas desde USD 2.200 y soporte desde USD 50 por mes.",
-    h1: "Precios claros, antes de empezar",
-    lead: "Estos son nuestros precios de lista. Después de una reunión le enviamos un precio cerrado que no cambia, salvo que usted solicite algo fuera del alcance.",
-    head: ["Servicio", "Precio", "Incluye"],
+    title: "Precios", description: `Precios de The Meowpany: sitio web ${m(prices.website.from)}, tienda en línea ${m(prices.store.from)}, software a medida desde ${m(prices.custom.from)}, soporte desde ${m(prices.support.basic)} por mes. Primera versión gratis en 72 horas.`,
+    eyebrow: "Precios", h1: "Precios publicados, antes de cualquier conversación",
+    lead: "Estos son nuestros precios de lista. Después de ver la primera versión, le enviamos un precio cerrado que no cambia salvo que usted pida algo fuera del alcance.",
+    head: ["Servicio", "Precio de lista", `Primeros ${launch.clients} clientes`, "Plazo", "Incluye"],
     rows: [
-      ["Sitio institucional", `${ui.price.from} ${money(prices.website.from, lang)}`, `Hasta ${prices.website.includedPages} páginas; cada página extra, ${money(prices.website.extraPage, lang)}`],
-      ["Tienda en línea", `${ui.price.from} ${money(prices.store.from, lang)}`, `Hasta ${prices.store.largeCatalogThreshold} productos y facturación electrónica; catálogo mayor, + ${money(prices.store.largeCatalog, lang)}`],
-      ["Sistema a medida", `${ui.price.from} ${money(prices.custom.from, lang)}`, `Proyecto típico: ${money(prices.custom.typical, lang)}. Se estima por puntos de función`],
-      ["Desarrollo para el exterior", `${money(prices.hours.rate, lang)} ${ui.price.perHour}`, "Por hora o con dedicación completa"],
+      ["Sitio web institucional", m(prices.website.from), m(launch.website), "2 a 3 semanas", `Hasta ${prices.website.includedPages} páginas, SEO básico, formulario, WhatsApp y analítica`],
+      ["Tienda en línea", m(prices.store.from), m(launch.store), "4 a 6 semanas", `Hasta ${prices.store.largeCatalogThreshold} productos, pagos, envíos y facturación electrónica`],
+      ["Software a medida", `${ui.price.from} ${m(prices.custom.from)}`, "-", "2 a 4 meses", `Proyecto típico: ${m(prices.custom.typical)}. Estimado por puntos de función`],
+      ["Desarrolladores para el exterior", `${m(prices.hours.rate)} ${ui.price.perHour}`, `${m(launch.hourly)} ${ui.price.perHour}`, "Continuo", "Por hora o con dedicación completa"],
     ],
-    payment: "Formas de pago: nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; por hitos en proyectos de más de USD 6.000. Transferencia, Mercado Pago o tarjeta (hasta 3 cuotas).",
-    launch: "Precio de lanzamiento: los primeros 5 clientes tienen sitio a USD 800 y tienda a USD 1.900.",
-    supportTitle: "Planes de soporte",
-    ctaTitle: "Solicite su precio cerrado", ctaText: "Use el cotizador y lo contactaremos en menos de un día hábil.",
+    extrasTitle: "Adicionales", extras: [
+      ["Página adicional en un sitio", m(prices.website.extraPage)],
+      [`Tienda con más de ${prices.store.largeCatalogThreshold} productos`, `+ ${m(prices.store.largeCatalog)}`],
+      ["Medio de pago adicional en una tienda", `+ ${m(prices.store.extraPayment)}`],
+      ["Hora de desarrollo fuera de un plan de soporte", `${m(prices.hours.rate)} ${ui.price.perHour}`],
+    ],
+    payTitle: "Cómo se paga", pay: [
+      "La primera versión funcional es gratis: sin anticipo, sin tarjeta y sin contrato.",
+      "Si decide avanzar: 50 % al aprobar la propuesta y 50 % en la entrega.",
+      "Los proyectos de más de USD 6.000 se pagan por hitos acordados en el contrato.",
+      "Transferencia bancaria, Mercado Pago o tarjeta, también en 3 cuotas.",
+      "Precios en dólares estadounidenses. Los clientes de Uruguay suman IVA (22 %).",
+    ],
+    launchTitle: "Precio de lanzamiento",
+    launchText: `Los primeros ${launch.clients} clientes pagan el precio reducido de la tabla y tienen el primer mes de soporte gratis, a cambio de permitirnos publicar el caso y un testimonio.`,
+    supportTitle: "Planes de soporte", supportLead: "Opcionales, mes a mes y sin permanencia mínima.",
+    ctaTitle: "Pida su precio cerrado", ctaText: "Primero le mostramos su proyecto funcionando; después le enviamos el precio cerrado.",
+    estimate: "Estimar un sistema a medida",
   },
   en: {
-    title: "Pricing", description: "The Meowpany list prices: websites from USD 1,000, stores from USD 2,200, developers at USD 35 an hour.",
-    h1: "Clear prices, before we start",
-    lead: "These are our list prices. After one call we send a fixed price that won't change unless you ask for something outside the scope.",
-    head: ["Service", "Price", "Includes"],
+    title: "Pricing", description: `The Meowpany prices: business website ${m(prices.website.from)}, online store ${m(prices.store.from)}, custom software from ${m(prices.custom.from)}, developers at ${m(prices.hours.rate)} an hour. Free first version in 72 hours.`,
+    eyebrow: "Pricing", h1: "Published prices, before any conversation",
+    lead: "These are our list prices. After you see the first version, we send a fixed price that won't change unless you ask for something outside the scope.",
+    head: ["Service", "List price", "Launch price", "Timeline", "Includes"],
     rows: [
-      ["Business website", `${ui.price.from} ${money(prices.website.from, lang)}`, `Up to ${prices.website.includedPages} pages; each extra page ${money(prices.website.extraPage, lang)}`],
-      ["Online store", `${ui.price.from} ${money(prices.store.from, lang)}`, `Up to ${prices.store.largeCatalogThreshold} products; larger catalogs + ${money(prices.store.largeCatalog, lang)}`],
-      ["Custom system", `${ui.price.from} ${money(prices.custom.from, lang)}`, `Typical project: ${money(prices.custom.typical, lang)}. Estimated with function points`],
-      ["Developers for hire", `${money(prices.hours.rate, lang)} ${ui.price.perHour}`, "Hourly or full time"],
+      ["Business website", m(prices.website.from), m(launch.website), "2 to 3 weeks", `Up to ${prices.website.includedPages} pages, basic SEO, contact form, WhatsApp and analytics`],
+      ["Online store", m(prices.store.from), m(launch.store), "4 to 6 weeks", `Up to ${prices.store.largeCatalogThreshold} products, payments, shipping and e-invoicing`],
+      ["Custom software", `${ui.price.from} ${m(prices.custom.from)}`, "-", "2 to 4 months", `Typical project: ${m(prices.custom.typical)}. Estimated with function points`],
+      ["Developers for hire", `${m(prices.hours.rate)} ${ui.price.perHour}`, `${m(launch.hourly)} ${ui.price.perHour}`, "Ongoing", "Hourly or full time"],
     ],
-    payment: "Payment: nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; milestones for projects over USD 6,000. Invoices in USD.",
-    launch: "",
-    supportTitle: "Support plans",
-    ctaTitle: "Get your fixed price", ctaText: "Use the quote form and we'll reach out within one business day.",
+    extrasTitle: "Extras", extras: [
+      ["Extra page on a website", m(prices.website.extraPage)],
+      [`Store with more than ${prices.store.largeCatalogThreshold} products`, `+ ${m(prices.store.largeCatalog)}`],
+      ["Extra payment method on a store", `+ ${m(prices.store.extraPayment)}`],
+      ["Development hour outside a support plan", `${m(prices.hours.rate)} ${ui.price.perHour}`],
+    ],
+    payTitle: "Payment", pay: [
+      "The first working version is free: no deposit, no card, no contract.",
+      "If you go ahead: 50 % when you approve the proposal and 50 % on delivery.",
+      "Projects over USD 6,000 are paid by milestones set in the contract.",
+      "Invoices in US dollars.",
+    ],
+    launchTitle: "Launch price",
+    launchText: `Our first ${launch.clients} clients pay the reduced price in the table in exchange for letting us publish the case and a testimonial.`,
+    supportTitle: "Support plans", supportLead: "Optional, month to month, no minimum term.",
+    ctaTitle: "Get your fixed price", ctaText: "First we show you your project working; then we send the fixed price.",
+    estimate: "Estimate a custom system",
   },
 }[lang];
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
-  <section class="section">
+  <header class="page-head">
     <div class="wrap">
+      <p class="eyebrow">{copy.eyebrow}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
-      <div class="table-wrap card" style="padding:0">
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      <div class="table-wrap">
         <table class="compare">
           <thead><tr>{copy.head.map((h) => <th scope="col">{h}</th>)}</tr></thead>
-          <tbody>{copy.rows.map(([name, price, detail]) => <tr><th scope="row">{name}</th><td><strong>{price}</strong></td><td class="muted">{detail}</td></tr>)}</tbody>
+          <tbody>
+            {copy.rows.map(([name, list, launchPrice, time, detail]) => (
+              <tr><th scope="row">{name}</th><td><strong>{list}</strong></td><td class="launch">{launchPrice}</td><td class="muted">{time}</td><td class="muted">{detail}</td></tr>
+            ))}
+          </tbody>
         </table>
       </div>
-      <p class="muted" style="margin-top:1rem">{ui.price.vat}. {copy.payment}</p>
-      {copy.launch && <p class="notice">{copy.launch}</p>}
-      <h2 style="margin-top:3rem">{copy.supportTitle}</h2>
+      <p class="muted small" style="margin-top:1rem">{ui.price.vat}. <a href={path("estimate", lang)}>{copy.estimate}</a></p>
+
+      <div class="cols">
+        <div class="card">
+          <h2 class="h3">{copy.payTitle}</h2>
+          <ul class="check-list">{copy.pay.map((item) => <li><span>{item}</span></li>)}</ul>
+        </div>
+        <div class="card">
+          <h2 class="h3">{copy.extrasTitle}</h2>
+          <dl class="extras">{copy.extras.map(([what, price]) => <div><dt>{what}</dt><dd>{price}</dd></div>)}</dl>
+          <h2 class="h3 launch-title">{copy.launchTitle}</h2>
+          <p class="muted">{copy.launchText}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.supportTitle}</h2><p class="lead">{copy.supportLead}</p></div>
       <SupportPlans lang={lang} />
     </div>
   </section>
   <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
 </Base>
+<style>
+  .launch { color: var(--primary); font-weight: 600; white-space: nowrap; }
+  td strong { white-space: nowrap; }
+  th[scope="row"] { font-weight: 600; white-space: nowrap; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 1rem; margin-top: 2.5rem; }
+  .h3 { font-size: 1.15rem; letter-spacing: -0.01em; margin-bottom: 1rem; }
+  .launch-title { margin-top: 1.75rem; }
+  .extras { margin: 0; }
+  .extras div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.65rem 0; border-bottom: 1px solid var(--line); }
+  .extras div:last-child { border-bottom: 0; }
+  .extras dt { color: var(--ink-2); }
+  .extras dd { margin: 0; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+</style>

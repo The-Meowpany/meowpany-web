@@ -1,19 +1,31 @@
 ---
-// The Meowpany cat: pointed ears like the brackets < and > turned upward, eyes in sun gold.
-interface Props { size?: number; withText?: boolean }
-const { size = 36, withText = true } = Astro.props;
+// The real brand: the hooded cat mark (SVG) and the "The Meowpany™" wordmark, charcoal on light
+// backgrounds and light on dark ones. `tone="light"` forces the light wordmark on a dark surface.
+import { withBase } from "../lib/url";
+
+interface Props { size?: number; withText?: boolean; tone?: "auto" | "light" }
+const { size = 34, withText = true, tone = "auto" } = Astro.props;
+// The wordmark artwork is 348 × 44 px; it is shown at half size or less so it stays sharp.
+const wordHeight = Math.round(size * 0.56);
 ---
-<span class="logo">
-  <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-    <path d="M11 31 L16 7 L29 21 M53 31 L48 7 L35 21" fill="var(--primary)" stroke="var(--primary)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M10 32 C10 52 22 60 32 60 C42 60 54 52 54 32 C54 25 45 21 32 21 C19 21 10 25 10 32 Z" fill="var(--primary)" />
-    <circle cx="24" cy="38" r="4.2" fill="var(--accent)" />
-    <circle cx="40" cy="38" r="4.2" fill="var(--accent)" />
-    <path d="M29 47 L32 50 L35 47" fill="none" stroke="var(--bg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>
-  {withText && <span class="logo-text">The Meowpany</span>}
+<span class:list={["logo", `tone-${tone}`]}>
+  <img class="mark" src={withBase("/brand/mark.svg")} width={Math.round(size * 1.264)} height={size} alt="" />
+  {withText && (
+    <span class="word">
+      <img class="on-light" src={withBase("/brand/wordmark-dark.png")} height={wordHeight} width={Math.round(wordHeight * 7.91)} alt="The Meowpany" />
+      <img class="on-dark" src={withBase("/brand/wordmark-light.png")} height={wordHeight} width={Math.round(wordHeight * 7.91)} alt="" />
+    </span>
+  )}
 </span>
 <style>
-  .logo { display: inline-flex; align-items: center; gap: 0.55rem; }
-  .logo-text { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.01em; }
+  .logo { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .mark { display: block; }
+  .word img { display: block; }
+  .on-dark { display: none !important; }
+  .tone-light .on-light { display: none !important; }
+  .tone-light .on-dark { display: block !important; }
+  @media (prefers-color-scheme: dark) {
+    .tone-auto .on-light { display: none !important; }
+    .tone-auto .on-dark { display: block !important; }
+  }
 </style>

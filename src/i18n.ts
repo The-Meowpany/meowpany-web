@@ -28,9 +28,9 @@ export type RouteKey = keyof typeof routes;
 
 export const ui = {
   es: {
-    tagline: "Software a medida para pymes",
+    tagline: "Webs, tiendas y software a medida para pymes",
     skip: "Saltar al contenido",
-    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar una llamada", firstVersion: "Véalo antes de pagar" },
+    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis" },
     quote: "Cotizar",
     seeItWorking: "Quiero verlo funcionando",
     menu: "Menú",
@@ -49,12 +49,12 @@ export const ui = {
     },
     whatsapp: "Escríbanos por WhatsApp",
     whatsappText: "Hola, quiero consultar por un proyecto.",
-    price: { from: "desde", perMonth: "por mes", perHour: "por hora", vat: "+ IVA para clientes de Uruguay" },
+    price: { from: "desde", perMonth: "por mes", perHour: "por hora", vat: "Precios en dólares estadounidenses. Clientes de Uruguay: + IVA (22 %)" },
   },
   en: {
-    tagline: "Custom software for growing businesses",
+    tagline: "Websites, stores and custom software",
     skip: "Skip to content",
-    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "See it before you pay" },
+    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version" },
     quote: "Get a quote",
     seeItWorking: "I want to see it working",
     menu: "Menu",
@@ -73,7 +73,7 @@ export const ui = {
     },
     whatsapp: "Message us on WhatsApp",
     whatsappText: "Hi, I'd like to ask about a project.",
-    price: { from: "from", perMonth: "per month", perHour: "per hour", vat: "Uruguayan clients add VAT" },
+    price: { from: "from", perMonth: "per month", perHour: "per hour", vat: "Prices in US dollars" },
   },
 } as const;
 

@@ -1,0 +1,30 @@
+---
+// Public market figures, each linked to its source.
+import { facts } from "../content";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const sourceLabel = lang === "es" ? "Fuente" : "Source";
+---
+<dl class="facts">
+  {facts[lang].map((fact) => (
+    <div class="fact reveal">
+      <dt>{fact.value}</dt>
+      <dd>
+        <p>{fact.text}</p>
+        <a class="sources" href={fact.url} rel="noopener" target="_blank">{sourceLabel}: {fact.source}</a>
+      </dd>
+    </div>
+  ))}
+</dl>
+<style>
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin: 0; border-top: 1px solid var(--line); }
+  .fact { padding: 1.6rem 1.5rem 0 0; }
+  dt { font-size: clamp(2rem, 3.6vw, 2.75rem); font-weight: 720; letter-spacing: -0.035em; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
+  dt::after { content: ""; display: block; width: 28px; height: 3px; border-radius: 2px; background: var(--brand); margin-top: 0.9rem; }
+  dd { margin: 0.9rem 0 0; }
+  dd p { margin: 0 0 0.5rem; color: var(--ink-2); }
+  .sources { text-decoration: none; }
+  .sources:hover { text-decoration: underline; }
+</style>

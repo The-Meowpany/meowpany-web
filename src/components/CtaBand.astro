@@ -2,6 +2,7 @@
 import Icon from "./Icon.astro";
 import { path, type Lang, t } from "../i18n";
 import { whatsappLink } from "../site";
+import { withBase } from "../lib/url";
 
 interface Props { lang: Lang; title: string; text: string }
 const { lang, title, text } = Astro.props;
@@ -9,17 +10,34 @@ const copy = t(lang);
 const whatsapp = whatsappLink(copy.whatsappText);
 ---
 <section class="cta">
-  <div class="wrap center reveal">
-    <h2>{title}</h2>
-    <p class="lead">{text}</p>
-    <div class="actions" style="justify-content:center">
-      <a class="btn btn-accent" href={path("quote", lang)}>{copy.quote}<Icon name="arrow-right" /></a>
-      {whatsapp && <a class="btn btn-ghost on-dark" href={whatsapp} rel="noopener"><Icon name="message-circle" />{copy.whatsapp}</a>}
+  <div class="wrap">
+    <div class="panel reveal">
+      <img class="mark" src={withBase("/brand/mark.svg")} width="76" height="60" alt="" />
+      <div class="text">
+        <h2>{title}</h2>
+        <p>{text}</p>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-primary" href={`${path("book", lang)}?for=prototype`}>{copy.seeItWorking}<Icon name="arrow-right" /></a>
+        <a class="btn btn-ghost on-dark" href={path("quote", lang)}>{copy.quote}</a>
+        {whatsapp && <a class="btn btn-ghost on-dark" href={whatsapp} rel="noopener"><Icon name="message-circle" />{copy.whatsapp}</a>}
+      </div>
     </div>
   </div>
 </section>
 <style>
-  .cta { background: #10305a; color: #fff; padding: clamp(3.5rem, 8vw, 6rem) 0; }
-  .cta .lead { color: #c9d6e8; }
-  .on-dark { color: #fff; border-color: rgb(255 255 255 / 35%); }
+  .cta { padding: clamp(3rem, 7vw, 5.5rem) 0; }
+  .panel {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
+    padding: clamp(1.75rem, 4vw, 3rem); border-radius: 24px; color: #f3f0f2;
+    background: radial-gradient(120% 140% at 0% 0%, rgb(202 103 142 / 28%), transparent 55%), #1d1b1f;
+    border: 1px solid #332f35;
+  }
+  h2 { color: #ffffff; margin-bottom: 0.35em; font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+  .text p { color: #c9c3cb; margin: 0; max-width: 36rem; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; }
+  .on-dark { background: transparent; color: #ffffff; border-color: #4a454c; }
+  .on-dark:hover { border-color: #ffffff; color: #ffffff; }
+  @media (prefers-color-scheme: dark) { .btn-primary { background: var(--brand); color: #1a0f14; } }
+  @media (max-width: 860px) { .panel { grid-template-columns: 1fr; } .buttons { justify-content: flex-start; } }
 </style>
