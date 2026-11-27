@@ -29,6 +29,7 @@ const { lang, title, description, lead, eyebrow, noindex, wide = false } = Astro
   .prose :global(h2) { margin-top: 2.75rem; font-size: clamp(1.4rem, 2.4vw, 1.85rem); }
   .prose :global(h2:first-child) { margin-top: 0; }
   .prose :global(h3) { margin-top: 1.75rem; }
+  .prose :global(.card h3), .prose :global(li h3), .prose :global(.head h3) { margin-top: 0; }
   .prose :global(p), .prose :global(li) { color: var(--ink-2); }
   .prose :global(ul:not([class])), .prose :global(ol:not([class])) { padding-left: 1.2rem; }
   .prose :global(li) { margin-bottom: 0.45rem; }

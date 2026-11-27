@@ -56,7 +56,7 @@ Web3Forms y el correo como respaldo. Sumar un proveedor es sumar un adaptador, s
 
 - Configure el número de WhatsApp en `src/site.ts`; mientras esté vacío, los botones de WhatsApp
   quedan ocultos.
-- Cree una clave de acceso gratuita de Web3Forms para el correo de la empresa y póngala en
+- Cree una clave de acceso gratuita de Web3Forms con themeowpany+web@gmail.com (ver [email.md](email.md)) y póngala en
   `services.web3formsKey` de `src/site.ts`. Mientras tanto, los formularios abren el correo del visitante.
 - Cree una clave gratuita de la API de PageSpeed Insights restringida al dominio del sitio y póngala
   en `services.pagespeedKey`: sin ella, Google suele rechazar las auditorías por falta de cupo.

@@ -3,7 +3,7 @@
 // request through src/lib/leads.ts: straight to the company inbox, or as an email ready to send.
 import { path, type Lang } from "../i18n";
 import { prices } from "../pricing";
-import { services, site } from "../site";
+import { inbox, services } from "../site";
 
 interface Props { lang: Lang; preset?: string }
 const { lang, preset = "" } = Astro.props;
@@ -41,7 +41,7 @@ const copy = {
 const privacyHref = path("privacy", lang);
 ---
 <form class="quote card" novalidate
-  data-lang={lang} data-email={site.email} data-inbox={services.web3formsKey}
+  data-lang={lang} data-email={inbox("cotizaciones")} data-inbox={services.web3formsKey}
   data-prices={JSON.stringify(prices)}
   data-text={JSON.stringify({ from: copy.from, perMonth: copy.perMonth, sending: copy.sending, ok: copy.ok, drafted: copy.drafted, required: copy.required, send: copy.send })}>
 

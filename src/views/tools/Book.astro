@@ -5,7 +5,7 @@
 import Base from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 import type { Lang } from "../../i18n";
-import { services, site } from "../../site";
+import { inbox, services } from "../../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -56,7 +56,7 @@ const copy = {
       )}
 
       {services.bookingUrl && <h2 class="or">{copy.or}</h2>}
-      <form id="book-form" class="card" novalidate data-lang={lang} data-email={site.email} data-inbox={services.web3formsKey}
+      <form id="book-form" class="card" novalidate data-lang={lang} data-email={inbox("llamadas")} data-email-prototype={inbox("primeraversion")} data-inbox={services.web3formsKey}
         data-text={JSON.stringify(copy)}>
         <p><label>{copy.reason}<br />
           <select name="reason">{Object.entries(copy.reasons).map(([value, label]) => <option value={value}>{label}</option>)}</select></label></p>
@@ -97,7 +97,8 @@ const copy = {
     }
     button.disabled = true;
     status.textContent = text.sending;
-    const delivery = await leadSink({ web3formsKey: form.dataset.inbox ?? "", email: form.dataset.email ?? "" }).send({
+    const mailbox = reason.value === "prototype" ? form.dataset.emailPrototype : form.dataset.email;
+    const delivery = await leadSink({ web3formsKey: form.dataset.inbox ?? "", email: mailbox ?? "" }).send({
       kind: reason.value === "prototype" ? "prototype" : "call",
       language: form.dataset.lang ?? "es", name: value("name"), email: value("email"), company: value("company"),
       phone: value("phone"), message: value("message"),
@@ -109,8 +110,8 @@ const copy = {
       status.textContent = text.sent;
     } else {
       const link = document.createElement("a");
-      link.href = `mailto:${form.dataset.email}`;
-      link.textContent = form.dataset.email ?? "";
+      link.href = `mailto:${mailbox}`;
+      link.textContent = mailbox ?? "";
       status.replaceChildren(`${text.drafted} `, link, ".");
     }
     status.setAttribute("tabindex", "-1");

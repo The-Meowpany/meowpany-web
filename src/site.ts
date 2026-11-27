@@ -2,8 +2,8 @@
 // while it is empty the WhatsApp buttons are hidden instead of pointing nowhere.
 export const site = {
   name: "The Meowpany",
-  // The company inbox until the meowpany.com domain and its mailboxes exist.
-  email: "themeowpany@gmail.com",
+  // The public contact address: an alias of the company Gmail (see inbox below).
+  email: "themeowpany+contacto@gmail.com",
   whatsapp: "", // International format without "+" or spaces, e.g. "598991234567".
   linkedin: "https://www.linkedin.com/company/meowpany",
   city: "Montevideo, Uruguay",
@@ -21,6 +21,13 @@ export const services = {
   // usually refuses with "quota exceeded", and the audit page offers email instead.
   pagespeedKey: "",
 };
+
+// One Gmail inbox, one alias per channel. Gmail delivers user+anything@gmail.com to user@gmail.com
+// and keeps the full address in "To", so a filter per alias files each message under its own label
+// (docs/es/email.md lists the aliases and the filters).
+export const INBOX_USER = "themeowpany";
+export type Mailbox = "contacto" | "cotizaciones" | "primeraversion" | "llamadas" | "estimaciones" | "auditorias" | "privacidad";
+export const inbox = (mailbox: Mailbox) => `${INBOX_USER}+${mailbox}@gmail.com`;
 
 export const whatsappLink = (text: string) =>
   site.whatsapp ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}` : "";

@@ -288,3 +288,159 @@ export const firstVersion = {
     ],
   },
 } as const;
+
+/** The 9 stages every project goes through in Core, with what each requires before the next one
+ *  starts (lifecycle/checks.py: the checks read Core's data, nobody ticks them by hand). */
+export const lifecycle: Record<Lang, { name: string; what: string; gate: string[] }[]> = {
+  es: [
+    { name: "Consulta", what: "Su pedido entra como oportunidad, con lo que nos contó y cómo nos encontró.", gate: ["La consulta registrada"] },
+    { name: "Relevamiento", what: "Entrevistas para entender el problema, con acta de cada una, y los primeros requisitos escritos.", gate: ["Acta de relevamiento", "Al menos un requisito escrito"] },
+    { name: "Propuesta", what: "Estimación por puntos de función, precio cerrado y plan de servicio elegido.", gate: ["Estimación preparada", "Plan de servicio elegido"] },
+    { name: "Contrato", what: "Contrato, hitos de cobro y especificación aprobada por usted.", gate: ["Contrato firmado", "Hitos de cobro definidos", "Requisitos aprobados por el cliente", "Primer pago recibido"] },
+    { name: "Diseño", what: "Pantallas y recorridos para su aprobación antes de construir.", gate: ["Entregables de diseño terminados"] },
+    { name: "Construcción", what: "Desarrollo en ciclos de 2 semanas, con demostración e informe semanal.", gate: ["Todas las tareas terminadas", "Todos los requisitos imprescindibles implementados"] },
+    { name: "Pruebas", what: "Cada requisito con sus casos de prueba; la última ejecución tiene que pasar completa.", gate: ["Última ejecución sin fallas, bloqueos ni pendientes", "Todos los requisitos imprescindibles verificados por pruebas"] },
+    { name: "Entrega", what: "Manuales, traspaso del código y de los accesos, y acta de cierre.", gate: ["Todos los entregables terminados", "Todo el contrato facturado", "Acta de cierre firmada"] },
+    { name: "Soporte", what: "Si contrató un plan, cada pedido queda registrado con su plazo y sus horas.", gate: ["Suscripción de soporte activa, si el plan la incluye"] },
+  ],
+  en: [
+    { name: "Inquiry", what: "Your request comes in as a lead, with what you told us and how you found us.", gate: ["Inquiry registered"] },
+    { name: "Discovery", what: "Interviews to understand the problem, with minutes for each, and the first written requirements.", gate: ["Discovery minutes", "At least one requirement written down"] },
+    { name: "Proposal", what: "Function point estimate, fixed price and the chosen service plan.", gate: ["Estimate prepared", "Service plan chosen"] },
+    { name: "Contract", what: "Contract, payment milestones and a specification you approve.", gate: ["Contract signed", "Payment milestones set", "Requirements approved by the client", "First payment received"] },
+    { name: "Design", what: "Screens and flows for your approval before building.", gate: ["Design deliverables done"] },
+    { name: "Build", what: "Two-week cycles with a demo and a weekly report.", gate: ["Every task finished", "Every must-have requirement implemented"] },
+    { name: "Testing", what: "Every requirement has its test cases; the last run must pass in full.", gate: ["Last run with nothing failed, blocked or pending", "Every must-have requirement verified by tests"] },
+    { name: "Handover", what: "Manuals, hand-over of the code and credentials, and closing minutes.", gate: ["Every deliverable done", "The whole contract invoiced", "Closing minutes signed"] },
+    { name: "Support", what: "With a plan, every request is logged with its deadline and hours.", gate: ["Support subscription active, if the plan includes one"] },
+  ],
+};
+
+/** Standards and practices behind each project, as Core implements them. */
+export const standards: Record<Lang, { name: string; area: string; text: string }[]> = {
+  es: [
+    { name: "IFPUG", area: "Estimación", text: "Medimos el tamaño del software en puntos de función y lo convertimos en horas, plazo y precio. Usted ve cada función y su peso." },
+    { name: "ISO/IEC/IEEE 29148", area: "Requisitos", text: "Requisitos funcionales, no funcionales y reglas de negocio, cada uno con criterios de aceptación y su aprobación." },
+    { name: "PERT y camino crítico", area: "Planificación", text: "Cada tarea con estimación de tres puntos; calculamos la probabilidad de cumplir la fecha y la mostramos en un Gantt." },
+    { name: "Pruebas trazables", area: "Calidad", text: "Casos de prueba vinculados a cada requisito; un requisito se da por cumplido solo cuando todas sus pruebas pasan." },
+    { name: "Scrum adaptado", area: "Método", text: "Análisis corto para fijar alcance y precio; después ciclos de 2 semanas con demostración." },
+    { name: "Ley 18.331", area: "Datos personales", text: "Protección de los datos de sus clientes y de los suyos, con acuerdo de confidencialidad si lo pide." },
+  ],
+  en: [
+    { name: "IFPUG", area: "Estimating", text: "We size software in function points and turn them into hours, timeline and price. You see every function and its weight." },
+    { name: "ISO/IEC/IEEE 29148", area: "Requirements", text: "Functional and non-functional requirements and business rules, each with acceptance criteria and sign-off." },
+    { name: "PERT and critical path", area: "Planning", text: "Three-point estimates for every task; we compute the probability of meeting the date and show it on a Gantt chart." },
+    { name: "Traceable testing", area: "Quality", text: "Test cases linked to each requirement; a requirement is done only when all of its tests pass." },
+    { name: "Adapted Scrum", area: "Method", text: "A short analysis to fix scope and price, then two-week cycles with a demo." },
+    { name: "Data protection", area: "Privacy", text: "Your data and your customers' data protected under Uruguay's Law 18,331, with an NDA if you ask." },
+  ],
+};
+
+/** How the company protects its own operation and its clients' information (Core's security). */
+export const security: Record<Lang, string[]> = {
+  es: [
+    "Acceso solo del equipo, con segundo factor de autenticación y bloqueo tras intentos fallidos.",
+    "Permisos por rol: cada persona ve solo lo que su trabajo necesita.",
+    "Registro de auditoría que no se puede editar: quién hizo qué y cuándo.",
+    "Copias de seguridad cifradas, con restauración verificada.",
+    "Repositorios privados por proyecto, con revisión del código antes de integrarlo.",
+  ],
+  en: [
+    "Team-only access, with two-factor authentication and lockout after failed attempts.",
+    "Role-based permissions: each person sees only what their work needs.",
+    "A tamper-proof audit log of who did what and when.",
+    "Encrypted backups with verified restores.",
+    "Private repositories per project, with code review before anything is merged.",
+  ],
+};
+
+/** Ways to work with us, from a fixed-price project to a dedicated developer. */
+export const engagement: Record<Lang, { icon: string; name: string; best: string; text: string; terms: string[] }[]> = {
+  es: [
+    { icon: "package-check", name: "Proyecto llave en mano", best: "Sitios, tiendas y sistemas con un alcance claro.", text: "Nos encargamos de todo, de la especificación a la puesta en producción.", terms: ["Precio cerrado", "Primera versión gratis en 72 horas", "Garantía de 60 días"] },
+    { icon: "refresh-cw", name: "Evolución mensual", best: "Productos que crecen mes a mes después de la entrega.", text: "Un plan con plazos de respuesta y horas de mejoras por mes.", terms: ["Desde USD 50 por mes", "Sin permanencia mínima", "Informe de horas usadas"] },
+    { icon: "users", name: "Desarrolladores dedicados", best: "Equipos y agencias del exterior que necesitan más capacidad.", text: "Desarrolladores que se suman a su equipo, en su horario y con sus herramientas.", terms: ["USD 35 por hora", "Por hora o tiempo completo", "Dos semanas de prueba sin penalidad"] },
+  ],
+  en: [
+    { icon: "package-check", name: "Turnkey project", best: "Websites, stores and systems with a clear scope.", text: "We take care of everything, from the specification to go-live.", terms: ["Fixed price", "Free first version in 72 hours", "60-day warranty"] },
+    { icon: "refresh-cw", name: "Monthly evolution", best: "Products that keep growing after launch.", text: "A plan with response times and improvement hours every month.", terms: ["From USD 50 a month", "No minimum term", "Report of hours used"] },
+    { icon: "users", name: "Dedicated developers", best: "Teams and agencies abroad that need more capacity.", text: "Developers who join your team, in your hours and with your tools.", terms: ["USD 35 an hour", "Hourly or full time", "Two-week trial, no penalty"] },
+  ],
+};
+
+/** Who we work for (business plan, section 9). */
+export const audiences: Record<Lang, { icon: string; name: string; text: string }[]> = {
+  es: [
+    { icon: "store", name: "Comercios y marcas", text: "Venden por Instagram o WhatsApp y quieren su propia tienda, conectada con la facturación electrónica." },
+    { icon: "stethoscope", name: "Empresas de servicios", text: "Clínicas, estudios profesionales y empresas de logística que necesitan turnos, gestión o un portal para sus clientes." },
+    { icon: "utensils", name: "Gastronomía", text: "Locales que quieren pedidos, reservas o menús propios, sin depender solo de aplicaciones de terceros." },
+    { icon: "globe", name: "Equipos del exterior", text: "Empresas y agencias de Estados Unidos que suman desarrolladores uruguayos en su horario." },
+  ],
+  en: [
+    { icon: "store", name: "Retail brands", text: "Selling through Instagram or WhatsApp and ready for their own store." },
+    { icon: "stethoscope", name: "Service companies", text: "Clinics, professional firms and logistics companies that need booking, back-office tools or a customer portal." },
+    { icon: "rocket", name: "Startups", text: "Teams that need a first working version fast, and a partner to keep building it." },
+    { icon: "globe", name: "Agencies", text: "US agencies that add Uruguayan developers to their projects, in their own hours." },
+  ],
+};
+
+/** How we compare, with published 2026 market prices (business plan, sections 2 and 8.5). */
+export const comparison = {
+  es: {
+    columns: ["", "Plataforma de autoservicio", "Freelancer", "Agencia mediana", "The Meowpany"],
+    rows: [
+      ["Precio de un sitio institucional", "No aplica", "USD 400 a 1.200", "USD 800 a 2.500", "USD 1.000 (lanzamiento: USD 800)"],
+      ["Ve su proyecto funcionando antes de pagar", "Plantilla de prueba", "Rara vez", "Rara vez", "Sí, en 72 horas"],
+      ["Alcance y precio cerrado por escrito", "No", "Depende", "Sí", "Sí, con especificación aprobada"],
+      ["Avance visible", "No aplica", "Depende", "Reuniones", "Demostración cada 2 semanas e informe semanal"],
+      ["Pruebas documentadas", "No", "Rara vez", "Depende", "Informe de pruebas en cada entrega"],
+      ["Soporte con plazos escritos", "Ayuda general", "Depende de la persona", "Planes propios", "Desde USD 50 por mes, sin permanencia"],
+      ["El código es suyo", "No", "Depende", "Depende", "Sí, con manuales y accesos"],
+    ],
+    note: "Rangos de precio publicados en 2026 por estudios y agencias de Uruguay, recopilados en nuestro plan de negocio.",
+  },
+  en: {
+    columns: ["", "Self-service platform", "Freelancer", "Mid-size agency", "The Meowpany"],
+    rows: [
+      ["See it working before you pay", "Template trial", "Rarely", "Rarely", "Yes, within 72 hours"],
+      ["Scope and fixed price in writing", "No", "It depends", "Yes", "Yes, with an approved specification"],
+      ["Visible progress", "n/a", "It depends", "Meetings", "A demo every 2 weeks and a weekly report"],
+      ["Documented testing", "No", "Rarely", "It depends", "A test report with every delivery"],
+      ["Support with written response times", "General help", "Depends on the person", "Own plans", "From USD 50 a month, no minimum term"],
+      ["You own the code", "No", "It depends", "It depends", "Yes, with manuals and credentials"],
+    ],
+    note: "Comparison based on published offers of providers in Uruguay in 2026.",
+  },
+};
+
+/** Technologies the team works with today, by layer. */
+export const stack: Record<Lang, { area: string; items: string[] }[]> = {
+  es: [
+    { area: "Sitios web", items: ["Astro", "TypeScript", "HTML y CSS accesibles"] },
+    { area: "Aplicaciones", items: ["React", "Tauri (escritorio)", "Aplicaciones web progresivas"] },
+    { area: "Servidores y lógica", items: ["Rust", "Python y Django", "Node.js"] },
+    { area: "Datos", items: ["PostgreSQL", "SQLite"] },
+    { area: "Calidad y entrega", items: ["GitHub y GitHub Actions", "Pruebas automatizadas", "Despliegue continuo"] },
+    { area: "Integraciones", items: ["Mercado Pago y tarjetas", "Facturación electrónica (CFE)", "WhatsApp y correo"] },
+  ],
+  en: [
+    { area: "Websites", items: ["Astro", "TypeScript", "Accessible HTML and CSS"] },
+    { area: "Apps", items: ["React", "Tauri (desktop)", "Progressive web apps"] },
+    { area: "Back end", items: ["Rust", "Python and Django", "Node.js"] },
+    { area: "Data", items: ["PostgreSQL", "SQLite"] },
+    { area: "Quality and delivery", items: ["GitHub and GitHub Actions", "Automated testing", "Continuous deployment"] },
+    { area: "Integrations", items: ["Payments", "Uruguayan e-invoicing (CFE)", "WhatsApp and email"] },
+  ],
+};
+
+/** What the company is, in the footer and wherever a short presentation is needed. */
+export const about: Record<Lang, { short: string; facts: string[] }> = {
+  es: {
+    short: "The Meowpany es un estudio de ingeniería de software de Montevideo. Diseñamos y desarrollamos sitios web, tiendas en línea y software a medida para pymes de Uruguay, y sumamos desarrolladores a equipos de Estados Unidos. Cada proyecto sigue un proceso documentado de 9 etapas, con precio cerrado, y empieza con una primera versión funcional gratis en 72 horas.",
+    facts: ["100 % remoto desde Montevideo", "Español e inglés", "Precios en dólares"],
+  },
+  en: {
+    short: "The Meowpany is a software engineering studio in Montevideo, Uruguay. We design and build websites, online stores and custom software, and add developers to teams in the United States. Every project follows a documented 9-stage process at a fixed price, and starts with a free first working version within 72 hours.",
+    facts: ["Fully remote from Montevideo", "Spanish and English", "1 to 2 hours ahead of US Eastern"],
+  },
+};

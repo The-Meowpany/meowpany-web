@@ -1,12 +1,25 @@
 ---
 import Simple from "../../views/Simple.astro";
 import ProcessSteps from "../../components/ProcessSteps.astro";
+import Lifecycle from "../../components/Lifecycle.astro";
+import Standards from "../../components/Standards.astro";
+import Stack from "../../components/Stack.astro";
 import Commitments from "../../components/Commitments.astro";
 import Faq from "../../components/Faq.astro";
 import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="en" wide title="How we work" eyebrow="Process" description="The Meowpany process: first call, free first version in 72 hours, fixed-price proposal, design, two-week development cycles, testing and launch." lead="First we show you your idea working. Then we fix the scope and the price, and build in two-week cycles you can see and try.">
+<Simple lang="en" wide title="How we work" eyebrow="Methodology" description="How The Meowpany works: a 9-stage lifecycle with verifiable gates, IFPUG estimating, ISO/IEC/IEEE 29148 requirements, PERT planning, traceable testing and information security." lead="Every project follows the same 9-stage lifecycle we run in our management platform. No stage ends until what it requires is met: nothing depends on anyone’s memory.">
+  <h2>The journey, simply</h2>
   <ProcessSteps lang="en" />
+
+  <h2>The 9 stages in detail</h2>
+  <Lifecycle lang="en" />
+
+  <h2>Standards and practices</h2>
+  <Standards lang="en" />
+
+  <h2>Technologies</h2>
+  <Stack lang="en" />
 
   <h2>What you get on every project</h2>
   <Commitments lang="en" />

@@ -1,0 +1,19 @@
+---
+// Technologies the team works with today.
+import { stack } from "../content";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<dl class="stack">
+  {stack[lang].map((group) => (
+    <div class="reveal"><dt>{group.area}</dt><dd>{group.items.map((item) => <span class="badge">{item}</span>)}</dd></div>
+  ))}
+</dl>
+<style>
+  .stack { margin: 0; display: grid; gap: 1.25rem 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+  dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 650; margin-bottom: 0.6rem; }
+  dd { margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .badge { font-size: 0.85rem; padding: 0.3rem 0.7rem; background: var(--bg); }
+</style>

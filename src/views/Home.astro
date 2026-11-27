@@ -10,6 +10,9 @@ import FirstVersion from "../components/FirstVersion.astro";
 import Commitments from "../components/Commitments.astro";
 import Facts from "../components/Facts.astro";
 import Tools from "../components/Tools.astro";
+import Engagement from "../components/Engagement.astro";
+import Comparison from "../components/Comparison.astro";
+import Audiences from "../components/Audiences.astro";
 import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
 import { launch } from "../pricing";
@@ -34,6 +37,10 @@ const copy = {
     factsEyebrow: "Por qué ahora", factsTitle: "La mayoría de las pymes todavía no aprovecha internet", factsLead: "Datos públicos de Uruguay. Cada cifra enlaza a su fuente.",
     toolsEyebrow: "Herramientas gratuitas", toolsTitle: "Resultados concretos antes de hablar de precios", toolsLead: "Úselas sin registrarse. Solo nos llega lo que usted decida enviarnos.",
     supportEyebrow: "Después de la entrega", supportTitle: "Planes de soporte con plazos por escrito", supportLead: "Mes a mes y sin permanencia mínima.",
+    modelsEyebrow: "Formas de trabajar", modelsTitle: "Contrate como le resulte más cómodo", modelsLead: "Un proyecto con precio cerrado, un plan mensual para seguir creciendo o desarrolladores que se suman a su equipo.",
+    compareEyebrow: "Comparación", compareTitle: "Qué recibe con nosotros y qué con las alternativas", compareLead: "La misma pregunta que se haría usted antes de contratar, respondida con hechos.",
+    audienceEyebrow: "Para quién", audienceTitle: "Trabajamos con empresas que ya venden y quieren hacerlo mejor", audienceLead: "Pymes de Uruguay de 5 a 99 personas y equipos del exterior.",
+    methodology: "Ver la metodología completa",
     faqTitle: "Preguntas frecuentes",
     ctaTitle: "Cuéntenos su idea", ctaText: `Treinta minutos alcanzan para saber qué incluiría su primera versión. Los primeros ${launch.clients} clientes tienen precio de lanzamiento.`,
   },
@@ -51,6 +58,10 @@ const copy = {
     factsEyebrow: "Why now", factsTitle: "Most small businesses are still offline", factsLead: "Public figures from Uruguay. Each one links to its source.",
     toolsEyebrow: "Free tools", toolsTitle: "Concrete results before any talk about price", toolsLead: "No sign-up. We only receive what you choose to send.",
     supportEyebrow: "After launch", supportTitle: "Support plans with written response times", supportLead: "Month to month, no minimum term.",
+    modelsEyebrow: "Engagement models", modelsTitle: "Work with us the way that suits you", modelsLead: "A fixed-price project, a monthly plan to keep growing, or developers who join your team.",
+    compareEyebrow: "Comparison", compareTitle: "What you get with us, and with the alternatives", compareLead: "The question you would ask before hiring, answered with facts.",
+    audienceEyebrow: "Who we work with", audienceTitle: "Companies that already sell and want to do it better", audienceLead: "Growing businesses, startups and agencies.",
+    methodology: "See the full methodology",
     faqTitle: "Frequently asked questions",
     ctaTitle: "Tell us your idea", ctaText: "Thirty minutes is enough to know what your first version would include.",
   },
@@ -78,7 +89,8 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
 
       <div class="panel" aria-hidden="true">
         <div class="panel-head">
-          <img src={withBase("/brand/mark.svg")} width="38" height="30" alt="" />
+          <img class="cat light" src={withBase("/brand/mark.svg")} width="38" height="30" alt="" />
+          <img class="cat dark" src={withBase("/brand/mark-dark.svg")} width="38" height="30" alt="" />
           <strong>{copy.panel.title}</strong>
           <span class="badge brand">{copy.panel.status}</span>
         </div>
@@ -114,6 +126,17 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow plain">{copy.modelsEyebrow}</p>
+        <h2 class="reveal">{copy.modelsTitle}</h2>
+        <p class="lead reveal">{copy.modelsLead}</p>
+      </div>
+      <Engagement lang={lang} />
+    </div>
+  </section>
+
   <FirstVersion lang={lang} id={lang === "es" ? "primera-version" : "first-version"} />
 
   <section class="section soft">
@@ -124,6 +147,29 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
         <p class="lead reveal">{copy.processLead}</p>
       </div>
       <ProcessSteps lang={lang} />
+      <p class="more-link"><a class="btn btn-ghost" href={path("process", lang)}>{copy.methodology}<Icon name="arrow-right" /></a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow plain">{copy.compareEyebrow}</p>
+        <h2 class="reveal">{copy.compareTitle}</h2>
+        <p class="lead reveal">{copy.compareLead}</p>
+      </div>
+      <Comparison lang={lang} />
+    </div>
+  </section>
+
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow plain">{copy.audienceEyebrow}</p>
+        <h2 class="reveal">{copy.audienceTitle}</h2>
+        <p class="lead reveal">{copy.audienceLead}</p>
+      </div>
+      <Audiences lang={lang} />
     </div>
   </section>
 
@@ -201,9 +247,11 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .trust li { display: inline-flex; align-items: center; gap: 0.4rem; }
   .trust :global(svg) { width: 16px; height: 16px; color: var(--primary); }
 
-  .panel { border: 1px solid var(--line); border-radius: 22px; background: var(--bg); box-shadow: 0 30px 60px -30px rgb(29 27 31 / 30%), var(--shadow-sm); padding: 1.25rem; }
+  .panel { border: 1px solid var(--line); border-radius: 22px; background: var(--bg); box-shadow: 0 30px 60px -30px rgb(43 40 45 / 30%), var(--shadow-sm); padding: 1.25rem; }
   .panel-head { display: flex; align-items: center; gap: 0.7rem; padding: 0.25rem 0.25rem 1rem; border-bottom: 1px solid var(--line); }
   .panel-head strong { font-size: 0.98rem; }
+  .cat.dark { display: none; }
+  @media (prefers-color-scheme: dark) { .cat.light { display: none; } .cat.dark { display: block; } }
   .panel-head .badge { margin-left: auto; }
   .timeline { list-style: none; padding: 0.5rem 0.25rem; margin: 0; }
   .timeline li { position: relative; display: grid; grid-template-columns: 18px 1fr auto; gap: 0.75rem; align-items: center; padding: 0.7rem 0; font-size: 0.93rem; }
@@ -232,6 +280,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .rows i:nth-child(2) { width: 82%; }
   .rows i:nth-child(3) { width: 64%; }
 
+  .more-link { margin: 1.5rem 0 0; }
   .faq-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 2rem 4rem; align-items: start; }
   @media (max-width: 920px) {
     .hero-grid, .faq-grid { grid-template-columns: 1fr; }

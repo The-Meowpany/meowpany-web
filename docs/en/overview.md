@@ -55,7 +55,7 @@ an email fallback. Adding a provider means adding an adapter, not touching the f
 ## Before going live
 
 - Set the WhatsApp number in `src/site.ts`; while it is empty, WhatsApp buttons stay hidden.
-- Create a free Web3Forms access key for the company inbox and set `services.web3formsKey` in
+- Create a free Web3Forms access key with themeowpany+web@gmail.com (see [email.md](email.md)) and set `services.web3formsKey` in
   `src/site.ts`. Until then the forms open the visitor's email app instead.
 - Create a free PageSpeed Insights API key restricted to the site's domain and set
   `services.pagespeedKey`: without it Google usually refuses audits for lack of quota.

@@ -4,7 +4,7 @@
 // If the visitor leaves an email, the proposal is also delivered to the team (src/lib/leads.ts).
 import Base from "../../layouts/Base.astro";
 import { path, type Lang } from "../../i18n";
-import { services, site } from "../../site";
+import { inbox, services } from "../../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -77,7 +77,7 @@ const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.com
   <section class="section">
     <div class="wrap">
 
-      <form id="estimate-form" class="card" novalidate data-email={site.email} data-inbox={services.web3formsKey}
+      <form id="estimate-form" class="card" novalidate data-email={inbox("estimaciones")} data-inbox={services.web3formsKey}
         data-lang={lang} data-rows={JSON.stringify(rowText)}>
         <p><label>{copy.project}<br /><input name="project_name" required maxlength="150" placeholder={copy.projectHint} /></label></p>
 

@@ -1,0 +1,34 @@
+---
+// Ways to work with us: turnkey project, monthly evolution, dedicated developers.
+import Icon from "./Icon.astro";
+import { engagement } from "../content";
+import { path, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = { es: { best: "Ideal para", cta: ["Ver primera versión gratis", "Ver planes", "Contratar desarrolladores"] }, en: { best: "Best for", cta: ["Free first version", "See plans", "Hire developers"] } }[lang];
+const links = [path("firstVersion", lang), `${path("pricing", lang)}`, path("hire", lang)];
+---
+<div class="models">
+  {engagement[lang].map((model, index) => (
+    <article class:list={["card", "model", "reveal", { featured: index === 0 }]}>
+      <span class="icon"><Icon name={model.icon} /></span>
+      <h3>{model.name}</h3>
+      <p class="best"><strong>{copy.best}:</strong> {model.best}</p>
+      <p class="muted">{model.text}</p>
+      <ul class="check-list">{model.terms.map((term) => <li><span>{term}</span></li>)}</ul>
+      <a class="go" href={links[index]}>{copy.cta[index]}<Icon name="arrow-right" /></a>
+    </article>
+  ))}
+</div>
+<style>
+  .models { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .model { display: flex; flex-direction: column; }
+  .featured { border-color: var(--brand-line); box-shadow: 0 0 0 1px var(--brand-line), var(--shadow); }
+  .icon { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--brand-soft); color: var(--primary); border: 1px solid var(--brand-line); margin-bottom: 1.1rem; }
+  .icon :global(svg) { width: 20px; height: 20px; }
+  .best { font-size: 0.93rem; color: var(--ink-2); }
+  .check-list { font-size: 0.94rem; margin-bottom: 1.25rem; }
+  .go { margin-top: auto; display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600; font-size: 0.93rem; text-decoration: none; }
+  .go :global(svg) { width: 15px; height: 15px; }
+</style>

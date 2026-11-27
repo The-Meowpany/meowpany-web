@@ -1,6 +1,7 @@
 ---
-// The real brand: the hooded cat mark (SVG) and the "The Meowpany™" wordmark, charcoal on light
-// backgrounds and light on dark ones. `tone="light"` forces the light wordmark on a dark surface.
+// The real brand, used as in Core: the pink cat and the charcoal wordmark on light backgrounds, the
+// charcoal cat and the light wordmark on dark ones. `tone="light"` is for surfaces that are always
+// dark (the footer, the closing band).
 import { withBase } from "../lib/url";
 
 interface Props { size?: number; withText?: boolean; tone?: "auto" | "light" }
@@ -9,7 +10,8 @@ const { size = 34, withText = true, tone = "auto" } = Astro.props;
 const wordHeight = Math.round(size * 0.56);
 ---
 <span class:list={["logo", `tone-${tone}`]}>
-  <img class="mark" src={withBase("/brand/mark.svg")} width={Math.round(size * 1.264)} height={size} alt="" />
+  <img class="mark on-light" src={withBase("/brand/mark.svg")} width={Math.round(size * 1.264)} height={size} alt="" />
+  <img class="mark on-dark" src={withBase("/brand/mark-dark.svg")} width={Math.round(size * 1.264)} height={size} alt="" />
   {withText && (
     <span class="word">
       <img class="on-light" src={withBase("/brand/wordmark-dark.png")} height={wordHeight} width={Math.round(wordHeight * 7.91)} alt="The Meowpany" />
@@ -19,7 +21,7 @@ const wordHeight = Math.round(size * 0.56);
 </span>
 <style>
   .logo { display: inline-flex; align-items: center; gap: 0.6rem; }
-  .mark { display: block; }
+  .mark.on-light { display: block; }
   .word img { display: block; }
   .on-dark { display: none !important; }
   .tone-light .on-light { display: none !important; }

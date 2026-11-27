@@ -2,22 +2,21 @@
 import Logo from "./Logo.astro";
 import { path, type Lang, t } from "../i18n";
 import { site, whatsappLink } from "../site";
+import { about as aboutCopy } from "../content";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = t(lang);
 const year = new Date().getFullYear();
 const whatsapp = whatsappLink(copy.whatsappText);
-const about = {
-  es: "Estudio de desarrollo de sitios web, tiendas en línea y software a medida para pymes de Uruguay y equipos del exterior. Trabajamos en forma remota desde Montevideo.",
-  en: "A studio building websites, online stores and custom software for businesses in Uruguay and teams abroad. We work remotely from Montevideo.",
-}[lang];
+const about = aboutCopy[lang];
 ---
 <footer class="site-footer">
   <div class="wrap cols">
     <div class="brand">
       <Logo size={30} tone="light" />
-      <p>{about}</p>
+      <p>{about.short}</p>
+      <ul class="facts">{about.facts.map((fact) => <li>{fact}</li>)}</ul>
       <p class="mail"><a href={`mailto:${site.email}`}>{site.email}</a></p>
     </div>
     <nav aria-label={copy.footer.services}>
@@ -57,9 +56,11 @@ const about = {
   </div>
 </footer>
 <style>
-  .site-footer { background: #1d1b1f; color: #c9c3cb; padding: 4.5rem 0 2rem; }
+  .site-footer { background: var(--surface-dark); color: #c9c3cb; padding: 4.5rem 0 2rem; }
   .cols { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr repeat(3, 1fr); }
-  .brand p { font-size: 0.93rem; line-height: 1.6; max-width: 26rem; margin: 1.1rem 0 0; color: #a9a2ab; }
+  .brand p { font-size: 0.93rem; line-height: 1.65; max-width: 30rem; margin: 1.1rem 0 0; color: #a9a2ab; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+  .facts li { font-size: 0.78rem; color: #c9c3cb; border: 1px solid #4a454c; border-radius: 999px; padding: 0.15rem 0.6rem; }
   .brand .mail a { color: #f3f0f2; font-weight: 600; text-decoration: none; border-bottom: 1px solid #4a454c; }
   .brand .mail a:hover { border-color: var(--brand); }
   h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b848d; margin: 0.3rem 0 1rem; font-weight: 650; }

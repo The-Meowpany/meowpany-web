@@ -4,7 +4,7 @@
 // summary also reaches the team (src/lib/leads.ts).
 import Base from "../../layouts/Base.astro";
 import { path, type Lang } from "../../i18n";
-import { services, site } from "../../site";
+import { inbox, services } from "../../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -51,7 +51,7 @@ const copy = {
     <div class="wrap">
 
       <form id="audit-form" class="card" novalidate
-        data-lang={lang} data-key={services.pagespeedKey} data-inbox={services.web3formsKey} data-email={site.email}
+        data-lang={lang} data-key={services.pagespeedKey} data-inbox={services.web3formsKey} data-email={inbox("auditorias")}
         data-text={JSON.stringify(copy)} data-quote={path("quote", lang)} data-book={path("book", lang)}>
         <p><label>{copy.url}<br /><input name="url" type="text" inputmode="url" autocomplete="url" required placeholder={copy.urlHint} maxlength="500" /></label></p>
         <p><label>{copy.email}<br /><input name="email" type="email" autocomplete="email" maxlength="254" /></label><br /><small>{copy.emailHint}</small></p>

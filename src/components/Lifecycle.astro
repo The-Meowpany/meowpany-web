@@ -1,0 +1,34 @@
+---
+// The 9 stages of every project, each with what it requires before the next one starts.
+import { lifecycle } from "../content";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const gateLabel = lang === "es" ? "Para avanzar" : "To move on";
+---
+<ol class="lifecycle">
+  {lifecycle[lang].map((stage, index) => (
+    <li class="reveal">
+      <span class="num">{String(index + 1).padStart(2, "0")}</span>
+      <div class="body">
+        <h3>{stage.name}</h3>
+        <p class="muted">{stage.what}</p>
+        <p class="gate-label">{gateLabel}</p>
+        <ul class="check-list gate">{stage.gate.map((item) => <li><span>{item}</span></li>)}</ul>
+      </div>
+    </li>
+  ))}
+</ol>
+<style>
+  .lifecycle { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .lifecycle > li { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.4rem; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg); }
+  .num { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; color: var(--primary); line-height: 1.2; font-variant-numeric: tabular-nums; }
+  h3 { margin-bottom: 0.35rem; }
+  .body > p.muted { font-size: 0.95rem; margin-bottom: 0.9rem; }
+  .gate-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 650; margin-bottom: 0.5rem; }
+  .gate { font-size: 0.9rem; gap: 0.4rem; }
+  .gate li { margin: 0; }
+  @media (max-width: 980px) { .lifecycle { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .lifecycle { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,27 @@
+---
+// How we compare with the usual alternatives.
+import { comparison } from "../content";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const data = comparison[lang];
+const last = data.columns.length - 1;
+---
+<div class="table-wrap reveal">
+  <table class="compare versus">
+    <thead><tr>{data.columns.map((c, i) => <th scope="col" class:list={{ us: i === last }}>{c}</th>)}</tr></thead>
+    <tbody>
+      {data.rows.map((row) => (
+        <tr>{row.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td class:list={{ us: i === last }}>{cell}</td>))}</tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="sources" style="margin-top:0.9rem">{data.note}</p>
+<style>
+  .versus th[scope="row"] { font-weight: 600; min-width: 13rem; }
+  .versus td { color: var(--muted); font-size: 0.94rem; }
+  .versus .us { background: var(--brand-soft); color: var(--ink); font-weight: 600; }
+  .versus thead .us { color: var(--primary); }
+</style>
