@@ -2,12 +2,14 @@
 import Simple from "../../views/Simple.astro";
 import QuoteForm from "../../components/QuoteForm.astro";
 import { path } from "../../i18n";
-import { site } from "../../site";
+import { site, whatsappLink } from "../../site";
+const whatsapp = whatsappLink("Hi, I'd like to ask about a project.");
 ---
-<Simple lang="en" wide title="Contact" eyebrow="Contact" description="Email us, book a call or ask for a quote. We reply within one business day." lead="We reply within one business day. Pick whichever channel suits you.">
-  <div class="channels">
+<Simple lang="en" wide title="Contact" description="Email us, book a call or ask for a quote. We reply within one business day." lead="We reply within one business day. Pick whichever channel suits you.">
+  <div class="channels balance">
     <a class="card channel" href={`mailto:${site.email}`}><strong>Email</strong><span>{site.email}</span><small class="muted">Any question. Within one business day.</small></a>
     <a class="card channel" href={path("book", "en")}><strong>30-minute call</strong><span>Book</span><small class="muted">By video, no strings attached.</small></a>
+    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>Our founder's WhatsApp</strong><span>{site.whatsappDisplay}</span><small class="muted">The personal number of The Meowpany's founder, who answers personally. Quick questions during business hours.</small></a>}
     <a class="card channel" href={site.linkedin} rel="noopener"><strong>LinkedIn</strong><span>The Meowpany</span><small class="muted">For companies and teams abroad.</small></a>
   </div>
   <p class="muted small">We work remotely from Montevideo, Uruguay.</p>
@@ -15,7 +17,7 @@ import { site } from "../../site";
   <QuoteForm lang="en" preset="hours" />
 </Simple>
 <style>
-  .channels { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin-bottom: 1rem; }
+  .channels { display: grid; gap: 1rem; margin-bottom: 1rem; }
   .channel { display: grid; gap: 0.2rem; text-decoration: none; color: inherit; }
   .channel span { color: var(--primary); font-weight: 600; word-break: break-word; }
 </style>

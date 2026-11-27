@@ -9,7 +9,7 @@ const { lang } = Astro.props;
 const data = modular[lang];
 ---
 <p class="intro">{data.intro}</p>
-<div class="points">
+<div class="points balance">
   {data.points.map((point) => (
     <article class="card reveal">
       <span class="icon"><Icon name={point.icon} /></span>
@@ -24,7 +24,7 @@ const data = modular[lang];
 </div>
 <style>
   .intro { font-size: 1.08rem; color: var(--ink-2); max-width: 48rem; margin-bottom: 1.5rem; }
-  .points { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .points { display: grid; gap: 1rem; }
   .icon { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--brand-soft); color: var(--primary); border: 1px solid var(--brand-line); margin-bottom: 1rem; }
   .icon :global(svg) { width: 20px; height: 20px; }
   .points p { font-size: 0.95rem; }

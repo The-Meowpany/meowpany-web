@@ -9,7 +9,7 @@ const { lang } = Astro.props;
 const copy = { es: { best: "Ideal para", cta: ["Ver primera versión gratis", "Ver planes", "Contratar desarrolladores"] }, en: { best: "Best for", cta: ["Free first version", "See plans", "Hire developers"] } }[lang];
 const links = [path("firstVersion", lang), `${path("pricing", lang)}`, path("hire", lang)];
 ---
-<div class="models">
+<div class="models balance">
   {engagement[lang].map((model, index) => (
     <article class:list={["card", "model", "reveal", { featured: index === 0 }]}>
       <span class="icon"><Icon name={model.icon} /></span>
@@ -22,7 +22,7 @@ const links = [path("firstVersion", lang), `${path("pricing", lang)}`, path("hir
   ))}
 </div>
 <style>
-  .models { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .models { display: grid; gap: 1rem; }
   .model { display: flex; flex-direction: column; }
   .featured { border-color: var(--brand-line); box-shadow: 0 0 0 1px var(--brand-line), var(--shadow); }
   .icon { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--brand-soft); color: var(--primary); border: 1px solid var(--brand-line); margin-bottom: 1.1rem; }

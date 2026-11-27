@@ -1,0 +1,86 @@
+---
+// The online-selling guide, offered in exchange for an email. It is written for Uruguayan
+// businesses, so it exists in Spanish only.
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+import LeadForm from "../../components/LeadForm.astro";
+import { withBase } from "../../lib/url";
+import { chapters } from "../../guide";
+
+const guide = withBase("/guia/vender-en-linea-uruguay/");
+const highlights = [
+  { icon: "book-open", text: `${chapters.length} capítulos` },
+  { icon: "shield-check", text: "Fuentes oficiales" },
+  { icon: "printer", text: "Se guarda en PDF" },
+];
+---
+<Base lang="es" title="Guía gratuita para vender en línea en Uruguay" description="Cómo cobrar con Mercado Pago, organizar los envíos, emitir la facturación electrónica y cumplir la ley para vender en línea en Uruguay. Guía gratuita, paso a paso.">
+  <header class="page-head">
+    <div class="wrap">
+      <h1>Cómo vender en línea en Uruguay</h1>
+      <p class="lead">Cobros con Mercado Pago, envíos, facturación electrónica y lo que pide la ley, explicado paso a paso para pymes y emprendimientos. Gratis.</p>
+      <ul class="highlights">{highlights.map((item) => <li><Icon name={item.icon} />{item.text}</li>)}</ul>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap layout">
+      <div class="card inside reveal">
+        <h2 class="h3">Qué va a encontrar</h2>
+        <ol class="chapters">
+          {chapters.map((chapter, index) => (
+            <li>
+              <span class="num">{String(index + 1).padStart(2, "0")}</span>
+              <div><strong>{chapter.title}</strong><p class="muted">{chapter.summary}</p></div>
+              <span class="icon"><Icon name={chapter.icon} /></span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <aside class="get reveal">
+        <div class="cover" aria-hidden="true">
+          <span class="cover-brand">The Meowpany · Guía</span>
+          <strong>Cómo vender en línea en Uruguay</strong>
+          <span class="cover-sub">Cobrar · Enviar · Facturar · Cumplir la ley</span>
+        </div>
+        <div class="form-intro">
+          <h2 class="h3">Recíbala gratis</h2>
+          <p class="muted">Déjenos su nombre y su correo y la abre al instante.</p>
+        </div>
+        <LeadForm lang="es" kind="guide" mailbox="guias" submit="Abrir la guía" done="¡Listo! Ya puede leer la guía."
+          consent="Quiero recibir novedades de The Meowpany de vez en cuando. Puedo darme de baja cuando quiera.">
+          <a slot="after" class="btn btn-primary open" href={guide}><Icon name="book-open" />Leer la guía</a>
+        </LeadForm>
+      </aside>
+    </div>
+  </section>
+</Base>
+<style>
+  .highlights { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.5rem; color: var(--ink-2); font-size: 0.95rem; font-weight: 550; }
+  .highlights li { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .highlights :global(svg) { width: 18px; height: 18px; color: var(--primary); }
+  .layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .h3 { font-size: 1.2rem; margin: 0 0 0.35rem; }
+  .chapters { list-style: none; margin: 1rem 0 0; padding: 0; }
+  .chapters li { display: grid; grid-template-columns: 2.4rem 1fr auto; gap: 0.9rem; align-items: center; padding: 1rem 0; border-top: 1px solid var(--line); }
+  .chapters li:first-child { border-top: 0; }
+  .chapters p { margin: 0.15rem 0 0; font-size: 0.93rem; }
+  .num { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; color: var(--brand); font-variant-numeric: tabular-nums; }
+  .icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: var(--soft); color: var(--primary); }
+  .icon :global(svg) { width: 19px; height: 19px; }
+  .get { position: sticky; top: 88px; display: grid; gap: 1rem; }
+  /* A cover, so the offer reads as a document worth keeping. */
+  .cover {
+    position: relative; overflow: hidden; display: grid; gap: 0.6rem; padding: 1.6rem 1.5rem 1.5rem;
+    border-radius: var(--radius-lg); color: #fff;
+    background: radial-gradient(120% 90% at 100% 0%, #d98aab 0%, transparent 60%), linear-gradient(135deg, var(--brand), var(--pink-600, #b04f76));
+    box-shadow: var(--shadow);
+  }
+  .cover::after { content: ""; position: absolute; right: -40px; bottom: -40px; width: 160px; height: 160px; border-radius: 50%; border: 22px solid rgb(255 255 255 / 12%); }
+  .cover-brand { font-size: 0.82rem; font-weight: 650; opacity: 0.85; }
+  .cover strong { font-family: var(--font-display); font-size: 1.6rem; line-height: 1.15; font-weight: 800; max-width: 16ch; }
+  .cover-sub { font-size: 0.9rem; opacity: 0.9; }
+  .form-intro p { margin: 0; }
+  .open { margin-top: 0.25rem; }
+  .open :global(svg) { width: 18px; height: 18px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } .get { position: static; order: -1; } }
+</style>

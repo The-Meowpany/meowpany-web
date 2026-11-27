@@ -1,0 +1,145 @@
+---
+// About: who we are, what we stand for and how we work inside, each in one recognisable pattern
+// (a split intro, a statement, a card grid, an icon list) instead of running text.
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Audiences from "../components/Audiences.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { path, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: {
+    title: "Nosotros", description: "The Meowpany es un estudio de desarrollo de sitios web, tiendas en línea y software a medida en Montevideo, para pymes de Uruguay y equipos del exterior.",
+    lead: "Un estudio de desarrollo de Montevideo. Hacemos sitios web, tiendas en línea y software a medida para pymes de Uruguay, y sumamos capacidad a equipos del exterior.",
+    orgTitle: "Quien le presenta la propuesta es quien construye su sistema",
+    org: ["The Meowpany está formada por socios desarrolladores que trabajan por proyecto. Para el diseño de interfaces se suma un diseñador en cada proyecto, y la contabilidad está a cargo de un contador externo.", "Trabajamos en forma remota, por videollamada. Si prefiere conversar en persona, vamos a su empresa."],
+    facts: [["map-pin", "Montevideo, Uruguay"], ["laptop", "100 % remoto"], ["languages", "Español e inglés"], ["clock", "Horario compatible con EE. UU."]],
+    mission: "Desarrollamos sitios, tiendas y software que aumentan las ventas y la productividad de nuestros clientes, con precio cerrado, plazos cumplidos y soporte cercano.",
+    valuesTitle: "Lo que nos guía",
+    values: [
+      ["eye", "Transparencia", "Presupuestos cerrados y un avance que usted puede ver en todo momento."],
+      ["badge-check", "Calidad verificable", "Código probado, seguro y documentado, con un informe de pruebas en cada entrega."],
+      ["calendar-check", "Cumplimiento", "La fecha comprometida se respeta, y los riesgos se avisan antes de que lleguen."],
+      ["graduation-cap", "Mejora continua", "Formación permanente, incluida la inteligencia artificial aplicada al desarrollo."],
+      ["shield-check", "Responsabilidad", "Sus datos y los de sus clientes, protegidos conforme a la Ley 18.331."],
+    ],
+    insideTitle: "Cómo trabajamos por dentro", insideLead: "Una plataforma propia reúne todo lo de cada proyecto. Por eso incluimos, sin costo extra:",
+    inside: [
+      ["calculator", "Estimación por puntos de función (IFPUG), función por función."],
+      ["file-text", "Requisitos con criterios de aceptación (ISO/IEC/IEEE 29148)."],
+      ["git-branch", "Planificación con camino crítico, para anticipar atrasos."],
+      ["flask-conical", "Pruebas vinculadas a cada requisito, con informe en cada entrega."],
+      ["mail", "Un informe semanal de horas y avances, revisado por una persona."],
+      ["life-buoy", "Una mesa de soporte con plazos de respuesta y horas registradas."],
+    ],
+    method: "Ver la metodología completa",
+    audienceTitle: "Con quién trabajamos", audienceLead: "Pymes de Uruguay de 5 a 99 personas y equipos del exterior.",
+    ctaTitle: "Conózcanos con su propio proyecto", ctaText: "La mejor forma de evaluarnos es ver su idea funcionando. En 72 horas y sin pagar nada.",
+  },
+  en: {
+    title: "About", description: "The Meowpany is a studio in Montevideo, Uruguay, building websites, online stores and custom software for businesses in Uruguay and teams abroad.",
+    lead: "A development studio in Montevideo, Uruguay. We build websites, online stores and custom software, and add capacity to teams abroad.",
+    orgTitle: "The person who presents your proposal is the person who builds it",
+    org: ["The Meowpany is made up of partner developers who work by project. A designer joins each project for the interfaces, and an external accountant keeps the books.", "We work remotely, by video call, in a time zone 1 to 2 hours ahead of US Eastern time."],
+    facts: [["map-pin", "Montevideo, Uruguay"], ["laptop", "Fully remote"], ["languages", "Spanish and English"], ["clock", "Overlaps with US hours"]],
+    mission: "We build websites, stores and software that grow our clients' sales and productivity, at a fixed price, on time and with close support.",
+    valuesTitle: "What guides us",
+    values: [
+      ["eye", "Transparency", "Fixed quotes and progress you can see at any time."],
+      ["badge-check", "Verifiable quality", "Tested, secure and documented code, with a test report on every delivery."],
+      ["calendar-check", "Reliability", "The committed date holds, and risks are flagged before they arrive."],
+      ["graduation-cap", "Continuous learning", "Ongoing training, including artificial intelligence applied to software development."],
+      ["shield-check", "Responsibility", "Your data and your clients' data, protected under Uruguay's Law 18,331."],
+    ],
+    insideTitle: "How we work inside", insideLead: "Our own platform keeps everything about each project in one place. That is why we include, at no extra cost:",
+    inside: [
+      ["calculator", "Function point estimates (IFPUG), function by function."],
+      ["file-text", "Requirements with acceptance criteria (ISO/IEC/IEEE 29148)."],
+      ["git-branch", "Critical-path planning, so delays are flagged early."],
+      ["flask-conical", "Tests linked to each requirement, with a report on every delivery."],
+      ["mail", "A weekly report of hours and progress, reviewed by a person."],
+      ["life-buoy", "A support desk with response deadlines and logged hours."],
+    ],
+    method: "See the full methodology",
+    audienceTitle: "Who we work with", audienceLead: "Growing businesses, startups and agencies.",
+    ctaTitle: "Get to know us through your own project", ctaText: "The best way to judge us is to see your idea working. Within 72 hours, before you pay anything.",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="reveal">
+        <h2 class="title-rule start">{copy.orgTitle}</h2>
+        {copy.org.map((paragraph) => <p class="text">{paragraph}</p>)}
+      </div>
+      <ul class="facts card reveal">
+        {copy.facts.map(([icon, text]) => <li><span class="icon"><Icon name={icon} /></span>{text}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="mission">
+    <div class="wrap"><p class="reveal">{copy.mission}</p></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.valuesTitle}</h2></div>
+      <div class="values balance">
+        {copy.values.map(([icon, name, text]) => (
+          <article class="card reveal"><span class="icon"><Icon name={icon} /></span><h3>{name}</h3><p class="muted">{text}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.insideTitle}</h2><p class="lead">{copy.insideLead}</p></div>
+      <ul class="inside balance">
+        {copy.inside.map(([icon, text]) => <li class="reveal"><span class="icon"><Icon name={icon} /></span><span>{text}</span></li>)}
+      </ul>
+      <p class="more"><a class="btn btn-ghost" href={path("process", lang)}>{copy.method}<Icon name="arrow-right" /></a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.audienceTitle}</h2><p class="lead">{copy.audienceLead}</p></div>
+      <Audiences lang={lang} />
+    </div>
+  </section>
+
+  <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
+</Base>
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .split h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  .text { color: var(--ink-2); font-size: 1.08rem; }
+  .facts { list-style: none; margin: 0; display: grid; gap: 0; padding: 0.5rem 1.5rem; }
+  .facts li { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .facts li:last-child { border-bottom: 0; }
+  .icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--brand-soft); color: var(--primary); flex: none; }
+  .icon :global(svg) { width: 20px; height: 20px; }
+  /* The mission is the one sentence everything else hangs from, so it gets a band of its own. */
+  .mission { padding: clamp(3rem, 7vw, 5rem) 0; background: var(--surface-dark); color: #f3f0f2; position: relative; overflow: hidden; }
+  .mission::before { content: ""; position: absolute; inset: 0; background: radial-gradient(50% 120% at 50% 0%, rgb(202 103 142 / 22%), transparent 70%); }
+  .mission p { position: relative; max-width: 30ch; margin: 0 auto; text-align: center; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 3.2vw, 2.4rem); line-height: 1.25; text-wrap: balance; }
+  .values h3 { margin: 1rem 0 0.4rem; }
+  .values p { margin: 0; }
+  .inside { list-style: none; margin: 0; padding: 0; gap: 1rem 2rem; }
+  .inside li { display: flex; align-items: center; gap: 0.9rem; color: var(--ink-2); }
+  .soft .icon { background: var(--bg); }
+  .more { text-align: center; margin: 2.25rem 0 0; }
+  @media (max-width: 860px) { .split { grid-template-columns: minmax(0, 1fr); } }
+</style>

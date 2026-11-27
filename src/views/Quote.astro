@@ -1,26 +1,100 @@
 ---
+// Quote request: the form on one side, and on the other what happens after sending it and the
+// other ways to reach the team.
 import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
 import QuoteForm from "../components/QuoteForm.astro";
-import type { Lang } from "../i18n";
+import { path, type Lang } from "../i18n";
+import { inbox } from "../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  es: { title: "Cotizar", description: "Solicite un precio estimado para su sitio, tienda o sistema en 2 minutos.", h1: "Cotice su proyecto", lead: "Elija el servicio, indique algunos detalles y reciba un precio estimado al instante." },
-  en: { title: "Get a quote", description: "Get an estimated price for your website, store or system in 2 minutes.", h1: "Get a quote", lead: "Pick a service, add a few details and see an estimated price right away." },
+  es: {
+    title: "Cotizar", description: "Pida la cotización de su sitio, tienda o sistema en 2 minutos.", h1: "Cotice su proyecto",
+    lead: "Elija el servicio y cuéntenos algunos detalles. Le respondemos en un día hábil con lo que haría falta para su primera versión.",
+    nextTitle: "Qué pasa después",
+    next: [
+      { icon: "mail-check", title: "Le respondemos en un día hábil", text: "Con las preguntas que falten y lo que incluiría su primera versión." },
+      { icon: "zap", title: "Ve su proyecto funcionando", text: "En 72 horas, sin anticipo, sin tarjeta y sin contrato." },
+      { icon: "file-check", title: "Recibe el precio cerrado", text: "Por escrito, con el alcance y el plazo. Si no le convence, no paga nada." },
+    ],
+    talkTitle: "¿Prefiere conversarlo?", talkText: "Treinta minutos por videollamada con quienes van a construirlo.",
+    book: "Agendar una llamada", orEmail: "O escríbanos a",
+    how: "Cómo cotizamos",
+  },
+  en: {
+    title: "Get a quote", description: "Ask for a quote for your website, store or system in 2 minutes.", h1: "Get a quote",
+    lead: "Pick a service and tell us a few details. We reply within one business day with what your first version would take.",
+    nextTitle: "What happens next",
+    next: [
+      { icon: "mail-check", title: "We reply within one business day", text: "With any open questions and what your first version would include." },
+      { icon: "zap", title: "You see your project working", text: "Within 72 hours, with no deposit, no card and no contract." },
+      { icon: "file-check", title: "You get a fixed price", text: "In writing, with the scope and timeline. If it doesn't convince you, you pay nothing." },
+    ],
+    talkTitle: "Rather talk it through?", talkText: "Thirty minutes on a video call with the people who will build it.",
+    book: "Book a call", orEmail: "Or email us at",
+    how: "How we price",
+  },
 }[lang];
+const email = inbox("cotizaciones");
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
   <header class="page-head">
     <div class="wrap">
-      <p class="eyebrow">{lang === "es" ? "Cotizar" : "Quote"}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
     </div>
   </header>
   <section class="section">
-    <div class="wrap">
+    <div class="wrap layout">
       <QuoteForm lang={lang} />
+      <aside class="side">
+        <div class="card next">
+          <h2>{copy.nextTitle}</h2>
+          <ol>
+            {copy.next.map((item) => (
+              <li>
+                <span class="icon"><Icon name={item.icon} /></span>
+                <div><strong>{item.title}</strong><p class="muted">{item.text}</p></div>
+              </li>
+            ))}
+          </ol>
+          <a class="how" href={path("pricing", lang)}>{copy.how}<Icon name="arrow-right" /></a>
+        </div>
+        <div class="card talk">
+          <h2>{copy.talkTitle}</h2>
+          <p class="muted">{copy.talkText}</p>
+          <a class="btn btn-ghost" href={path("book", lang)}><Icon name="calendar-check" />{copy.book}</a>
+          <p class="muted small">{copy.orEmail} <a href={`mailto:${email}`}>{email}</a></p>
+        </div>
+      </aside>
     </div>
   </section>
 </Base>
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .layout > :global(.quote) { max-width: none; }
+  .side { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; position: sticky; top: 88px; }
+  .talk a:not(.btn) { overflow-wrap: anywhere; }
+  .side h2 { font-size: 1.1rem; letter-spacing: -0.01em; margin: 0 0 1rem; }
+  .next ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.1rem; position: relative; }
+  /* A thin line joins the three steps. */
+  .next ol::before { content: ""; position: absolute; left: 17px; top: 18px; bottom: 18px; width: 2px; background: var(--brand-line); border-radius: 2px; }
+  .next li { display: grid; grid-template-columns: 36px 1fr; gap: 0.85rem; align-items: start; position: relative; }
+  .next li p { margin: 0.15rem 0 0; font-size: 0.93rem; }
+  .icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg); border: 2px solid var(--brand-line); color: var(--primary); }
+  .icon :global(svg) { width: 17px; height: 17px; }
+  .how { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 1.25rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; }
+  .how :global(svg) { width: 15px; height: 15px; transition: transform 150ms var(--ease); }
+  .how:hover :global(svg) { transform: translateX(2px); }
+  .talk { display: grid; gap: 0.75rem; justify-items: start; }
+  .talk h2 { margin: 0; }
+  .talk p { margin: 0; }
+  .talk .btn :global(svg) { width: 17px; height: 17px; }
+  .small { font-size: 0.88rem; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .side { position: static; }
+  }
+</style>

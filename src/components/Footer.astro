@@ -1,6 +1,7 @@
 ---
 import Logo from "./Logo.astro";
 import { path, type Lang, t } from "../i18n";
+import { withBase } from "../lib/url";
 import { site, whatsappLink } from "../site";
 import { about as aboutCopy } from "../content";
 
@@ -25,6 +26,7 @@ const about = aboutCopy[lang];
         <li><a href={path("services", lang)}>{copy.nav.services}</a></li>
         <li><a href={path("firstVersion", lang)}>{copy.nav.firstVersion}</a></li>
         <li><a href={path("pricing", lang)}>{copy.nav.pricing}</a></li>
+        <li><a href={path("offers", lang)}>{copy.nav.offers}</a></li>
         <li><a href={path("hire", lang)}>{copy.nav.hire}</a></li>
         <li><a href={path("quote", lang)}>{copy.quote}</a></li>
       </ul>
@@ -32,10 +34,12 @@ const about = aboutCopy[lang];
     <nav aria-label={copy.footer.tools}>
       <h2>{copy.footer.tools}</h2>
       <ul>
+        <li><a href={path("diagnosis", lang)}>{copy.nav.diagnosis}</a></li>
         <li><a href={path("audit", lang)}>{copy.nav.audit}</a></li>
         <li><a href={path("estimate", lang)}>{copy.nav.estimate}</a></li>
         <li><a href={path("roi", lang)}>{copy.nav.roi}</a></li>
         <li><a href={path("book", lang)}>{copy.nav.book}</a></li>
+        {lang === "es" && <li><a href={withBase("/guia/")}>{copy.nav.guide}</a></li>}
       </ul>
     </nav>
     <nav aria-label={copy.footer.company}>
@@ -44,6 +48,7 @@ const about = aboutCopy[lang];
         <li><a href={path("about", lang)}>{copy.nav.about}</a></li>
         <li><a href={path("process", lang)}>{copy.nav.process}</a></li>
         <li><a href={path("work", lang)}>{copy.nav.work}</a></li>
+        <li><a href={path("partners", lang)}>{copy.nav.partners}</a></li>
         <li><a href={path("resources", lang)}>{copy.nav.resources}</a></li>
         <li><a href={path("news", lang)}>{copy.nav.news}</a></li>
         <li><a href={path("brand", lang)}>{copy.nav.brand}</a></li>

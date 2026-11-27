@@ -2,6 +2,7 @@
 title: "A free first working version, within 72 hours"
 date: 2026-11-27
 summary: "See your website, store or system working before you pay anything. How the offer works, what it includes and what it doesn't."
+topic: "launch"
 tag: "Launch"
 ---
 

@@ -1,0 +1,65 @@
+---
+// A slim bar under the header that points to the partner program. It stays out of the partner page
+// itself, and once dismissed it stays closed on this device (the flag is read before first paint).
+import Icon from "./Icon.astro";
+import { path, type Lang, t } from "../i18n";
+import { withoutBase } from "../lib/url";
+import { commissions } from "../pricing";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = t(lang).partnerBar;
+const href = path("partners", lang);
+const onPartnerPage = withoutBase(Astro.url.pathname) === withoutBase(href);
+const text = copy.text.replace("{rate}", String(commissions.closer));
+---
+{!onPartnerPage && (
+  <aside class="partner-bar" data-partner-bar aria-label={t(lang).nav.partners}>
+    <div class="wrap inner">
+      <a class="go" href={href}>
+        <span class="icon"><Icon name="handshake" /></span>
+        <span class="text">{text}</span>
+        <span class="link">{copy.link}<Icon name="arrow-right" /></span>
+      </a>
+      <button type="button" class="close" aria-label={copy.close} data-partner-close><Icon name="x" /></button>
+    </div>
+  </aside>
+)}
+<script>
+  document.querySelector("[data-partner-close]")?.addEventListener("click", () => {
+    document.documentElement.dataset.partnerBar = "closed";
+    try { localStorage.setItem("partner-bar", "closed"); } catch {}
+  });
+</script>
+<style>
+  .partner-bar {
+    position: relative; overflow: hidden; border-bottom: 1px solid var(--brand-line);
+    background: linear-gradient(90deg, var(--brand-soft), var(--bg) 50%, var(--brand-soft));
+    animation: bar-in 600ms 300ms var(--ease) both;
+  }
+  /* A soft sheen passes over the bar every few seconds. */
+  .partner-bar::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(100deg, transparent 35%, rgb(255 255 255 / 35%) 50%, transparent 65%);
+    transform: translateX(-100%); animation: sheen 7s 1.5s var(--ease) infinite;
+  }
+  :global([data-theme="dark"]) .partner-bar::after { background: linear-gradient(100deg, transparent 35%, rgb(255 255 255 / 6%) 50%, transparent 65%); }
+  :global([data-partner-bar="closed"]) .partner-bar { display: none; }
+  .inner { display: flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 42px; }
+  .go { display: inline-flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center; text-decoration: none; color: var(--ink-2); font-size: 0.9rem; padding: 0.4rem 0; }
+  .icon { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 7px; background: var(--bg); color: var(--primary); border: 1px solid var(--brand-line); }
+  .icon :global(svg) { width: 14px; height: 14px; }
+  .link { display: inline-flex; align-items: center; gap: 0.25rem; color: var(--primary); font-weight: 650; }
+  .link :global(svg) { width: 14px; height: 14px; transition: transform 200ms var(--ease); }
+  .go:hover .link :global(svg) { transform: translateX(3px); }
+  .go:hover .text { color: var(--ink); }
+  .close { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+  .close:hover { background: var(--bg); color: var(--ink); }
+  .close :global(svg) { width: 15px; height: 15px; }
+  @keyframes bar-in { from { opacity: 0; transform: translateY(-100%); } }
+  @keyframes sheen { 0% { transform: translateX(-100%); } 30%, 100% { transform: translateX(100%); } }
+  @media (max-width: 640px) { .text { flex-basis: 100%; text-align: center; } .go { gap: 0.3rem 0.6rem; } .icon { display: none; } }
+  @keyframes bar-fade { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .partner-bar { animation-name: bar-fade; } .partner-bar::after { animation: none; } }
+  @media print { .partner-bar { display: none; } }
+</style>

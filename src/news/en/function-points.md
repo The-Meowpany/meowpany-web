@@ -2,6 +2,7 @@
 title: "How we estimate a project: function points, explained"
 date: 2026-11-26
 summary: "The IFPUG method we use to go from \"what the system must do\" to hours, timeline and price, with a full example."
+topic: "method"
 tag: "Method"
 ---
 
@@ -25,7 +26,7 @@ Fourteen general characteristics (communications, performance, complexity of the
 
 ## 3. Turn it into hours, timeline and price
 
-We multiply the adjusted points by our productivity, currently calibrated at **3 hours per point**, and the hours by the **USD 35** rate. The price range we show is 20 % below and above that value.
+We multiply the adjusted points by our productivity, currently calibrated at **3 hours per point**, and the hours by our current rate. The price range we show is 20 % below and above that value.
 
 ## An example
 
@@ -34,7 +35,6 @@ A system that stores customers (with several fields each), issues complex invoic
 - **61 function points** before adjustment.
 - Adjustment factor **1.01**.
 - **61.61 adjusted points × 3 hours = 185 hours**.
-- Reference price **USD 6,475**, range **USD 5,180 to 7,770**.
 - About **4.7 weeks** with a 40-hour-a-week team.
 
 Try it with your own project in the [estimator](/en/estimate/).

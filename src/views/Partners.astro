@@ -1,0 +1,155 @@
+---
+// Partner program: accountants who refer clients, independent closers who bring them in, and
+// business chambers that get terms for their members. Commission rates come from src/pricing.ts.
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import LeadForm from "../components/LeadForm.astro";
+import { path, type Lang } from "../i18n";
+import { commissions } from "../pricing";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = commissions;
+const copy = {
+  es: {
+    title: "Programa de socios", description: `Programa de socios de The Meowpany: estudios contables y vendedores independientes con comisión del ${c.closer} %, y convenios con cámaras empresariales.`,
+    h1: "Gane con cada empresa que nos presenta",
+    lead: "Para estudios contables, vendedores independientes y cámaras empresariales. Usted presenta, nosotros mostramos el proyecto funcionando antes de que el cliente pague, y la comisión queda por escrito.",
+    programs: [
+      { icon: "calculator", tag: `${c.accountant} % de comisión`, title: "Estudios contables", text: "Sus clientes le preguntan qué sistema usar, cómo vender en línea o cómo conectar la facturación electrónica. Recomiéndenos con tranquilidad: ven su proyecto funcionando antes de pagar.", points: [`${c.accountant} % de cada proyecto que se concrete`, "Sus clientes reciben el diagnóstico y la primera versión sin costo", "Le avisamos cada paso de los proyectos que nos presentó"] },
+      { icon: "briefcase", tag: `${c.closer} % de comisión`, title: "Vendedores independientes", text: "Si tiene contactos con pymes y sabe cerrar ventas, consiga clientes para nosotros con una oferta fácil de presentar: la primera versión es gratis.", points: [`${c.closer} % fijo de cada proyecto que se concrete`, "Sin exclusividad, sin metas mínimas y sin costo de entrada", "Materiales de venta, demostraciones y apoyo técnico en las reuniones"] },
+      { icon: "building-2", tag: "Convenio", title: "Cámaras y asociaciones", text: "Condiciones especiales para sus socios y actividades sin costo para su comunidad.", points: ["Descuento sobre la cotización para los socios", "Charlas y talleres gratuitos sobre venta en línea y digitalización", "Diagnóstico gratis para los asistentes de sus ferias y eventos"] },
+    ],
+    howTitle: "Cómo funciona",
+    how: [
+      { icon: "send", title: "Se postula", text: "Complete el formulario. Le respondemos en un día hábil." },
+      { icon: "file-signature", title: "Firmamos un acuerdo", text: "Con el porcentaje, cómo se registra cada cliente y cuándo se paga." },
+      { icon: "users", title: "Presenta empresas", text: "Cada empresa queda registrada a su nombre desde el primer contacto que nos presenta." },
+      { icon: "wallet", title: "Cobra su comisión", text: "A medida que el cliente paga el proyecto, sobre lo efectivamente cobrado." },
+    ],
+    rulesTitle: "Reglas claras",
+    rules: [
+      "La comisión se calcula sobre el primer proyecto de cada cliente, sin impuestos.",
+      "Las propuestas y los precios los emite The Meowpany: usted presenta y acompaña, no se compromete a nada en nuestro nombre.",
+      "Si el cliente no sigue después de la primera versión gratuita, no hay comisión ni costo para nadie.",
+      "Para cobrar, factura su comisión o la cobra como lo acordemos por escrito.",
+    ],
+    formTitle: "Postúlese", formLead: "Cuéntenos quién es y con qué empresas trabaja.",
+    program: "Programa", programs_: [
+      { value: "accountant", label: "Estudio contable" }, { value: "closer", label: "Vendedor independiente" }, { value: "chamber", label: "Cámara o asociación" }, { value: "other", label: "Otro" },
+    ],
+    message: "¿Con qué tipo de empresas trabaja?", submit: "Enviar postulación", done: "Recibimos su postulación. Le respondemos en menos de un día hábil.",
+    tools: "Materiales para presentar", toolsText: "El diagnóstico de 2 minutos y la guía para vender en línea sirven para abrir la conversación con cualquier empresa.", diagnosis: "Ver el diagnóstico",
+  },
+  en: {
+    title: "Partner program", description: `The Meowpany partner program: accountants and independent closers earn a ${c.closer}% commission, and business chambers get terms for their members.`,
+    h1: "Earn with every business you bring us",
+    lead: "For accounting firms, independent closers and business chambers. You introduce, we show the project working before the client pays, and the commission is in writing.",
+    programs: [
+      { icon: "calculator", tag: `${c.accountant}% commission`, title: "Accounting firms", text: "Your clients ask you which system to use or how to sell online. Recommend us with peace of mind: they see their project working before they pay.", points: [`${c.accountant}% of every project that goes ahead`, "Your clients get the diagnosis and the first version at no cost", "We keep you posted on every project you introduced"] },
+      { icon: "briefcase", tag: `${c.closer}% commission`, title: "Independent closers", text: "If you know small businesses and can close deals, bring us clients with an offer that's easy to pitch: the first version is free.", points: [`A fixed ${c.closer}% of every project that goes ahead`, "No exclusivity, no quotas, no sign-up fee", "Sales material, demos and technical support in meetings"] },
+      { icon: "building-2", tag: "Agreement", title: "Chambers and associations", text: "Special terms for your members and free activities for your community.", points: ["A discount on quotes for members", "Free talks and workshops on selling online and going digital", "A free diagnosis for attendees of your fairs and events"] },
+    ],
+    howTitle: "How it works",
+    how: [
+      { icon: "send", title: "You apply", text: "Fill in the form. We reply within one business day." },
+      { icon: "file-signature", title: "We sign an agreement", text: "With the rate, how each client is registered and when you get paid." },
+      { icon: "users", title: "You introduce businesses", text: "Each business is registered under your name from the first contact you introduce." },
+      { icon: "wallet", title: "You get paid", text: "As the client pays for the project, on what is actually collected." },
+    ],
+    rulesTitle: "Clear rules",
+    rules: [
+      "Commission is calculated on each client's first project, before taxes.",
+      "The Meowpany issues proposals and prices: you introduce and support, and commit to nothing on our behalf.",
+      "If the client doesn't continue after the free first version, there's no commission and no cost to anyone.",
+      "You invoice your commission, or collect it however we agree in writing.",
+    ],
+    formTitle: "Apply", formLead: "Tell us who you are and which businesses you work with.",
+    program: "Program", programs_: [
+      { value: "accountant", label: "Accounting firm" }, { value: "closer", label: "Independent closer" }, { value: "chamber", label: "Chamber or association" }, { value: "other", label: "Other" },
+    ],
+    message: "What kind of businesses do you work with?", submit: "Send application", done: "We got your application and will reply within one business day.",
+    tools: "Material to pitch with", toolsText: "The 2-minute diagnosis is an easy way to open the conversation with any business.", diagnosis: "See the diagnosis",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1>{copy.h1}</h1>
+      <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      <div class="programs balance">
+        {copy.programs.map((program) => (
+          <article class="card program reveal">
+            <div class="top"><span class="icon"><Icon name={program.icon} /></span><span class="badge brand">{program.tag}</span></div>
+            <h2>{program.title}</h2>
+            <p class="muted">{program.text}</p>
+            <ul class="check-list">{program.points.map((point) => <li><span>{point}</span></li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head reveal"><h2>{copy.howTitle}</h2></div>
+      <ol class="how balance">
+        {copy.how.map((item, index) => (
+          <li class="card reveal">
+            <span class="num">{index + 1}</span>
+            <span class="icon"><Icon name={item.icon} /></span>
+            <h3>{item.title}</h3>
+            <p class="muted">{item.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap apply">
+      <div class="side">
+        <div class="card reveal">
+          <h2 class="h3">{copy.rulesTitle}</h2>
+          <ul class="check-list">{copy.rules.map((rule) => <li><span>{rule}</span></li>)}</ul>
+        </div>
+        <div class="card reveal">
+          <h2 class="h3">{copy.tools}</h2>
+          <p class="muted">{copy.toolsText}</p>
+          <a class="btn btn-ghost btn-sm" href={path("diagnosis", lang)}>{copy.diagnosis}<Icon name="arrow-right" /></a>
+        </div>
+      </div>
+      <div class="form reveal">
+        <h2>{copy.formTitle}</h2>
+        <p class="muted">{copy.formLead}</p>
+        <LeadForm lang={lang} kind="partner" mailbox="socios" phone submit={copy.submit} done={copy.done} message={copy.message}
+          choice={{ name: "program", label: copy.program, options: copy.programs_ }} />
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .program { display: flex; flex-direction: column; gap: 0.6rem; }
+  .program h2 { font-size: 1.3rem; margin: 0.4rem 0 0; }
+  .program p { margin: 0; }
+  .program .check-list { margin-top: 0.4rem; font-size: 0.95rem; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  .icon { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--soft); color: var(--primary); }
+  .icon :global(svg) { width: 22px; height: 22px; }
+  .soft .icon { background: var(--bg); }
+  .how { list-style: none; margin: 0; padding: 0; }
+  .how li { position: relative; display: flex; flex-direction: column; gap: 0.5rem; }
+  .how h3 { margin: 0.4rem 0 0; font-size: 1.1rem; }
+  .how p { margin: 0; }
+  .num { position: absolute; top: 1.1rem; right: 1.25rem; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; line-height: 1; color: var(--brand-line); }
+  .apply { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 1.5rem; align-items: start; }
+  .side { display: grid; gap: 1rem; }
+  .h3 { font-size: 1.15rem; margin-bottom: 1rem; }
+  .side .btn { margin-top: 0.25rem; }
+  .form h2 { margin: 0 0 0.4rem; }
+  .form > p { margin: 0 0 1.25rem; }
+  @media (max-width: 900px) { .apply { grid-template-columns: 1fr; } .form { order: -1; } }
+</style>

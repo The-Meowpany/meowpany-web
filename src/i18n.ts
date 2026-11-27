@@ -24,6 +24,9 @@ export const routes = {
   news: { es: "/novedades/", en: "/en/news/" },
   privacy: { es: "/privacidad/", en: "/en/privacy/" },
   terms: { es: "/terminos/", en: "/en/terms/" },
+  offers: { es: "/beneficios/", en: "/en/offers/" },
+  partners: { es: "/socios/", en: "/en/partners/" },
+  diagnosis: { es: "/diagnostico/", en: "/en/diagnosis/" },
 } as const;
 
 export type RouteKey = keyof typeof routes;
@@ -32,13 +35,16 @@ export const ui = {
   es: {
     tagline: "Webs, tiendas y software a medida para pymes",
     skip: "Saltar al contenido",
-    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis", brand: "Marca", news: "Novedades" },
+    nav: { services: "Servicios", work: "Casos", pricing: "Presupuestos", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis", brand: "Marca", news: "Novedades", offers: "Beneficios", partners: "Programa de socios", diagnosis: "Diagnóstico gratis", guide: "Guía para vender en línea" },
     quote: "Cotizar",
     seeItWorking: "Quiero verlo funcionando",
     menu: "Menú",
     close: "Cerrar",
     switchTo: "English",
     switchLabel: "Read this page in English",
+    language: "Idioma",
+    theme: { toDark: "Activar el modo oscuro", toLight: "Activar el modo claro" },
+    partnerBar: { text: "Programa de socios: gane un {rate} % por cada empresa que nos presente.", link: "Conocer el programa", close: "Cerrar el aviso" },
     footer: {
       rights: "Todos los derechos reservados.",
       privacy: "Privacidad",
@@ -49,20 +55,25 @@ export const ui = {
       services: "Servicios",
       reach: "Contacto",
     },
-    whatsapp: "Escríbanos por WhatsApp",
+    whatsapp: "Escribir por WhatsApp a quien fundó The Meowpany",
+    whatsappShort: "WhatsApp directo",
+    whatsappNote: "WhatsApp personal de quien fundó The Meowpany",
     whatsappText: "Hola, quiero consultar por un proyecto.",
-    price: { from: "desde", perMonth: "por mes", perHour: "por hora", vat: "Precios en dólares estadounidenses. Clientes de Uruguay: + IVA (22 %)" },
+    price: { vat: "Cotizamos en dólares estadounidenses. Clientes de Uruguay: + IVA (22 %)" },
   },
   en: {
     tagline: "Websites, stores and custom software",
     skip: "Skip to content",
-    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version", brand: "Brand", news: "News" },
+    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version", brand: "Brand", news: "News", offers: "Offers", partners: "Partner program", diagnosis: "Free diagnosis", guide: "Guide to selling online in Uruguay (Spanish)" },
     quote: "Get a quote",
     seeItWorking: "I want to see it working",
     menu: "Menu",
     close: "Close",
     switchTo: "Español",
     switchLabel: "Leer esta página en español",
+    language: "Language",
+    theme: { toDark: "Switch to dark mode", toLight: "Switch to light mode" },
+    partnerBar: { text: "Partner program: earn {rate}% for every business you bring us.", link: "See the program", close: "Dismiss" },
     footer: {
       rights: "All rights reserved.",
       privacy: "Privacy",
@@ -73,9 +84,11 @@ export const ui = {
       services: "Services",
       reach: "Contact",
     },
-    whatsapp: "Message us on WhatsApp",
+    whatsapp: "Message our founder on WhatsApp",
+    whatsappShort: "Talk to our founder",
+    whatsappNote: "The personal WhatsApp of The Meowpany's founder",
     whatsappText: "Hi, I'd like to ask about a project.",
-    price: { from: "from", perMonth: "per month", perHour: "per hour", vat: "Prices in US dollars" },
+    price: { vat: "Quotes in US dollars" },
   },
 } as const;
 
@@ -95,6 +108,3 @@ export function alternate(pathname: string, lang: Lang): string {
   }
   return withBase(routes.home[other]);
 }
-
-export const money = (amount: number, lang: Lang) =>
-  `USD ${amount.toLocaleString(lang === "es" ? "es-UY" : "en-US", { maximumFractionDigits: 0 })}`;

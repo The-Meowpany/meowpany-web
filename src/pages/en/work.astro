@@ -1,19 +1,4 @@
 ---
-import Simple from "../../views/Simple.astro";
-import CtaBand from "../../components/CtaBand.astro";
-import { launch } from "../../pricing";
+import Work from "../../views/Work.astro";
 ---
-<Simple lang="en" title="Work" eyebrow="Work" description="The Meowpany projects: the client's problem, what we built and the measured result." lead="Each case will show the client's problem, what we built and the measured result. We only publish cases with the client's permission.">
-  <p class="notice">We are just starting and there are no published cases yet. We don't show made-up projects or logos of clients we don't have.</p>
-  <h2>What each case will include</h2>
-  <ul>
-    <li>The starting point and the concrete problem.</li>
-    <li>What we built and why we built it that way.</li>
-    <li>The committed timeline and the real one.</li>
-    <li>A measured result: sales, hours saved, errors avoided or site speed.</li>
-    <li>The client's own words, with their name and company.</li>
-  </ul>
-  <h2>Launch price</h2>
-  <p>Our first {launch.clients} clients get a reduced price in exchange for letting us publish their case and a testimonial.</p>
-  <CtaBand slot="after" lang="en" title="Want to be one of the first?" text="See your project working within 72 hours and get the launch price." />
-</Simple>
+<Work lang="en" />

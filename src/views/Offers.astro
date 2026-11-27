@@ -1,0 +1,136 @@
+---
+// Standing offers. Every figure comes from src/pricing.ts, and every benefit is written into the
+// client's proposal, so nothing here depends on a deadline or a countdown.
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { path, type Lang } from "../i18n";
+import { launch, offers } from "../pricing";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const o = offers;
+const copy = {
+  es: {
+    title: "Beneficios", description: `Beneficios de The Meowpany: ${o.starterSupportMonths} meses de soporte incluidos con su sitio o tienda, ${o.annualFreeMonths} meses gratis pagando el soporte anual, referidos, condiciones para emprendimientos, ONG y cámaras, y cuotas sin interés.`,
+    h1: "Más por lo mismo, por escrito en su propuesta",
+    lead: "Beneficios permanentes, sin fechas de vencimiento ni letra chica. Si le corresponde alguno, lo incluimos en la propuesta y queda en el contrato.",
+    cards: [
+      { icon: "package", tag: "Sitios y tiendas", title: "Paquete de arranque", text: `Su sitio web o su tienda en línea vienen con ${o.starterSupportMonths} meses de soporte incluidos: actualizaciones, copias de seguridad y respuesta con plazos escritos. No queda solo después de la entrega.`, terms: ["Plan Básico de soporte desde el día de la puesta en producción", "Después decide si sigue, cambia de plan o no"] },
+      { icon: "calendar-heart", tag: "Soporte", title: "Soporte anual", text: `Pagando un plan de soporte por un año adelantado, ${o.annualFreeMonths} de los 12 meses son sin cargo.`, terms: ["Vale para los tres planes", "Se paga una sola vez, al comienzo del año"] },
+      { icon: "gift", tag: "Referidos", title: "Recomiende y ganen los dos", text: `Si nos recomienda a otra empresa y contrata un proyecto, usted recibe ${o.referralFreeMonths} mes de soporte gratis y la empresa nueva también.`, terms: ["Sin límite de recomendaciones", "El mes se suma a su plan actual o al próximo que contrate"] },
+      { icon: "wallet", tag: "Solo el código", title: `Hasta ${o.codeOnlyInstallments} cuotas sin interés`, text: `Si prefiere llevarse el código sin contratar soporte, puede pagar el proyecto en hasta ${o.codeOnlyInstallments} cuotas mensuales sin interés, directamente con nosotros.`, terms: ["Recibe el código, los accesos y los manuales", "Lo mantiene usted o quien usted elija"] },
+    ],
+    specialTitle: "Condiciones especiales", specialLead: "Un descuento sobre su cotización, según el caso, que acordamos antes de enviarle la propuesta.",
+    special: [
+      { icon: "rocket", title: "Emprendimientos nuevos", text: "Empresas con menos de dos años de actividad, con su inscripción en DGI y BPS." },
+      { icon: "heart-handshake", title: "Organizaciones sin fines de lucro", text: "Asociaciones civiles y fundaciones con personería jurídica." },
+      { icon: "building-2", title: "Socios de cámaras con convenio", text: "Socios de las cámaras y asociaciones empresariales con las que tengamos un convenio vigente." },
+    ],
+    chamber: "¿Representa a una cámara?", chamberLink: "Conozca el programa de socios",
+    launchTitle: "Primeros clientes", launchText: `Los primeros ${launch.clients} clientes reciben además un descuento sobre su cotización y el primer mes de soporte gratis, a cambio de permitirnos publicar el caso.`,
+    rulesTitle: "Cómo se aplican",
+    rules: [
+      "Cada beneficio queda escrito en la propuesta y en el contrato.",
+      "Los beneficios no se suman entre sí, salvo el de referidos, que vale siempre.",
+      "El paquete de arranque y las cuotas sin interés son alternativos: con soporte incluido o solo el código.",
+      "Pueden cambiar para proyectos nuevos, nunca para una propuesta ya enviada.",
+    ],
+    ctaTitle: "Vea qué le corresponde", ctaText: "En la llamada repasamos su caso y le decimos qué beneficios aplican antes de enviarle la propuesta.",
+  },
+  en: {
+    title: "Offers", description: `The Meowpany offers: ${o.starterSupportMonths} months of support included with your website or store, ${o.annualFreeMonths} months free on annual support, referrals, terms for startups, non-profits and chambers, and interest-free instalments.`,
+    h1: "More for the same price, in writing in your proposal",
+    lead: "Standing offers with no expiry dates and no fine print. If one applies to you, we include it in the proposal and it goes into the contract.",
+    cards: [
+      { icon: "package", tag: "Websites and stores", title: "Starter package", text: `Your website or online store comes with ${o.starterSupportMonths} months of support included: updates, backups and replies within written times. You're not left alone after launch.`, terms: ["Basic support plan from go-live day", "Then you decide whether to continue, switch plans or stop"] },
+      { icon: "calendar-heart", tag: "Support", title: "Annual support", text: `Pay for a support plan a year in advance and ${o.annualFreeMonths} of the 12 months are free.`, terms: ["Applies to all three plans", "Paid once, at the start of the year"] },
+      { icon: "gift", tag: "Referrals", title: "Refer and both win", text: `Refer another company and, if it hires a project, you get ${o.referralFreeMonths} month of support free and so does the new company.`, terms: ["No limit on referrals", "The month is added to your current plan or the next one"] },
+      { icon: "wallet", tag: "Code only", title: `Up to ${o.codeOnlyInstallments} interest-free instalments`, text: `If you'd rather take the code without a support plan, you can pay for the project in up to ${o.codeOnlyInstallments} interest-free monthly instalments, directly with us.`, terms: ["You get the code, credentials and manuals", "You or whoever you choose maintains it"] },
+    ],
+    specialTitle: "Special terms", specialLead: "A discount on your quote, depending on the case, agreed before we send the proposal.",
+    special: [
+      { icon: "rocket", title: "New businesses", text: "Companies with less than two years of activity." },
+      { icon: "heart-handshake", title: "Non-profits", text: "Registered non-profit organizations and foundations." },
+      { icon: "building-2", title: "Members of partner chambers", text: "Members of business chambers and associations we have a current agreement with." },
+    ],
+    chamber: "Do you represent a chamber?", chamberLink: "See the partner program",
+    launchTitle: "First clients", launchText: `Our first ${launch.clients} clients also get a discount on their quote and the first month of support free, in exchange for letting us publish the case.`,
+    rulesTitle: "How they apply",
+    rules: [
+      "Every offer is written into the proposal and the contract.",
+      "Offers don't stack, except referrals, which always apply.",
+      "The starter package and interest-free instalments are alternatives: support included, or code only.",
+      "They may change for new projects, never for a proposal already sent.",
+    ],
+    ctaTitle: "See what applies to you", ctaText: "On the call we go over your case and tell you which offers apply before we send the proposal.",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1>{copy.h1}</h1>
+      <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      <div class="offers balance pairs">
+        {copy.cards.map((card) => (
+          <article class="card offer reveal">
+            <div class="top"><span class="icon"><Icon name={card.icon} /></span><span class="badge">{card.tag}</span></div>
+            <h2>{card.title}</h2>
+            <p class="muted">{card.text}</p>
+            <ul class="check-list">{card.terms.map((term) => <li><span>{term}</span></li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head reveal"><h2>{copy.specialTitle}</h2><p class="lead">{copy.specialLead}</p></div>
+      <div class="special balance">
+        {copy.special.map((item) => (
+          <article class="card reveal">
+            <span class="icon"><Icon name={item.icon} /></span>
+            <h3>{item.title}</h3>
+            <p class="muted">{item.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="chamber reveal">{copy.chamber} <a href={path("partners", lang)}>{copy.chamberLink}</a></p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="rules balance">
+        <div class="card reveal">
+          <h2 class="h3">{copy.rulesTitle}</h2>
+          <ul class="check-list">{copy.rules.map((rule) => <li><span>{rule}</span></li>)}</ul>
+        </div>
+        <div class="card reveal launch">
+          <h2 class="h3">{copy.launchTitle}</h2>
+          <p class="muted">{copy.launchText}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
+</Base>
+<style>
+  .offer { display: flex; flex-direction: column; gap: 0.6rem; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .offer h2 { font-size: 1.3rem; margin: 0.4rem 0 0; }
+  .offer p { margin: 0; }
+  .offer .check-list { margin-top: 0.4rem; font-size: 0.95rem; }
+  .icon { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--soft); color: var(--primary); }
+  .icon :global(svg) { width: 22px; height: 22px; }
+  .soft .icon { background: var(--bg); }
+  .special h3 { margin: 0.9rem 0 0.35rem; font-size: 1.1rem; }
+  .special p { margin: 0; }
+  .chamber { margin: 1.5rem 0 0; color: var(--ink-2); }
+  .h3 { font-size: 1.15rem; margin-bottom: 1rem; }
+  .launch { background: linear-gradient(135deg, var(--soft), var(--bg)); border-color: var(--brand-line); }
+</style>

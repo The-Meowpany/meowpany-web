@@ -2,6 +2,7 @@
 title: "Primera versión funcional gratis, en 72 horas"
 date: 2026-11-27
 summary: "Antes de pagar nada, vea su sitio, tienda o sistema funcionando. Cómo es la propuesta, qué incluye y qué no."
+topic: "launch"
 tag: "Lanzamiento"
 ---
 

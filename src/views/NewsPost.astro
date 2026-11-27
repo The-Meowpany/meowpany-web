@@ -1,43 +1,109 @@
 ---
+// A news story: breadcrumb, headline and meta, a wide cover, the text in a reading column, then a
+// way to share it and two more stories to keep reading.
 import Base from "../layouts/Base.astro";
 import CtaBand from "../components/CtaBand.astro";
-import { formatDate, newsPath, type Post } from "../news";
+import Icon from "../components/Icon.astro";
+import NewsCover from "../components/NewsCover.astro";
+import { formatDate, newsPath, posts, readingMinutes, type Post } from "../news";
 import type { Lang } from "../i18n";
 
 interface Props { lang: Lang; post: Post }
 const { lang, post } = Astro.props;
 const html = await post.html();
 const copy = {
-  es: { back: "← Todas las novedades", ctaTitle: "¿Lo vemos con su proyecto?", ctaText: "Una llamada de 30 minutos y, en 72 horas, su idea funcionando." },
-  en: { back: "← All news", ctaTitle: "Shall we try it with your project?", ctaText: "A 30-minute call and, within 72 hours, your idea working." },
+  es: { news: "Novedades", minutes: (n: number) => `${n} min de lectura`, share: "Compartir", copy: "Copiar enlace", copied: "Enlace copiado", more: "Seguir leyendo", all: "Ver todas las novedades", ctaTitle: "¿Lo vemos con su proyecto?", ctaText: "Una llamada de 30 minutos y, en 72 horas, su idea funcionando." },
+  en: { news: "News", minutes: (n: number) => `${n} min read`, share: "Share", copy: "Copy link", copied: "Link copied", more: "Keep reading", all: "See all news", ctaTitle: "Shall we try it with your project?", ctaText: "A 30-minute call and, within 72 hours, your idea working." },
 }[lang];
+const others = posts(lang).filter((p) => p.slug !== post.slug).slice(0, 2);
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 const schema = { "@context": "https://schema.org", "@type": "Article", headline: post.title, datePublished: post.date.toISOString(), description: post.summary, author: { "@type": "Organization", name: "The Meowpany" } };
 ---
 <Base lang={lang} title={post.title} description={post.summary}>
   <article>
-    <header class="page-head">
-      <div class="wrap narrow">
-        <p class="meta"><a href={newsPath(lang)}>{copy.back}</a></p>
-        <p class="meta"><span class="badge brand">{post.tag}</span><time datetime={post.date.toISOString().slice(0, 10)}>{formatDate(post.date, lang)}</time></p>
+    <header class="page-head story-head">
+      <div class="wrap">
+        <nav class="crumbs" aria-label={copy.news}><a href={newsPath(lang)}>{copy.news}</a><Icon name="chevron-right" /><span>{post.tag}</span></nav>
         <h1>{post.title}</h1>
         <p class="lead">{post.summary}</p>
+        <p class="meta"><time datetime={post.date.toISOString().slice(0, 10)}>{formatDate(post.date, lang)}</time><span>{copy.minutes(readingMinutes(html))}</span></p>
       </div>
     </header>
-    <div class="section">
-      <div class="wrap narrow body" set:html={html}></div>
+    <div class="wrap cover-wrap"><NewsCover topic={post.topic} size="lg" label={post.tag} /></div>
+    <div class="section body-section">
+      <div class="wrap body" set:html={html}></div>
+      <div class="wrap share">
+        <span>{copy.share}</span>
+        <button type="button" class="btn btn-ghost btn-sm" data-copy={url} data-done={copy.copied}><Icon name="link" /><span>{copy.copy}</span></button>
+        <a class="btn btn-ghost btn-sm" href={linkedin} rel="noopener" target="_blank"><Icon name="share-2" />LinkedIn</a>
+      </div>
     </div>
   </article>
+  {others.length > 0 && (
+    <section class="section soft">
+      <div class="wrap">
+        <div class="section-head"><h2>{copy.more}</h2></div>
+        <ol class="more balance">
+          {others.map((other) => (
+            <li class="reveal">
+              <a class="story" href={newsPath(lang, other.slug)}>
+                <NewsCover topic={other.topic} label={other.tag} />
+                <span class="tag">{other.tag}</span>
+                <strong>{other.title}</strong>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="all"><a class="btn btn-ghost" href={newsPath(lang)}>{copy.all}<Icon name="arrow-right" /></a></p>
+      </div>
+    </section>
+  )}
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
 </Base>
+<script>
+  const button = document.querySelector<HTMLButtonElement>("[data-copy]");
+  button?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(button.dataset.copy ?? location.href);
+      const label = button.querySelector("span");
+      if (label) label.textContent = button.dataset.done ?? "";
+    } catch {
+      // Without clipboard access the address bar still has the link.
+    }
+  });
+</script>
 <style>
-  .meta { display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem; color: var(--muted); margin-bottom: 0.8rem; }
-  .meta a { text-decoration: none; font-weight: 600; }
-  .body { font-size: 1.05rem; }
-  .body :global(h2) { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin-top: 2.25rem; }
+  .story-head { padding-bottom: clamp(5rem, 10vw, 8rem); }
+  .crumbs { display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--muted); }
+  .crumbs a { text-decoration: none; font-weight: 600; }
+  .crumbs :global(svg) { width: 14px; height: 14px; }
+  .story-head h1 { max-width: 24ch; }
+  .meta { display: flex; justify-content: center; gap: 0.9rem; margin: 1.25rem 0 0; font-size: 0.9rem; color: var(--muted); }
+  .meta > * + *::before { content: "·"; margin-right: 0.9rem; color: var(--line-strong); }
+  /* The cover overlaps the header band, like a magazine opening. */
+  .cover-wrap { max-width: 960px; margin-top: clamp(-6.5rem, -9vw, -4rem); position: relative; animation: rise 800ms 200ms var(--ease) both; }
+  .cover-wrap :global(.cover) { box-shadow: var(--shadow-lg); }
+  .body-section { padding-top: clamp(2.5rem, 5vw, 3.5rem); }
+  .body { max-width: 720px; font-size: 1.07rem; line-height: 1.75; }
+  .body :global(h2) { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin-top: 2.5rem; }
   .body :global(p), .body :global(li) { color: var(--ink-2); }
   .body :global(li) { margin-bottom: 0.45rem; }
   .body :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
   .body :global(th), .body :global(td) { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
   .body :global(thead th) { background: var(--soft); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  @media (max-width: 560px) {
+    .body :global(th), .body :global(td) { padding: 0.5rem 0.35rem; font-size: 0.84rem; }
+    .body :global(thead th) { font-size: 0.68rem; letter-spacing: 0; }
+  }
+  .share { max-width: 720px; display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .share > span { font-weight: 650; margin-right: 0.4rem; }
+  .share :global(svg) { width: 16px; height: 16px; }
+  .more { list-style: none; margin: 0; padding: 0; gap: 1.5rem; max-width: 860px; margin-inline: auto; }
+  .story { display: grid; gap: 0.6rem; text-decoration: none; color: inherit; }
+  .story strong { font-family: var(--font-display); font-size: 1.2rem; line-height: 1.25; transition: color 200ms; }
+  .story:hover strong { color: var(--primary); }
+  .tag { color: var(--primary); font-weight: 700; font-size: 0.85rem; }
+  .all { text-align: center; margin: 2rem 0 0; }
 </style>

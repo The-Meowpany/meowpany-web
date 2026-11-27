@@ -1,0 +1,133 @@
+---
+// A short single-step form that delivers a lead through src/lib/leads.ts. Used where a visitor only
+// leaves their details: partner applications and the guide download. Whatever is passed in the
+// "after" slot appears once the form is sent (or drafted in the visitor's email app).
+import { path, type Lang } from "../i18n";
+import type { LeadKind } from "../lib/leads";
+import { inbox, services, type Mailbox } from "../site";
+
+type Choice = { name: string; label: string; options: { value: string; label: string }[] };
+
+interface Props {
+  lang: Lang;
+  kind: LeadKind;
+  mailbox: Mailbox;
+  submit: string;
+  done: string;
+  company?: boolean;
+  phone?: boolean;
+  message?: string;
+  choice?: Choice;
+  consent?: string;
+}
+const { lang, kind, mailbox, submit, done, company = true, phone = false, message, choice, consent } = Astro.props;
+const copy = {
+  es: {
+    name: "Nombre", company: "Empresa u organización (opcional)", email: "Correo", phone: "Teléfono o WhatsApp (opcional)",
+    sending: "Enviando...", required: "Complete su nombre y un correo válido.",
+    drafted: "Abrimos su correo con el mensaje ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
+    privacy: "Usamos sus datos solo para lo que pidió. Ver la política de privacidad.",
+  },
+  en: {
+    name: "Name", company: "Company or organization (optional)", email: "Email", phone: "Phone (optional)",
+    sending: "Sending...", required: "Please add your name and a valid email.",
+    drafted: "Your email app opened with the message written out: just send it. If it didn't open, email us at",
+    privacy: "We only use your details for what you asked. See our privacy policy.",
+  },
+}[lang];
+// Name and email share a row; an odd optional field left over takes the whole row.
+const lastWide = (company ? 1 : 0) + (phone ? 1 : 0) === 1;
+---
+<form class="lead card" novalidate data-lead
+  data-kind={kind} data-lang={lang} data-email={inbox(mailbox)} data-inbox={services.web3formsKey}
+  data-text={JSON.stringify({ sending: copy.sending, required: copy.required, drafted: copy.drafted, done, submit })}>
+  <div class="fields">
+    <label>{copy.name}<input name="name" autocomplete="name" required maxlength="200" /></label>
+    <label>{copy.email}<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+    {company && <label class:list={{ wide: lastWide && !phone }}>{copy.company}<input name="company" autocomplete="organization" maxlength="200" /></label>}
+    {phone && <label class:list={{ wide: lastWide }}>{copy.phone}<input name="phone" type="tel" autocomplete="tel" maxlength="40" /></label>}
+    {choice && (
+      <label class="wide">{choice.label}
+        <select name={choice.name} data-detail={choice.label}>{choice.options.map((o) => <option value={o.value}>{o.label}</option>)}</select>
+      </label>
+    )}
+    {message && <label class="wide">{message}<textarea name="message" rows="4" maxlength="4000"></textarea></label>}
+    {consent && <label class="check wide"><input type="checkbox" name="consent" data-detail="Consent" /><span>{consent}</span></label>}
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <p class="muted small"><a href={path("privacy", lang)}>{copy.privacy}</a></p>
+  <p class="status" role="status" aria-live="polite"></p>
+  <div class="actions"><button type="submit" class="btn btn-primary">{submit}</button></div>
+  <div class="after" data-after hidden><slot name="after" /></div>
+</form>
+
+<script>
+  import { isBot, isEmail, leadSink, type LeadKind } from "../lib/leads";
+
+  for (const form of document.querySelectorAll<HTMLFormElement>("form[data-lead]")) {
+    const text = JSON.parse(form.dataset.text ?? "{}");
+    const status = form.querySelector<HTMLElement>(".status")!;
+    const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+    const value = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value.trim() ?? "";
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = value("email");
+      if (!value("name") || !isEmail(email)) {
+        status.textContent = text.required;
+        status.className = "status error";
+        return;
+      }
+      if (isBot(form)) return;
+      button.disabled = true;
+      button.textContent = text.sending;
+      const details: Record<string, string | boolean> = {};
+      for (const field of form.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[data-detail]")) {
+        details[field.dataset.detail!] = field instanceof HTMLInputElement && field.type === "checkbox" ? field.checked : field.value;
+      }
+      const sink = leadSink({ web3formsKey: form.dataset.inbox ?? "", email: form.dataset.email ?? "" });
+      const delivery = await sink.send({
+        kind: form.dataset.kind as LeadKind, language: form.dataset.lang ?? "es",
+        name: value("name"), email, company: value("company"), phone: value("phone"), message: value("message"), details,
+      });
+      if (delivery === "sent") {
+        form.querySelectorAll(".fields, .actions, .small").forEach((el) => el.setAttribute("hidden", ""));
+        status.textContent = text.done;
+      } else {
+        status.replaceChildren(`${text.drafted} `);
+        const link = document.createElement("a");
+        link.href = `mailto:${form.dataset.email}`;
+        link.textContent = form.dataset.email ?? "";
+        status.append(link, ".");
+      }
+      status.className = "status ok";
+      form.querySelector<HTMLElement>("[data-after]")?.removeAttribute("hidden");
+      button.disabled = false;
+      button.textContent = text.submit;
+    });
+  }
+</script>
+
+<style>
+  .lead { display: grid; gap: 1rem; }
+  .fields { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fields .wide { grid-column: 1 / -1; }
+  label { display: grid; gap: 0.35rem; font-weight: 550; }
+  input, select, textarea {
+    font: inherit; font-weight: 400; padding: 0.75rem 0.85rem; min-height: 48px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+  .check { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 400; color: var(--ink-2); }
+  .check input { width: 20px; height: 20px; min-height: 0; margin-top: 0.15rem; accent-color: var(--primary); flex: none; }
+  .small { font-size: 0.88rem; margin: 0; }
+  .actions { display: flex; justify-content: flex-end; }
+  .status { margin: 0; }
+  .status:empty { display: none; }
+  .status.ok { color: #15803d; font-weight: 600; }
+  .status.error { color: #b91c1c; }
+  :global([data-theme="dark"]) .status.ok { color: #4ade80; }
+  :global([data-theme="dark"]) .status.error { color: #f87171; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  @media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+</style>

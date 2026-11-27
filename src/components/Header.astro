@@ -2,7 +2,8 @@
 // Header: four destinations and one action. Everything else lives in the footer, and in the phone
 // menu, which has room for it.
 import Logo from "./Logo.astro";
-import { alternate, path, type Lang, t } from "../i18n";
+import Icon from "./Icon.astro";
+import { alternate, languages, path, type Lang, t } from "../i18n";
 import { withoutBase } from "../lib/url";
 
 interface Props { lang: Lang }
@@ -13,7 +14,7 @@ const links = lang === "es"
   ? (["services", "process", "pricing", "news"] as const)
   : (["services", "hire", "pricing", "news"] as const);
 // Only in the phone menu.
-const extra = (["firstVersion", "about", "quote"] as const);
+const extra = (["firstVersion", "offers", "diagnosis", "about", "quote"] as const);
 const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
 const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as keyof typeof copy.nav]);
 ---
@@ -32,7 +33,14 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
         {extra.map((key) => <li class="phone-only"><a href={path(key, lang)}>{label(key)}</a></li>)}
       </ul>
       <div class="end">
-        <a class="lang" href={alternate(current, lang)} hreflang={lang === "es" ? "en" : "es"} lang={lang === "es" ? "en" : "es"} aria-label={copy.switchLabel}>{lang === "es" ? "EN" : "ES"}</a>
+        <div class="langs" role="group" aria-label={copy.language}>
+          {languages.map((code) => code === lang
+            ? <span class="lang on" aria-current="true">{code.toUpperCase()}</span>
+            : <a class="lang" href={alternate(current, lang)} hreflang={code} lang={code} aria-label={copy.switchLabel}>{code.toUpperCase()}</a>)}
+        </div>
+        <button type="button" class="theme" data-theme-toggle data-dark={copy.theme.toDark} data-light={copy.theme.toLight} aria-label={copy.theme.toDark}>
+          <span class="sun"><Icon name="sun" /></span><span class="moon"><Icon name="moon" /></span>
+        </button>
         <a class="btn btn-primary btn-sm cta" href={`${path("book", lang)}?for=prototype`}>{copy.nav.book}</a>
       </div>
     </nav>
@@ -57,6 +65,44 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
   });
   nav?.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest("a") && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
+  });
+  // Light or dark, remembered on this device. The switch spreads from the button where the browser
+  // can animate it; otherwise it simply cross-fades.
+  const themeButton = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const syncTheme = () => {
+    const dark = document.documentElement.dataset.theme === "dark";
+    themeButton?.setAttribute("aria-label", (dark ? themeButton.dataset.light : themeButton.dataset.dark) ?? "");
+    themeColor?.setAttribute("content", dark ? "#1e1c20" : "#ffffff");
+  };
+  syncTheme();
+  themeButton?.addEventListener("click", () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    const apply = () => {
+      root.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch {}
+      syncTheme();
+    };
+    if (!document.startViewTransition) return apply();
+    const { left, top, width, height } = themeButton.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    root.classList.add("theming");
+    const transition = document.startViewTransition(apply);
+    transition.ready.then(() => {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 550, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)", pseudoElement: "::view-transition-new(root)" });
+    });
+    transition.finished.finally(() => root.classList.remove("theming"));
+  });
+  // Follow the device while the visitor hasn't chosen.
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+    try { if (localStorage.getItem("theme")) return; } catch {}
+    document.documentElement.dataset.theme = event.matches ? "dark" : "light";
+    syncTheme();
   });
   // The header gains a shadow once the page scrolls under it.
   const onScroll = () => header?.classList.toggle("scrolled", window.scrollY > 8);
@@ -92,9 +138,19 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
   .nav ul a:hover::after, .nav ul a[aria-current="page"]::after { transform: scaleX(1); }
   .nav ul a[aria-current="page"] { color: var(--ink); }
   .phone-only { display: none; }
-  .end { display: flex; align-items: center; gap: 0.4rem; }
-  .lang { color: var(--muted); font-size: 0.82rem; font-weight: 650; letter-spacing: 0.06em; min-height: 36px; padding: 0 0.6rem; display: inline-flex; align-items: center; text-decoration: none; border-radius: 8px; }
-  .lang:hover { color: var(--ink); background: var(--soft); }
+  .end { display: flex; align-items: center; gap: 0.5rem; }
+  /* ES | EN: the current language is the highlighted one. */
+  .langs { display: inline-flex; padding: 3px; border-radius: 10px; border: 1px solid var(--line); background: var(--soft); }
+  .lang { color: var(--muted); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; min-height: 28px; padding: 0 0.55rem; display: inline-flex; align-items: center; text-decoration: none; border-radius: 7px; transition: color 150ms, background-color 150ms; }
+  a.lang:hover { color: var(--ink); }
+  .lang.on { background: var(--bg); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .theme { position: relative; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); cursor: pointer; overflow: hidden; transition: border-color 150ms, color 150ms; }
+  .theme:hover { color: var(--primary); border-color: var(--brand-line); }
+  .theme span { grid-area: 1 / 1; display: grid; transition: transform 450ms var(--ease), opacity 300ms var(--ease); }
+  .theme :global(svg) { width: 18px; height: 18px; }
+  .sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+  :global([data-theme="dark"]) .sun { opacity: 1; transform: none; }
+  :global([data-theme="dark"]) .moon { opacity: 0; transform: rotate(90deg) scale(0.6); }
   .toggle {
     display: none; align-items: center; gap: 0.55rem; min-height: 40px; padding: 0 0.9rem; border-radius: 10px;
     border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); font: inherit; font-size: 0.92rem; font-weight: 600; cursor: pointer;
@@ -118,9 +174,8 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
     .phone-only { display: block; }
     .nav ul a { display: flex; font-size: 1.15rem; min-height: 54px; color: var(--ink); border-bottom: 1px solid var(--line); padding: 0; }
     .nav ul a::after { display: none; }
-    .end { flex-direction: column; align-items: stretch; margin-top: auto; }
-    .end .btn { min-height: 50px; font-size: 1rem; }
-    .lang { justify-content: center; }
+    .end { flex-wrap: wrap; justify-content: center; margin-top: auto; }
+    .end .btn { flex-basis: 100%; min-height: 50px; font-size: 1rem; }
   }
   @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 </style>

@@ -2,6 +2,7 @@
 title: "A new website, with four free tools"
 date: 2026-11-25
 summary: "Website audit, project estimator, return calculator and call booking: concrete results before any talk about price."
+topic: "company"
 tag: "News"
 ---
 

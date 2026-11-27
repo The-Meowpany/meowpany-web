@@ -1,10 +1,11 @@
-// Business details shown across the site. Fill in the WhatsApp number once the business line exists;
-// while it is empty the WhatsApp buttons are hidden instead of pointing nowhere.
+// Business details shown across the site. The WhatsApp number is the founder's personal line, and the
+// site says so wherever it appears; while it is empty the WhatsApp buttons are hidden.
 export const site = {
   name: "The Meowpany",
   // The public contact address: an alias of the company Gmail (see inbox below).
   email: "themeowpany+contacto@gmail.com",
-  whatsapp: "", // International format without "+" or spaces, e.g. "598991234567".
+  whatsapp: "59892955928", // International format without "+" or spaces.
+  whatsappDisplay: "+598 92 955 928",
   linkedin: "https://www.linkedin.com/company/meowpany",
   city: "Montevideo, Uruguay",
 };
@@ -39,7 +40,7 @@ export const availability = {
 // and keeps the full address in "To", so a filter per alias files each message under its own label
 // (docs/es/email.md lists the aliases and the filters).
 export const INBOX_USER = "themeowpany";
-export type Mailbox = "contacto" | "cotizaciones" | "primeraversion" | "llamadas" | "estimaciones" | "auditorias" | "privacidad";
+export type Mailbox = "contacto" | "cotizaciones" | "primeraversion" | "llamadas" | "estimaciones" | "auditorias" | "privacidad" | "socios" | "guias" | "diagnosticos";
 export const inbox = (mailbox: Mailbox) => `${INBOX_USER}+${mailbox}@gmail.com`;
 
 export const whatsappLink = (text: string) =>

@@ -1,0 +1,203 @@
+---
+// The online-selling guide itself. It is reached from the form on /guia/, so it stays out of search
+// results. Every legal or tax statement links to its source; figures that change often (fees,
+// rates) are left to each provider's own page on purpose.
+import Base from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
+import { path } from "../../i18n";
+import { chapters, reviewed } from "../../guide";
+
+const date = reviewed.toLocaleDateString("es-UY", { month: "long", year: "numeric", timeZone: "UTC" });
+const checklist = [
+  "Calculé el margen de cada producto con la comisión de cobro, el envío y el empaque.",
+  "Elegí los medios de pago y revisé en mi cuenta cuánto cuesta cada plazo de acreditación.",
+  "Definí zonas, costos y plazos de envío, y los escribí en la tienda.",
+  "Cada venta emite su comprobante fiscal electrónico (e-ticket o e-factura).",
+  "Publiqué la política de cambios y devoluciones, con el derecho de arrepentimiento de 5 días hábiles.",
+  "Publiqué la política de privacidad y pido consentimiento para usar los datos de los clientes.",
+  "Los precios que se ven son finales, y el costo del envío aparece antes de pagar.",
+  "Cada producto tiene fotos propias, medidas o talles y una descripción clara.",
+  "El botón de WhatsApp y el correo de contacto están a la vista.",
+  "Probé una compra completa desde el celular: pago, comprobante y aviso de envío.",
+];
+const sources = [
+  ["Ley 17.250 de Relaciones de Consumo, artículo 16 (IMPO)", "https://www.impo.com.uy/bases/leyes/17250-2000/16"],
+  ["Ley 18.331 de Protección de Datos Personales (IMPO)", "https://www.impo.com.uy/bases/leyes/18331-2008"],
+  ["Facturación electrónica: incorporación de los restantes contribuyentes de IVA (DGI)", "https://www.gub.uy/direccion-general-impositiva/comunicacion/noticias/facturacion-electronica-incorporacion-restantes-contribuyentes-iva"],
+  ["Facturación electrónica: inclusión obligatoria a partir del 1/1/2025 (RSM Uruguay)", "https://www.rsm.global/uruguay/es/news/facturacion-electronica-inclusion-obligatoria-partir-del-01012025"],
+  ["Paquetería nacional del Correo Uruguayo (gub.uy)", "https://www.gub.uy/tramites/paqueteria-nacional-envio-paqueteria-todo-territorio-nacional"],
+  ["Unidad Reguladora y de Control de Datos Personales (URCDP)", "https://www.gub.uy/unidad-reguladora-control-datos-personales/"],
+];
+---
+<Base lang="es" title="Cómo vender en línea en Uruguay" description="Guía gratuita de The Meowpany: cobros, envíos, facturación electrónica y lo que pide la ley para vender en línea en Uruguay." noindex>
+  <header class="page-head">
+    <div class="wrap">
+      <h1>Cómo vender en línea en Uruguay</h1>
+      <p class="lead">Lo que necesita resolver para vender por internet: cobrar, enviar, facturar y cumplir la ley. Pensada para pymes y emprendimientos que hoy venden por redes sociales, WhatsApp o en su local.</p>
+      <p class="meta">Guía gratuita de The Meowpany · Revisada en {date}</p>
+    </div>
+  </header>
+
+  <section class="section guide">
+    <div class="wrap layout">
+      <aside class="side no-print">
+        <nav class="toc" aria-label="Contenido">
+          <strong>Contenido</strong>
+          <ol>{chapters.map((chapter, index) => <li><a href={`#${chapter.id}`} data-toc={chapter.id}><span>{String(index + 1).padStart(2, "0")}</span>{chapter.title}</a></li>)}</ol>
+        </nav>
+        <button type="button" class="btn btn-ghost btn-sm print" data-print><Icon name="printer" />Guardar en PDF</button>
+      </aside>
+      <article class="body">
+
+      <h2 id="numeros">1. Antes de empezar: los números</h2>
+      <p>Vender en línea agrega costos que en el local no existen. Antes de publicar precios, calcule cuánto le queda de cada venta:</p>
+      <div class="formula card">
+        <p><strong>Margen por venta</strong> = precio de venta − costo del producto − comisión del medio de pago − envío que usted absorbe − empaque − impuestos</p>
+      </div>
+      <ul>
+        <li><strong>Empiece por lo que más se vende y mejor viaja.</strong> Productos con buena rotación, que se describen fácil y que se envían sin riesgo de romperse.</li>
+        <li><strong>Decida dónde vender.</strong> Una tienda propia no paga comisión por venta a una plataforma y los datos de sus clientes son suyos. Un marketplace trae visitas, pero cobra por cada venta y pone sus propias reglas. Muchas pymes combinan las dos cosas, y siguen usando las redes sociales para atraer visitas a la tienda.</li>
+        <li><strong>Fije un monto mínimo o un envío gratis desde cierto monto</strong> solo después de hacer la cuenta: un envío gratis mal calculado se come el margen de los pedidos chicos.</li>
+      </ul>
+
+      <h2 id="cobrar">2. Cobrar</h2>
+      <h3>Mercado Pago</h3>
+      <p>Es una de las formas más extendidas de cobrar en línea en Uruguay, y sirve para tres situaciones:</p>
+      <ul>
+        <li><strong>En la tienda:</strong> el cliente paga sin salir del sitio, con tarjeta o con el saldo de su cuenta.</li>
+        <li><strong>Por WhatsApp o redes sociales:</strong> un link de pago que se manda en el chat.</li>
+        <li><strong>En el local:</strong> un código QR o un dispositivo para cobrar con tarjeta.</li>
+      </ul>
+      <div class="note card">
+        <Icon name="info" />
+        <p><strong>Lo que más incide en el costo es el plazo.</strong> La comisión depende de cuándo elige recibir el dinero: cuanto antes, más cara. Antes de fijar sus precios, entre a su cuenta, revise la sección de costos y elija el plazo que le conviene. Si ofrece cuotas, verifique quién asume su costo: usted o el cliente.</p>
+      </div>
+      <h3>Otras formas de cobro</h3>
+      <ul>
+        <li><strong>Transferencia bancaria:</strong> no tiene comisión de una pasarela de pagos, pero hay que confirmar cada pago a mano antes de despachar.</li>
+        <li><strong>Efectivo al retirar o al recibir:</strong> útil para clientes que no pagan en línea. Defina un límite y quién maneja el dinero.</li>
+      </ul>
+      <p>Muestre los medios de pago y las cuotas en la página de cada producto, no recién al pagar: es una de las primeras dudas del cliente.</p>
+
+      <h2 id="enviar">3. Enviar</h2>
+      <p>Lo que el cliente quiere saber antes de comprar es cuánto cuesta el envío y cuándo le llega. Combine las opciones que le sirvan:</p>
+      <ul>
+        <li><strong>Retiro en el local o en un punto de entrega:</strong> sin costo para el cliente y sin esperar.</li>
+        <li><strong>Envío propio o con cadetería:</strong> para su ciudad, con un costo fijo por zona. Le da control del plazo y de la atención.</li>
+        <li><strong>Paquetería a todo el país:</strong> el Correo Uruguayo tiene un servicio de paquetería nacional con tarifas por tamaño, hasta 30 kilos, y empresas privadas como DAC o UES también hacen envíos a todo el país. Pida cotización a más de una y compare costo, plazo, cobertura y cómo se rastrea el paquete.</li>
+      </ul>
+      <p>Algunas empresas de envíos ofrecen integraciones para calcular el costo en la tienda e imprimir las etiquetas. Pruébelas con pedidos reales antes de depender de ellas.</p>
+      <p>En cada pedido, avise al cliente cuando sale, con el número de seguimiento, y cuando se entrega. La mayoría de los reclamos se evitan con ese aviso.</p>
+
+      <h2 id="facturar">4. Facturar</h2>
+      <p>Desde el <strong>1 de enero de 2025</strong>, los contribuyentes de IVA, incluidos los de IVA mínimo (pequeña empresa), deben emitir <strong>comprobantes fiscales electrónicos (CFE)</strong>, con algunas excepciones puntuales, y quien se inscribe en IVA desde esa fecha es emisor electrónico desde el inicio.</p>
+      <ul>
+        <li><strong>Qué necesita:</strong> un certificado digital y un proveedor de facturación electrónica habilitado por la DGI.</li>
+        <li><strong>Qué comprobante emitir:</strong> e-ticket cuando le vende a un consumidor final, y e-factura cuando el cliente es una empresa con RUT.</li>
+        <li><strong>Conéctelo a la tienda:</strong> si la tienda está integrada con su proveedor, cada venta emite el comprobante y el cliente lo recibe por correo, sin cargar nada a mano.</li>
+        <li><strong>Beneficios:</strong> la DGI estableció un beneficio fiscal para los contribuyentes más pequeños que contratan el servicio. Pregunte a su contador si le corresponde y hasta cuándo rige.</li>
+      </ul>
+      <p>Si está en otro régimen, por ejemplo monotributo, consulte con su contador qué comprobantes le corresponden.</p>
+
+      <h2 id="ley">5. Lo que pide la ley</h2>
+      <h3>Derecho de arrepentimiento</h3>
+      <p>Según el <a href="https://www.impo.com.uy/bases/leyes/17250-2000/16" rel="noopener" target="_blank">artículo 16 de la Ley 17.250</a>, cuando la venta se hace fuera del local, por internet entre otros medios, el cliente puede dejarla sin efecto <strong>dentro de los cinco días hábiles</strong> desde el contrato o desde que recibe el producto, sin dar explicaciones. Tiene que avisarle por un medio fehaciente y devolver el producto sin uso; usted tiene que devolverle de inmediato lo que pagó, y cada parte se hace cargo de los costos de su devolución.</p>
+      <p>Escríbalo en su política de cambios y devoluciones, con los pasos para pedirlo.</p>
+      <h3>Datos personales</h3>
+      <p>La <a href="https://www.impo.com.uy/bases/leyes/18331-2008" rel="noopener" target="_blank">Ley 18.331</a> protege los datos de sus clientes. En la práctica:</p>
+      <ul>
+        <li>Informe para qué usa los datos y pida el consentimiento, por ejemplo con una casilla para recibir promociones.</li>
+        <li>Publique una política de privacidad con un correo para pedir acceso, corrección o eliminación de los datos.</li>
+        <li>Las bases de datos personales se inscriben ante la <a href="https://www.gub.uy/unidad-reguladora-control-datos-personales/" rel="noopener" target="_blank">URCDP</a>; consulte allí o con un profesional cómo aplica a su caso.</li>
+      </ul>
+      <h3>Información clara</h3>
+      <p>Muestre precios finales, el costo del envío antes de pagar, los plazos de entrega y las condiciones de cambio. Además de evitar reclamos, da confianza a quien le compra por primera vez.</p>
+
+      <h2 id="vender">6. Que le compren</h2>
+      <ul>
+        <li><strong>Fotos propias:</strong> con luz natural y fondo neutro, varias por producto, una en uso.</li>
+        <li><strong>Descripciones completas:</strong> medidas, talles, materiales, cuidados y qué incluye. Cada duda que responde la página es una consulta menos por WhatsApp.</li>
+        <li><strong>Confianza:</strong> reseñas de clientes, su dirección o zona, el WhatsApp y el correo a la vista, y su ficha de Google Business Profile actualizada.</li>
+        <li><strong>Velocidad en el celular:</strong> la mayoría de las visitas llegan desde el teléfono. Un sitio lento pierde ventas antes de mostrar el primer producto. Puede medir el suyo con nuestra <a href={path("audit", "es")}>auditoría gratuita</a>.</li>
+        <li><strong>Medir:</strong> cuántas visitas llegan, de dónde y cuántas compran. Sin esos números no sabe qué mejorar.</li>
+      </ul>
+
+      <h2 id="lista">7. Lista para lanzar</h2>
+      <ul class="checklist">
+        {checklist.map((item) => <li><label><input type="checkbox" /><span>{item}</span></label></li>)}
+      </ul>
+
+      <div class="disclaimer">
+        <h2>Fuentes</h2>
+        <ul class="sources">{sources.map(([label, url]) => <li><a href={url} rel="noopener" target="_blank">{label}</a></li>)}</ul>
+        <p class="muted small">Revisamos estas fuentes en {date}. Esta guía es informativa y no reemplaza el asesoramiento de su contador o de un abogado: las normas, las tarifas y los plazos cambian, así que confirme lo que aplica a su caso.</p>
+      </div>
+
+      <div class="cta card no-print">
+        <h2>¿Quiere su tienda funcionando sin ocuparse de todo esto?</h2>
+        <p class="muted">Armamos su tienda con Mercado Pago, envíos y facturación electrónica conectados. Ve una primera versión funcionando en 72 horas, antes de pagar nada.</p>
+        <div class="buttons">
+          <a class="btn btn-primary" href={`${path("book", "es")}?for=prototype`}>Pedir la primera versión gratis</a>
+          <a class="btn btn-ghost" href={path("diagnosis", "es")}>Hacer el diagnóstico de 2 minutos</a>
+        </div>
+      </div>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.querySelector("[data-print]")?.addEventListener("click", () => window.print());
+  // The contents highlight the chapter being read.
+  const links = new Map([...document.querySelectorAll<HTMLAnchorElement>("[data-toc]")].map((a) => [a.dataset.toc!, a]));
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      links.forEach((link, id) => link.classList.toggle("on", id === entry.target.id));
+    }
+  }, { rootMargin: "-20% 0px -70% 0px" });
+  links.forEach((_, id) => { const heading = document.getElementById(id); if (heading) observer.observe(heading); });
+</script>
+
+<style>
+  /* A reading column with the contents beside it, sticky while the article scrolls. */
+  .layout { display: grid; grid-template-columns: 250px minmax(0, 720px); justify-content: center; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .side { position: sticky; top: 96px; display: grid; gap: 1.25rem; }
+  .print :global(svg) { width: 17px; height: 17px; }
+  .body > h2:first-child { margin-top: 0; }
+  .guide h2 { margin: 3rem 0 1rem; font-size: clamp(1.4rem, 2.4vw, 1.85rem); scroll-margin-top: 90px; }
+  .guide h3 { margin: 1.75rem 0 0.6rem; font-size: 1.15rem; }
+  .guide p, .guide li { color: var(--ink-2); line-height: 1.7; }
+  .guide ul { padding-left: 1.2rem; display: grid; gap: 0.5rem; }
+  .toc strong { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 0.75rem; }
+  .toc ol { list-style: none; margin: 0; padding: 0 !important; display: grid; gap: 0.15rem; border-left: 2px solid var(--line); }
+  .toc a { display: flex; gap: 0.6rem; padding: 0.4rem 0 0.4rem 0.9rem; margin-left: -2px; border-left: 2px solid transparent; color: var(--ink-2); text-decoration: none; font-size: 0.93rem; line-height: 1.35; transition: color 150ms, border-color 150ms; }
+  .toc a span { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .toc a:hover, .toc a.on { color: var(--primary); border-left-color: var(--brand); }
+  .toc a.on span { color: var(--primary); }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    .side { position: static; }
+  }
+  .formula, .note { margin: 1.25rem 0; background: var(--soft); }
+  .formula p { margin: 0; }
+  .note { display: grid; grid-template-columns: 22px 1fr; gap: 0.8rem; border-color: var(--brand-line); }
+  .note :global(svg) { width: 20px; height: 20px; color: var(--primary); margin-top: 0.2rem; }
+  .note p { margin: 0; }
+  .checklist { list-style: none; padding: 0 !important; }
+  .checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 0.75rem; align-items: start; cursor: pointer; }
+  .checklist input { width: 20px; height: 20px; margin-top: 0.2rem; accent-color: var(--primary); }
+  .checklist input:checked + span { text-decoration: line-through; color: var(--muted); }
+  .disclaimer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .disclaimer h2 { margin-top: 0; font-size: 1.2rem; }
+  .sources { font-size: 0.95rem; }
+  .small { font-size: 0.9rem; }
+  .cta { margin-top: 3rem; background: var(--soft); border-color: var(--brand-line); }
+  .cta h2 { margin: 0 0 0.5rem; font-size: 1.35rem; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+  @media print {
+    :global(.site-header), :global(.site-footer), :global(.wa-float), .no-print { display: none !important; }
+    .guide h2 { break-after: avoid; }
+    .card { box-shadow: none; }
+  }
+</style>

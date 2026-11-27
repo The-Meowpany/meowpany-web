@@ -1,8 +1,8 @@
 ---
 // Support plans. Every line is a commitment the team can keep and measure today: response times
 // and improvement hours are tracked per ticket in Core.
-import { money, type Lang, t } from "../i18n";
-import { launch, prices, supportPlans } from "../pricing";
+import { type Lang, t } from "../i18n";
+import { launch, offers, supportPlans } from "../pricing";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -17,7 +17,7 @@ const copy = {
     proExtra: "Informe mensual de lo hecho",
     premiumExtra: "Revisión mensual de rendimiento y seguridad",
     recommended: "El más elegido",
-    note: `Las horas que excedan el plan se facturan a USD ${prices.hours.rate} por hora, con aviso previo. Sin permanencia mínima. Los primeros ${launch.clients} clientes tienen el primer mes gratis. El alojamiento y el dominio se pagan a cada proveedor.`,
+    note: `El costo de cada plan depende del sitio o sistema que cubre y va en su propuesta. Las horas que excedan el plan se cotizan antes de usarlas. Sin permanencia mínima. Pagando el año por adelantado, ${offers.annualFreeMonths} meses son sin cargo. Los primeros ${launch.clients} clientes tienen el primer mes gratis. El alojamiento y el dominio se pagan a cada proveedor.`,
   },
   en: {
     names: { basic: "Basic", pro: "Pro", premium: "Premium" },
@@ -28,17 +28,16 @@ const copy = {
     proExtra: "Monthly report of the work done",
     premiumExtra: "Monthly performance and security review",
     recommended: "Most chosen",
-    note: `Hours beyond the plan are billed at USD ${prices.hours.rate} an hour, with notice. No minimum term. Hosting and domain fees are paid to each provider.`,
+    note: `The cost of each plan depends on the site or system it covers and is set in your proposal. Hours beyond the plan are quoted before they are used. No minimum term. Pay a year in advance and ${offers.annualFreeMonths} months are free. Our first ${launch.clients} clients get the first month free. Hosting and domain fees are paid to each provider.`,
   },
 }[lang];
 ---
-<div class="plans">
+<div class="plans balance">
   {supportPlans.map((plan) => (
     <article class:list={["card", "plan", "reveal", { featured: plan.key === "pro" }]}>
       {plan.key === "pro" && <span class="badge brand ribbon">{copy.recommended}</span>}
       <h3>{copy.names[plan.key]}</h3>
       <p class="muted small">{copy.tagline[plan.key]}</p>
-      <p class="price">{money(plan.price, lang)} <small>{ui.price.perMonth}</small></p>
       <ul class="check-list">
         <li><span><strong>{copy.response} {plan.responseHours[lang]}</strong></span></li>
         <li><span>{copy.hours(plan.improvementHours)}</span></li>
@@ -51,10 +50,10 @@ const copy = {
 </div>
 <p class="muted small note">{copy.note} {ui.price.vat}.</p>
 <style>
-  .plans { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); align-items: stretch; }
+  .plans { display: grid; gap: 1rem; align-items: stretch; }
   .plan { display: flex; flex-direction: column; gap: 0.4rem; }
   .plan h3 { margin: 0; }
-  .plan .price { margin: 0.5rem 0 1rem; }
+  .plan .check-list { margin-top: 0.75rem; }
   .featured { border-color: var(--brand-line); box-shadow: 0 0 0 1px var(--brand-line), var(--shadow); }
   .ribbon { position: absolute; top: 1.2rem; right: 1.2rem; }
   .note { margin-top: 1.25rem; max-width: 60rem; }

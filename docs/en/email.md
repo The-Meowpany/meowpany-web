@@ -21,6 +21,9 @@ Defined in `src/site.ts` (`inbox(...)`). Adding one means adding it here and in 
 | `themeowpany+estimaciones@gmail.com` | Project estimator | `Web/Estimaciones` |
 | `themeowpany+auditorias@gmail.com` | Website audit | `Web/Auditorías` |
 | `themeowpany+privacidad@gmail.com` | Personal data requests | `Legal/Privacidad` |
+| `themeowpany+socios@gmail.com` | Partner program applications (accountants, closers, chambers) | `Web/Socios` |
+| `themeowpany+guias@gmail.com` | Online-selling guide downloads | `Web/Guías` |
+| `themeowpany+diagnosticos@gmail.com` | Diagnosis results the visitor chooses to send | `Web/Diagnósticos` |
 | `themeowpany+web@gmail.com` | The Web3Forms account | `Web/Formularios` |
 
 ## Creating a filter

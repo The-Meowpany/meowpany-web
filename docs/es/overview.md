@@ -42,7 +42,7 @@ Web3Forms y el correo como respaldo. Sumar un proveedor es sumar un adaptador, s
 | --- | --- |
 | `src/i18n.ts` | Las rutas en ambos idiomas y los textos compartidos de la interfaz |
 | `src/content.ts` | Todo dato que afirma el sitio, en ambos idiomas: servicios, proceso, garantías, cifras de mercado con su fuente, herramientas, preguntas frecuentes y la oferta de primera versión. Las cifras salen del plan de negocio (revisión 99) |
-| `src/pricing.ts` | Precios de lista y la estimación de la cotización. Los precios se cambian solo aquí |
+| `src/pricing.ts` | Condiciones de lanzamiento y planes de soporte. No hay lista de precios: cada proyecto se cotiza aparte |
 | `src/site.ts` | Correo, número de WhatsApp, LinkedIn y las claves públicas de los servicios de formularios, agenda y auditoría |
 | `src/lib/` | Lógica del navegador con pruebas unitarias. `leads.ts`, `audit.ts` y `estimator.ts` son los módulos `web-leads`, `web-audit` y `estimator` de meowpany-engineering (0.1.0); se cambian primero allí |
 | `src/news/` | Novedades en Markdown (`es/` y `en/`): un archivo nuevo es una novedad nueva, en el listado, en el RSS y en la portada |

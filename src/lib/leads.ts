@@ -1,7 +1,7 @@
 // Where the site's forms deliver what visitors send. The forms only know the LeadSink contract;
 // the adapter is chosen from src/site.ts, so changing provider never touches a form.
 
-export type LeadKind = "quote" | "prototype" | "estimate" | "audit" | "call";
+export type LeadKind = "quote" | "prototype" | "estimate" | "audit" | "call" | "partner" | "guide" | "diagnosis";
 
 export type Lead = {
   kind: LeadKind;
@@ -28,6 +28,9 @@ const SUBJECTS: Record<LeadKind, string> = {
   estimate: "Project estimate",
   audit: "Website audit",
   call: "Call request",
+  partner: "Partner application",
+  guide: "Guide download",
+  diagnosis: "Diagnosis result",
 };
 
 export const subjectOf = (lead: Lead) =>

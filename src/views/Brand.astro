@@ -21,7 +21,7 @@ const colors = [
 const copy = {
   es: {
     title: "Marca", description: "Manual de marca de The Meowpany: logo, colores, tipografía, imágenes, voz y tono, y archivos para descargar.",
-    eyebrow: "Manual de marca", h1: "La marca The Meowpany",
+    h1: "La marca The Meowpany",
     lead: "Cómo se ve, cómo se escribe y cómo se usa. Para nuestro equipo, la prensa y cualquiera que trabaje con nosotros.",
     toc: ["Logo", "Colores", "Tipografía", "Iconos e imágenes", "Voz y tono", "Descargas"],
     logo: {
@@ -48,7 +48,7 @@ const copy = {
   },
   en: {
     title: "Brand", description: "The Meowpany brand book: logo, colours, typography, imagery, voice and tone, and downloadable files.",
-    eyebrow: "Brand book", h1: "The Meowpany brand",
+    h1: "The Meowpany brand",
     lead: "How it looks, how it writes and how it is used. For our team, the press and anyone working with us.",
     toc: ["Logo", "Colours", "Typography", "Icons and imagery", "Voice and tone", "Downloads"],
     logo: {
@@ -79,17 +79,15 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 <Base lang={lang} title={copy.title} description={copy.description}>
   <header class="page-head">
     <div class="wrap">
-      <p class="eyebrow">{copy.eyebrow}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
-      <nav class="toc" aria-label={copy.eyebrow}>{copy.toc.map((label, i) => <a href={`#${ids[i]}`}>{label}</a>)}</nav>
+      <nav class="toc" aria-label={copy.h1}>{copy.toc.map((label, i) => <a href={`#${ids[i]}`}>{label}</a>)}</nav>
     </div>
   </header>
 
   <section class="section" id="logo">
     <div class="wrap">
-      <h2>{copy.toc[0]}</h2>
-      <p class="lead">{copy.logo.intro}</p>
+      <div class="section-head"><h2>{copy.toc[0]}</h2><p class="lead">{copy.logo.intro}</p></div>
       <!-- One cat per view: the variants are shown one at a time. -->
       <div class="variants">
         <div class="switch" role="radiogroup">
@@ -108,9 +106,8 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 
   <section class="section soft" id="color">
     <div class="wrap">
-      <h2>{copy.toc[1]}</h2>
-      <p class="lead">{copy.colorsIntro}</p>
-      <ul class="swatches">
+      <div class="section-head"><h2>{copy.toc[1]}</h2><p class="lead">{copy.colorsIntro}</p></div>
+      <ul class="swatches balance">
         {colors.map((c) => (
           <li class="swatch">
             <div class="chip" style={`background:${c.hex};color:${c.ink}`}><span>{c.hex}</span></div>
@@ -124,10 +121,9 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 
   <section class="section" id="type">
     <div class="wrap">
-      <h2>{copy.toc[2]}</h2>
-      <p class="lead">{copy.type.intro}</p>
+      <div class="section-head"><h2>{copy.toc[2]}</h2><p class="lead">{copy.type.intro}</p></div>
       <div class="grid-2">
-        <div class="card specimen"><p class="label">{copy.type.display}</p><p class="display">{copy.type.sample}</p><p class="glyphs display-glyphs">Aa Bb Cc 0123456789 USD 1.000</p></div>
+        <div class="card specimen"><p class="label">{copy.type.display}</p><p class="display">{copy.type.sample}</p><p class="glyphs display-glyphs">Aa Bb Cc 0123456789 · 72 h · +32 %</p></div>
         <div class="card specimen"><p class="label">{copy.type.text}</p><p class="body">{copy.type.body}</p><p class="glyphs">Aa Bb Cc Ññ Áá 0123456789</p></div>
       </div>
       <ul class="dash-list scale">{copy.type.scale.map((s) => <li>{s}</li>)}</ul>
@@ -136,23 +132,22 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 
   <section class="section soft" id="imagery">
     <div class="wrap narrow">
-      <h2>{copy.toc[3]}</h2>
+      <div class="section-head"><h2>{copy.toc[3]}</h2></div>
       <ul class="check-list">{copy.imagery.map((r) => <li><span>{r}</span></li>)}</ul>
     </div>
   </section>
 
   <section class="section" id="voice">
     <div class="wrap">
-      <h2>{copy.toc[4]}</h2>
-      <p class="lead">{copy.voice.intro}</p>
-      <dl class="voice">{copy.voice.rules.map(([t, d]) => <div class="card"><dt>{t}</dt><dd class="muted">{d}</dd></div>)}</dl>
+      <div class="section-head"><h2>{copy.toc[4]}</h2><p class="lead">{copy.voice.intro}</p></div>
+      <dl class="voice balance">{copy.voice.rules.map(([t, d]) => <div class="card"><dt>{t}</dt><dd class="muted">{d}</dd></div>)}</dl>
     </div>
   </section>
 
   <section class="section soft" id="downloads">
     <div class="wrap">
-      <h2>{copy.toc[5]}</h2>
-      <ul class="files">{copy.files.map(([label, file]) => <li><a class="card file" href={b(file)} download><span>{label}</span><span class="muted small">{file}</span></a></li>)}</ul>
+      <div class="section-head"><h2>{copy.toc[5]}</h2></div>
+      <ul class="files balance">{copy.files.map(([label, file]) => <li><a class="card file" href={b(file)} download><span>{label}</span><span class="muted small">{file}</span></a></li>)}</ul>
     </div>
   </section>
 </Base>
@@ -171,10 +166,11 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 </script>
 
 <style>
-  .toc { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.75rem; }
+  .toc { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1.75rem; }
   .toc a { padding: 0.4rem 0.85rem; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); text-decoration: none; font-size: 0.9rem; font-weight: 550; }
   .toc a:hover { border-color: var(--ink-2); color: var(--ink); }
-  .variants { margin: 2rem 0; max-width: 720px; }
+  .variants { margin: 2rem auto 0; max-width: 720px; text-align: center; }
+  .variants .tile { text-align: left; }
   .switch { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); margin-bottom: 1rem; }
   .switch input { position: absolute; opacity: 0; pointer-events: none; }
   .switch label { padding: 0.45rem 1rem; border-radius: 9px; font-size: 0.9rem; font-weight: 600; color: var(--muted); cursor: pointer; }
@@ -190,7 +186,7 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
   .dont { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.55rem; }
   .dont li { padding-left: 1.6rem; position: relative; color: var(--ink-2); }
   .dont li::before { content: "×"; position: absolute; left: 0.2rem; top: -0.05rem; color: var(--error); font-weight: 700; font-size: 1.1rem; }
-  .swatches { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+  .swatches { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1rem; }
   .swatch { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); }
   .chip { height: 110px; display: flex; align-items: flex-end; padding: 0.75rem 1rem; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.02em; }
   .info { padding: 1rem; }
@@ -202,9 +198,9 @@ const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
   .glyphs { color: var(--muted); font-size: 1.1rem; margin: 0; }
   .display-glyphs { font-family: var(--font-display); font-weight: 700; }
   .scale { margin-top: 1.5rem; }
-  .voice { margin: 2rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .voice { margin: 2rem 0 0; display: grid; gap: 1rem; }
   .voice dt { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin-bottom: 0.35rem; }
   .voice dd { margin: 0; }
-  .files { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .files { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1rem; }
   .file { display: grid; gap: 0.25rem; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.95rem; }
 </style>

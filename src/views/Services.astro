@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import ServiceCards from "../components/ServiceCards.astro";
 import Commitments from "../components/Commitments.astro";
+import Engagement from "../components/Engagement.astro";
 import CtaBand from "../components/CtaBand.astro";
 import { path, type Lang, t } from "../i18n";
 
@@ -10,27 +11,28 @@ const { lang } = Astro.props;
 const ui = t(lang);
 const copy = {
   es: {
-    title: "Servicios", description: "Sitios web institucionales, tiendas en línea, software y aplicaciones a medida, soporte mensual y desarrolladores para el exterior: qué incluye cada uno, plazos y precios.",
-    eyebrow: "Servicios", h1: "Webs, tiendas y software, con alcance y precio por escrito",
-    lead: "Cinco servicios con lo que incluyen, lo que se cobra aparte, el plazo y el precio de lista. Todos empiezan con una primera versión funcional gratis en 72 horas.",
+    title: "Servicios", description: "Sitios web institucionales, tiendas en línea, software y aplicaciones a medida, soporte mensual y desarrolladores para el exterior: qué incluye cada uno y sus plazos. Cada proyecto se cotiza según lo que necesita.",
+    h1: "Webs, tiendas y software, con alcance y plazo por escrito",
+    lead: "Cinco servicios con lo que incluyen, lo que se cobra aparte y el plazo. El precio se cotiza para cada proyecto, y todos empiezan con una primera versión funcional gratis en 72 horas.",
     commitTitle: "Reglas que aplican a todos los servicios",
+    modelsTitle: "Contrate como le resulte más cómodo", modelsLead: "Un proyecto con precio cerrado, un plan mensual para seguir creciendo o desarrolladores que se suman a su equipo.",
     ctaTitle: "¿No sabe cuál necesita?", ctaText: "Cuéntenos el problema y le recomendamos la opción más simple que lo resuelva. Si conviene, se la mostramos funcionando en 72 horas.",
-    pricing: "Comparar precios",
+    pricing: "Cómo cotizamos",
   },
   en: {
-    title: "Services", description: "Business websites, online stores, custom software and apps, monthly support and developers for hire: what each includes, timelines and prices.",
-    eyebrow: "Services", h1: "Websites, stores and software, with scope and price in writing",
-    lead: "Five services with what they include, what costs extra, the timeline and the list price. Each one starts with a free first working version in 72 hours.",
+    title: "Services", description: "Business websites, online stores, custom software and apps, monthly support and developers for hire: what each includes and its timeline. Every project is quoted for what it needs.",
+    h1: "Websites, stores and software, with scope and price in writing",
+    lead: "Five services with what they include, what costs extra and the timeline. Each project is quoted on its own, and each one starts with a free first working version in 72 hours.",
     commitTitle: "Rules that apply to every service",
+    modelsTitle: "Work with us the way that suits you", modelsLead: "A fixed-price project, a monthly plan to keep growing, or developers who join your team.",
     ctaTitle: "Not sure which one you need?", ctaText: "Tell us the problem and we'll recommend the simplest option that solves it, and show it working within 72 hours if it makes sense.",
-    pricing: "Compare prices",
+    pricing: "How we price",
   },
 }[lang];
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
   <header class="page-head">
     <div class="wrap">
-      <p class="eyebrow">{copy.eyebrow}</p>
       <h1>{copy.h1}</h1>
       <p class="lead">{copy.lead}</p>
       <div class="actions"><a class="btn btn-ghost btn-sm" href={path("pricing", lang)}>{copy.pricing}</a></div>
@@ -39,10 +41,16 @@ const copy = {
   <section class="section">
     <div class="wrap">
       <ServiceCards lang={lang} detailed />
-      <p class="muted small" style="margin-top:1.25rem">{ui.price.vat}.</p>
+      <p class="note">{ui.price.vat}.</p>
     </div>
   </section>
   <section class="section soft">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.modelsTitle}</h2><p class="lead">{copy.modelsLead}</p></div>
+      <Engagement lang={lang} />
+    </div>
+  </section>
+  <section class="section">
     <div class="wrap">
       <div class="section-head"><h2>{copy.commitTitle}</h2></div>
       <Commitments lang={lang} />

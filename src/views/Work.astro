@@ -1,0 +1,90 @@
+---
+// Case studies. There are none published yet, so the page is an honest empty state: what each case
+// will show, and the terms for the first clients who let us publish theirs.
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { path, type Lang } from "../i18n";
+import { launch } from "../pricing";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: {
+    title: "Casos", description: "Proyectos de The Meowpany: el problema del cliente, lo que construimos y el resultado medido.",
+    lead: "Cada caso va a mostrar el problema del cliente, lo que construimos y el resultado medido. Solo publicamos casos con permiso del cliente.",
+    emptyTitle: "Los primeros casos se están construyendo", emptyText: "Estamos empezando y todavía no hay casos publicados. No mostramos proyectos inventados ni logos de clientes que no tenemos.",
+    includeTitle: "Qué va a encontrar en cada caso",
+    include: [["flag", "La situación de partida y el problema concreto."], ["hammer", "Lo que construimos y por qué lo hicimos así."], ["calendar-range", "El plazo comprometido y el real."], ["trending-up", "Un resultado medido: ventas, horas ahorradas, errores evitados o velocidad."], ["quote", "La opinión del cliente, con su nombre y su empresa."]],
+    launchTitle: "Sea uno de los primeros", launchText: `Los primeros ${launch.clients} clientes reciben un descuento sobre su cotización y el primer mes de soporte gratis, a cambio de permitirnos publicar su caso y un testimonio.`, offers: "Ver los beneficios",
+    ctaTitle: "¿Quiere ser uno de los primeros casos?", ctaText: "Vea su proyecto funcionando en 72 horas y acceda a las condiciones de lanzamiento.",
+  },
+  en: {
+    title: "Work", description: "The Meowpany projects: the client's problem, what we built and the measured result.",
+    lead: "Each case will show the client's problem, what we built and the measured result. We only publish cases with the client's permission.",
+    emptyTitle: "The first cases are being built", emptyText: "We are just starting and there are no published cases yet. We don't show made-up projects or logos of clients we don't have.",
+    includeTitle: "What each case will include",
+    include: [["flag", "The starting point and the concrete problem."], ["hammer", "What we built and why we built it that way."], ["calendar-range", "The committed timeline and the real one."], ["trending-up", "A measured result: sales, hours saved, errors avoided or speed."], ["quote", "The client's own words, with their name and company."]],
+    launchTitle: "Be one of the first", launchText: `Our first ${launch.clients} clients get a discount on their quote and the first month of support free, in exchange for letting us publish their case and a testimonial.`, offers: "See the offers",
+    ctaTitle: "Want to be one of the first?", ctaText: "See your project working within 72 hours and get the launch terms.",
+  },
+}[lang];
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <header class="page-head">
+    <div class="wrap">
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      <div class="empty reveal">
+        <span class="slots" aria-hidden="true">{[1, 2, 3].map(() => <span class="slot"><Icon name="image" /></span>)}</span>
+        <h2>{copy.emptyTitle}</h2>
+        <p class="muted">{copy.emptyText}</p>
+      </div>
+    </div>
+  </section>
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head"><h2>{copy.includeTitle}</h2></div>
+      <ul class="include balance">
+        {copy.include.map(([icon, text]) => <li class="card reveal"><span class="icon"><Icon name={icon} /></span><span>{text}</span></li>)}
+      </ul>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <a class="card launch reveal" href={path("offers", lang)}>
+        <span class="icon big"><Icon name="gift" /></span>
+        <span><strong>{copy.launchTitle}</strong><span class="muted">{copy.launchText}</span></span>
+        <span class="go">{copy.offers}<Icon name="arrow-right" /></span>
+      </a>
+    </div>
+  </section>
+  <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
+</Base>
+<style>
+  .empty { max-width: 640px; margin: 0 auto; text-align: center; }
+  .empty h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 1.75rem 0 0.6rem; }
+  .empty p { margin: 0 auto; max-width: 52ch; }
+  /* Three placeholder frames hint at the cases to come. */
+  .slots { display: flex; justify-content: center; gap: 0.75rem; }
+  .slot { display: grid; place-items: center; width: clamp(80px, 16vw, 130px); aspect-ratio: 4 / 3; border-radius: 14px; border: 2px dashed var(--brand-line); background: var(--brand-soft); color: var(--brand); animation: breathe 4s ease-in-out infinite; }
+  .slot:nth-child(2) { animation-delay: 0.6s; }
+  .slot:nth-child(3) { animation-delay: 1.2s; }
+  .slot :global(svg) { width: 26px; height: 26px; opacity: 0.7; }
+  .include { list-style: none; margin: 0; padding: 0; }
+  .include li { display: flex; align-items: center; gap: 0.9rem; color: var(--ink-2); }
+  .icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--brand-soft); color: var(--primary); flex: none; }
+  .icon :global(svg) { width: 20px; height: 20px; }
+  .launch { display: grid; grid-template-columns: auto 1fr auto; gap: 1.25rem; align-items: center; max-width: 980px; margin: 0 auto; text-decoration: none; color: inherit; }
+  .launch strong { display: block; font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.3rem; }
+  .icon.big { width: 52px; height: 52px; border-radius: 14px; }
+  .icon.big :global(svg) { width: 24px; height: 24px; }
+  .go { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--primary); font-weight: 650; white-space: nowrap; }
+  .go :global(svg) { width: 16px; height: 16px; transition: transform 200ms var(--ease); }
+  .launch:hover .go :global(svg) { transform: translateX(3px); }
+  @media (max-width: 700px) { .launch { grid-template-columns: auto 1fr; } .go { grid-column: 1 / -1; } }
+</style>

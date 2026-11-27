@@ -23,6 +23,9 @@ Están definidos en `src/site.ts` (`inbox(...)`). Si se agrega uno, se agrega ta
 | `themeowpany+estimaciones@gmail.com` | Estimador de proyectos | `Web/Estimaciones` |
 | `themeowpany+auditorias@gmail.com` | Auditoría web | `Web/Auditorías` |
 | `themeowpany+privacidad@gmail.com` | Pedidos sobre datos personales (Ley 18.331) | `Legal/Privacidad` |
+| `themeowpany+socios@gmail.com` | Postulaciones al programa de socios (contadores, vendedores, cámaras) | `Web/Socios` |
+| `themeowpany+guias@gmail.com` | Descargas de la guía para vender en línea | `Web/Guías` |
+| `themeowpany+diagnosticos@gmail.com` | Resultados del diagnóstico que el visitante decide enviar | `Web/Diagnósticos` |
 | `themeowpany+web@gmail.com` | Cuenta de Web3Forms (ver abajo) | `Web/Formularios` |
 
 Alias recomendados para el resto de la operación (no los usa el sitio):

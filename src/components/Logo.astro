@@ -23,16 +23,12 @@ const wordHeight = Math.round(size * 0.56);
   .logo { display: inline-flex; align-items: center; gap: 0.6rem; }
   .mark-light { display: block; }
   .mark-dark { display: none; }
-  @media (prefers-color-scheme: dark) {
-    .mark-light { display: none; }
-    .mark-dark { display: block; }
-  }
+  :global([data-theme="dark"]) .mark-light { display: none; }
+  :global([data-theme="dark"]) .mark-dark { display: block; }
   .word img { display: block; }
   .on-dark { display: none !important; }
   .tone-light .on-light { display: none !important; }
   .tone-light .on-dark { display: block !important; }
-  @media (prefers-color-scheme: dark) {
-    .tone-auto .on-light { display: none !important; }
-    .tone-auto .on-dark { display: block !important; }
-  }
+  :global([data-theme="dark"]) .tone-auto .on-light { display: none !important; }
+  :global([data-theme="dark"]) .tone-auto .on-dark { display: block !important; }
 </style>

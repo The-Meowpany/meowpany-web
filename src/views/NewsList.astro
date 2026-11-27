@@ -1,49 +1,117 @@
 ---
+// The newsroom: the latest story leads with a large cover, the rest follow in a grid, and a row
+// of topics filters them in place.
 import Base from "../layouts/Base.astro";
-import { formatDate, newsPath, posts } from "../news";
+import Icon from "../components/Icon.astro";
+import NewsCover from "../components/NewsCover.astro";
+import { formatDate, newsPath, posts, readingMinutes } from "../news";
 import { withBase } from "../lib/url";
 import type { Lang } from "../i18n";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
-  es: { title: "Novedades", description: "Novedades de The Meowpany: lanzamientos, método de trabajo y guías para pymes.", lead: "Lanzamientos, cómo trabajamos y guías prácticas. Sin relleno.", rss: "Suscribirse por RSS", read: "Leer" },
-  en: { title: "News", description: "News from The Meowpany: launches, how we work and practical guides.", lead: "Launches, how we work and practical guides. No filler.", rss: "Subscribe via RSS", read: "Read" },
+  es: { title: "Novedades", description: "Novedades de The Meowpany: lanzamientos, método de trabajo y guías para pymes.", lead: "Lanzamientos, cómo trabajamos y guías prácticas para pymes.", all: "Todas", rss: "RSS", read: "Leer la nota", minutes: (n: number) => `${n} min de lectura`, filter: "Filtrar por tema" },
+  en: { title: "News", description: "News from The Meowpany: launches, how we work and practical guides.", lead: "Launches, how we work and practical guides.", all: "All", rss: "RSS", read: "Read the story", minutes: (n: number) => `${n} min read`, filter: "Filter by topic" },
 }[lang];
-const list = posts(lang);
+const list = await Promise.all(posts(lang).map(async (post) => ({ ...post, minutes: readingMinutes(await post.html()) })));
+const [lead, ...rest] = list;
+const topics = [...new Map(list.map((post) => [post.topic, post.tag])).entries()];
 const feed = withBase(lang === "es" ? "/novedades/rss.xml" : "/en/news/rss.xml");
+const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
   <link slot="head" rel="alternate" type="application/rss+xml" title={`The Meowpany · ${copy.title}`} href={feed} />
   <header class="page-head">
     <div class="wrap">
-      <p class="eyebrow">{copy.title}</p>
       <h1>{copy.title}</h1>
       <p class="lead">{copy.lead}</p>
-      <div class="actions"><a class="btn btn-ghost btn-sm" href={feed}>{copy.rss}</a></div>
     </div>
   </header>
   <section class="section">
     <div class="wrap">
-      <ol class="posts">
-        {list.map((post) => (
-          <li class="reveal">
-            <a class="card post" href={newsPath(lang, post.slug)}>
-              <p class="meta"><span class="badge brand">{post.tag}</span><time datetime={post.date.toISOString().slice(0, 10)}>{formatDate(post.date, lang)}</time></p>
-              <h2>{post.title}</h2>
-              <p class="muted">{post.summary}</p>
-              <span class="read">{copy.read} →</span>
-            </a>
-          </li>
-        ))}
-      </ol>
+      <div class="bar">
+        <div class="filters" role="group" aria-label={copy.filter} data-filters>
+          <button type="button" class="chip on" data-topic="all" aria-pressed="true">{copy.all}</button>
+          {topics.map(([topic, tag]) => <button type="button" class="chip" data-topic={topic} aria-pressed="false">{tag}</button>)}
+        </div>
+        <a class="rss" href={feed}><Icon name="rss" />{copy.rss}</a>
+      </div>
+
+      {lead && (
+        <a class="featured reveal" href={newsPath(lang, lead.slug)} data-item={lead.topic}>
+          <NewsCover topic={lead.topic} size="lg" label={lead.tag} />
+          <div>
+            <p class="meta"><span class="tag">{lead.tag}</span><time datetime={iso(lead.date)}>{formatDate(lead.date, lang)}</time><span>{copy.minutes(lead.minutes)}</span></p>
+            <h2>{lead.title}</h2>
+            <p class="summary">{lead.summary}</p>
+            <span class="go">{copy.read}<Icon name="arrow-right" /></span>
+          </div>
+        </a>
+      )}
+
+      {rest.length > 0 && (
+        <ol class="stories balance">
+          {rest.map((post) => (
+            <li class="reveal" data-item={post.topic}>
+              <a class="story" href={newsPath(lang, post.slug)}>
+                <NewsCover topic={post.topic} label={post.tag} />
+                <p class="meta"><span class="tag">{post.tag}</span><time datetime={iso(post.date)}>{formatDate(post.date, lang)}</time><span>{copy.minutes(post.minutes)}</span></p>
+                <h3>{post.title}</h3>
+                <p class="summary">{post.summary}</p>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   </section>
 </Base>
+
+<script>
+  // Filtering happens in place: each topic chip shows only its stories.
+  const group = document.querySelector<HTMLElement>("[data-filters]");
+  group?.addEventListener("click", (event) => {
+    const chip = (event.target as HTMLElement).closest<HTMLButtonElement>("button[data-topic]");
+    if (!chip) return;
+    const topic = chip.dataset.topic;
+    group.querySelectorAll("button").forEach((button) => {
+      button.classList.toggle("on", button === chip);
+      button.setAttribute("aria-pressed", String(button === chip));
+    });
+    document.querySelectorAll<HTMLElement>("[data-item]").forEach((item) => {
+      item.hidden = topic !== "all" && item.dataset.item !== topic;
+    });
+  });
+</script>
+
 <style>
-  .posts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
-  .post { display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; }
-  .meta { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--muted); }
-  .post h2 { font-size: 1.35rem; margin: 0.25rem 0 0.6rem; }
-  .read { margin-top: auto; color: var(--primary); font-weight: 600; font-size: 0.92rem; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-bottom: 1.25rem; margin-bottom: 2rem; border-bottom: 1px solid var(--line); }
+  .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { font: inherit; font-size: 0.9rem; font-weight: 600; padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); cursor: pointer; transition: background-color 150ms, color 150ms, border-color 150ms; }
+  .chip:hover { border-color: var(--brand-line); color: var(--ink); }
+  .chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .rss { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; font-weight: 600; color: var(--muted); text-decoration: none; }
+  .rss:hover { color: var(--primary); }
+  .rss :global(svg) { width: 15px; height: 15px; }
+
+  .featured { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: center; text-decoration: none; color: inherit; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+  .featured h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.12; margin: 0.6rem 0 0.75rem; transition: color 200ms; }
+  .featured:hover h2, .story:hover h3 { color: var(--primary); }
+  .summary { color: var(--ink-2); margin: 0; }
+  .featured .summary { font-size: 1.08rem; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.9rem; margin: 0; font-size: 0.86rem; color: var(--muted); }
+  .meta > * + *::before { content: "·"; margin-right: 0.9rem; color: var(--line-strong); }
+  .tag { color: var(--primary); font-weight: 700; }
+  .go { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 1.25rem; color: var(--primary); font-weight: 650; }
+  .go :global(svg) { width: 16px; height: 16px; transition: transform 200ms var(--ease); }
+  .featured:hover .go :global(svg) { transform: translateX(4px); }
+
+  .stories { list-style: none; margin: 0; padding: 0; gap: clamp(1.5rem, 3vw, 2.25rem); }
+  .story { display: grid; gap: 0.75rem; text-decoration: none; color: inherit; }
+  .story h3 { font-size: 1.25rem; line-height: 1.25; margin: 0; transition: color 200ms; }
+  .story :global(.cover), .featured :global(.cover) { transition: transform 400ms var(--ease), box-shadow 400ms var(--ease); }
+  .story:hover :global(.cover), .featured:hover :global(.cover) { transform: translateY(-3px); box-shadow: var(--shadow); }
+  @media (max-width: 860px) { .featured { grid-template-columns: minmax(0, 1fr); } }
+  @media (prefers-reduced-motion: reduce) { .story:hover :global(.cover), .featured:hover :global(.cover) { transform: none; } }
 </style>

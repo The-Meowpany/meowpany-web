@@ -2,6 +2,7 @@
 title: "Cómo estimamos un proyecto: los puntos de función, explicados"
 date: 2026-11-26
 summary: "El método IFPUG que usamos para pasar de «qué tiene que hacer el sistema» a horas, plazo y precio, con un ejemplo completo."
+topic: "method"
 tag: "Método"
 ---
 
@@ -25,7 +26,7 @@ Catorce características generales (comunicación, rendimiento, complejidad de l
 
 ## 3. Pasar a horas, plazo y precio
 
-Multiplicamos los puntos ajustados por nuestra productividad, hoy calibrada en **3 horas por punto**, y las horas por la tarifa de **USD 35**. El rango de precio que mostramos es de un 20 % hacia abajo y hacia arriba de ese valor.
+Multiplicamos los puntos ajustados por nuestra productividad, hoy calibrada en **3 horas por punto**, y las horas por nuestra tarifa vigente. El rango de precio que mostramos es de un 20 % hacia abajo y hacia arriba de ese valor.
 
 ## Un ejemplo
 
@@ -34,7 +35,6 @@ Un sistema que guarda clientes (con varios datos cada uno), emite facturas compl
 - **61 puntos de función** sin ajustar.
 - Factor de ajuste **1,01** (pocas personas a la vez, reglas moderadas).
 - **61,61 puntos ajustados × 3 horas = 185 horas**.
-- Precio de referencia **USD 6.475**, con un rango de **USD 5.180 a USD 7.770**.
 - Unas **4,7 semanas** con un equipo de 40 horas semanales.
 
 ## Pruébelo con su proyecto

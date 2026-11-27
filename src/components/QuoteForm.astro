@@ -1,9 +1,11 @@
 ---
-// Three-step quote form. It shows an estimate from the published price list and delivers the
-// request through src/lib/leads.ts: straight to the company inbox, or as an email ready to send.
+// Three-step quote request. There is no price list, so it collects what drives the price and
+// delivers it through src/lib/leads.ts: straight to the company inbox, or as an email ready to send.
+import Icon from "./Icon.astro";
 import { path, type Lang } from "../i18n";
-import { prices } from "../pricing";
 import { inbox, services } from "../site";
+
+const icons = { website: "layout-template", store: "shopping-bag", custom: "workflow", support: "life-buoy", hours: "globe" };
 
 interface Props { lang: Lang; preset?: string }
 const { lang, preset = "" } = Astro.props;
@@ -12,11 +14,12 @@ const copy = {
   es: {
     step1: "¿Qué necesita?", step2: "Algunos detalles", step3: "¿Cómo lo contactamos?",
     services: { website: "Sitio institucional", store: "Tienda en línea", custom: "Sistema a medida", support: "Plan de soporte", hours: "Desarrolladores para el exterior" },
-    pages: "¿Cuántas páginas? (incluye 6)", products: "¿Cuántos productos aproximadamente?", payments: "Medios de pago extra (además de Mercado Pago)",
+    hints: { website: "Presentar su empresa y recibir consultas", store: "Vender en línea con pagos y envíos", custom: "Gestión, turnos, portales o integraciones", support: "Mantener y mejorar lo que ya tiene", hours: "Sumar desarrolladores a su equipo" },
+    pages: "¿Cuántas páginas aproximadamente?", products: "¿Cuántos productos aproximadamente?", payments: "Medios de pago extra (además de Mercado Pago)",
     plan: "Plan", plans: { basic: "Básico", pro: "Profesional", premium: "Premium" }, hoursMonth: "Horas por mes",
     customHint: "Cuéntenos qué quiere resolver: turnos, gestión, un portal, una integración...",
     name: "Nombre", company: "Empresa", email: "Correo", phone: "Teléfono o WhatsApp (opcional)", message: "Mensaje",
-    estimate: "Precio estimado", from: "desde", perMonth: "por mes", note: "Es una estimación de la lista de precios. El precio final, cerrado, va en la propuesta. Clientes de Uruguay: + IVA.",
+    stepOf: "Paso {n} de {total}",
     next: "Siguiente", back: "Atrás", send: "Enviar pedido",
     sending: "Enviando...", ok: "Recibimos su pedido. Le responderemos en menos de un día hábil.",
     drafted: "Abrimos su correo con el pedido ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
@@ -26,11 +29,12 @@ const copy = {
   en: {
     step1: "What do you need?", step2: "A few details", step3: "How can we reach you?",
     services: { website: "Business website", store: "Online store", custom: "Custom system", support: "Support plan", hours: "Developers for hire" },
-    pages: "How many pages? (6 included)", products: "Roughly how many products?", payments: "Extra payment methods",
+    hints: { website: "Present your business and get enquiries", store: "Sell online with payments and shipping", custom: "Back office, booking, portals or integrations", support: "Keep what you have running and improving", hours: "Add developers to your team" },
+    pages: "Roughly how many pages?", products: "Roughly how many products?", payments: "Extra payment methods",
     plan: "Plan", plans: { basic: "Basic", pro: "Pro", premium: "Premium" }, hoursMonth: "Hours per month",
     customHint: "Tell us what you want to solve: bookings, back office, a portal, an integration...",
     name: "Name", company: "Company", email: "Email", phone: "Phone or WhatsApp (optional)", message: "Message",
-    estimate: "Estimated price", from: "from", perMonth: "per month", note: "This is an estimate from our price list. The final, fixed price goes in the proposal.",
+    stepOf: "Step {n} of {total}",
     next: "Next", back: "Back", send: "Send request",
     sending: "Sending...", ok: "Done! We got your request and will reply within one business day.",
     drafted: "Your email app opened with the request written out: just send it. If it didn't open, email us at",
@@ -42,14 +46,22 @@ const privacyHref = path("privacy", lang);
 ---
 <form class="quote card" novalidate
   data-lang={lang} data-email={inbox("cotizaciones")} data-inbox={services.web3formsKey}
-  data-prices={JSON.stringify(prices)}
-  data-text={JSON.stringify({ from: copy.from, perMonth: copy.perMonth, sending: copy.sending, ok: copy.ok, drafted: copy.drafted, required: copy.required, send: copy.send })}>
+  data-text={JSON.stringify({ stepOf: copy.stepOf, sending: copy.sending, ok: copy.ok, drafted: copy.drafted, required: copy.required, send: copy.send })}>
+
+  <div class="progress">
+    <p class="progress-label" data-progress aria-live="polite"></p>
+    <div class="bars" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
 
   <fieldset data-step="1">
     <legend>{copy.step1}</legend>
     <div class="options">
       {Object.entries(copy.services).map(([value, label], index) => (
-        <label class="option"><input type="radio" name="service" value={value} checked={preset ? preset === value : index === 0} /><span>{label}</span></label>
+        <label class="option">
+          <input type="radio" name="service" value={value} checked={preset ? preset === value : index === 0} />
+          <span class="option-icon"><Icon name={icons[value as keyof typeof icons]} /></span>
+          <span class="option-text"><strong>{label}</strong><small>{copy.hints[value as keyof typeof copy.hints]}</small></span>
+        </label>
       ))}
     </div>
   </fieldset>
@@ -78,11 +90,6 @@ const privacyHref = path("privacy", lang);
     <p class="muted small"><a href={privacyHref}>{copy.privacy}</a></p>
   </fieldset>
 
-  <div class="estimate" aria-live="polite">
-    <span class="muted">{copy.estimate}</span>
-    <strong data-estimate>-</strong>
-    <p class="muted small">{copy.note}</p>
-  </div>
 
   <p class="status" role="status" aria-live="polite"></p>
 
@@ -94,7 +101,6 @@ const privacyHref = path("privacy", lang);
 </form>
 
 <script>
-  import { estimate, type QuoteInput, type ServiceKey } from "../pricing";
   import { isBot, isEmail, leadSink } from "../lib/leads";
 
   for (const form of document.querySelectorAll<HTMLFormElement>("form.quote")) {
@@ -105,22 +111,21 @@ const privacyHref = path("privacy", lang);
     const next = form.querySelector<HTMLButtonElement>("[data-next]")!;
     const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!;
     const status = form.querySelector<HTMLElement>(".status")!;
-    const output = form.querySelector<HTMLElement>("[data-estimate]")!;
     let step = 0;
 
     const value = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? "";
-    const service = () => (form.querySelector<HTMLInputElement>("input[name=service]:checked")?.value ?? "website") as ServiceKey;
+    const service = () => form.querySelector<HTMLInputElement>("input[name=service]:checked")?.value ?? "website";
 
-    const current = (): ReturnType<typeof estimate> => {
-      const input: QuoteInput = {
-        service: service(),
-        pages: Number(value("pages")),
-        products: Number(value("products")),
-        extraPayments: Number(value("extraPayments")),
-        supportPlan: value("supportPlan") as QuoteInput["supportPlan"],
-        hoursPerMonth: Number(value("hoursPerMonth")),
+    // Only the answers for the chosen service travel with the request.
+    const details = (): Record<string, string> => {
+      const chosen = service();
+      const fields: Record<string, Record<string, string>> = {
+        website: { Pages: value("pages") },
+        store: { Products: value("products"), "Extra payment methods": value("extraPayments") },
+        support: { "Support plan": value("supportPlan") },
+        hours: { "Hours per month": value("hoursPerMonth") },
       };
-      return estimate(input);
+      return { Service: chosen, ...(fields[chosen] ?? {}) };
     };
 
     const render = () => {
@@ -129,9 +134,9 @@ const privacyHref = path("privacy", lang);
       back.hidden = step === 0;
       next.hidden = step === steps.length - 1;
       submit.hidden = step !== steps.length - 1;
-      const result = current();
-      const amount = `USD ${result.amount.toLocaleString(lang === "es" ? "es-UY" : "en-US")}`;
-      output.textContent = `${result.from ? `${text.from} ` : ""}${amount}${result.monthly ? ` ${text.perMonth}` : ""}`;
+      form.querySelectorAll(".bars span").forEach((bar, index) => bar.classList.toggle("on", index <= step));
+      const label = form.querySelector("[data-progress]");
+      if (label) label.textContent = text.stepOf.replace("{n}", String(step + 1)).replace("{total}", String(steps.length));
     };
 
     form.addEventListener("input", render);
@@ -152,10 +157,10 @@ const privacyHref = path("privacy", lang);
       const sink = leadSink({ web3formsKey: form.dataset.inbox ?? "", email: form.dataset.email ?? "" });
       const delivery = await sink.send({
         kind: "quote", language: lang, name: value("name").trim(), email, company: value("company"), phone: value("phone"),
-        message: value("message"), details: { Service: service(), "Estimated price (USD)": current().amount },
+        message: value("message"), details: details(),
       });
       if (delivery === "sent") {
-        form.querySelectorAll("fieldset, .nav-buttons, .estimate").forEach((el) => el.setAttribute("hidden", ""));
+        form.querySelectorAll("fieldset, .nav-buttons, .progress").forEach((el) => el.setAttribute("hidden", ""));
         status.textContent = text.ok;
         status.className = "status ok";
       } else {
@@ -175,26 +180,41 @@ const privacyHref = path("privacy", lang);
 </script>
 
 <style>
-  .quote { max-width: 720px; display: grid; gap: 1.25rem; }
+  .quote { max-width: 760px; display: grid; gap: 1.25rem; }
+  .progress { display: grid; gap: 0.6rem; }
+  .progress-label { margin: 0; font-size: 0.8rem; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .bars span { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; position: relative; }
+  .bars span::after { content: ""; position: absolute; inset: 0; background: var(--brand); transform: scaleX(0); transform-origin: left; transition: transform 400ms var(--ease); }
+  .bars span.on::after { transform: scaleX(1); }
   fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 1rem; }
-  legend { font-weight: 700; font-size: 1.35rem; margin-bottom: 0.75rem; }
+  legend { font-weight: 700; font-size: 1.35rem; margin-bottom: 0.75rem; padding: 0; }
   label { display: grid; gap: 0.35rem; font-weight: 550; }
   input, select, textarea {
     font: inherit; font-weight: 400; padding: 0.75rem 0.85rem; min-height: 48px; border-radius: 10px;
     border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%;
   }
   input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-  .options { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
-  .option { display: flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; min-height: 56px; }
+  .options { display: grid; gap: 0.6rem; }
+  .option {
+    display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 0.85rem; padding: 0.8rem 1rem;
+    border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: border-color 150ms, background-color 150ms;
+  }
+  .option:hover { border-color: var(--line-strong); }
   .option:has(input:checked) { border-color: var(--primary); background: var(--soft); }
   .option input { width: 20px; height: 20px; min-height: 0; accent-color: var(--primary); }
-  .estimate { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.2rem; }
-  .estimate strong { font-size: 1.8rem; }
+  .option-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--soft); color: var(--primary); }
+  .option:has(input:checked) .option-icon { background: var(--bg); }
+  .option-icon :global(svg) { width: 18px; height: 18px; }
+  .option-text { display: grid; gap: 0.1rem; }
+  .option-text strong { font-weight: 600; }
+  .option-text small { color: var(--muted); font-size: 0.88rem; font-weight: 400; }
   .small { font-size: 0.9rem; margin: 0; }
   .nav-buttons { display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap; }
   .status:empty { display: none; }
   .status.ok { color: #15803d; font-weight: 600; font-size: 1.1rem; }
   .status.error { color: #b91c1c; }
-  @media (prefers-color-scheme: dark) { .status.ok { color: #4ade80; } .status.error { color: #f87171; } }
+  :global([data-theme="dark"]) .status.ok { color: #4ade80; }
+  :global([data-theme="dark"]) .status.error { color: #f87171; }
   .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 </style>

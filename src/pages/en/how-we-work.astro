@@ -8,23 +8,24 @@ import Commitments from "../../components/Commitments.astro";
 import Faq from "../../components/Faq.astro";
 import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="en" wide title="How we work" eyebrow="Methodology" description="How The Meowpany works: a 9-stage lifecycle with verifiable gates, IFPUG estimating, ISO/IEC/IEEE 29148 requirements, PERT planning, traceable testing and information security." lead="Every project follows the same 9-stage lifecycle we run in our management platform. No stage ends until what it requires is met: nothing depends on anyone’s memory.">
-  <h2>The journey, simply</h2>
+<Simple lang="en" wide title="How we work" description="How The Meowpany works: a 9-stage lifecycle with verifiable gates, IFPUG estimating, ISO/IEC/IEEE 29148 requirements, PERT planning, traceable testing and information security." lead="Every project follows the same 9-stage lifecycle we run in our management platform. No stage ends until what it requires is met: nothing depends on anyone’s memory.">
+  <nav class="jump" aria-label="On this page"><a href="#the-journey-simply">The journey, simply</a><a href="#the-9-stages-in-detail">The 9 stages in detail</a><a href="#standards-and-practices">Standards and practices</a><a href="#modular-engineering">Modular engineering</a><a href="#what-you-get-on-every-project">What you get on every project</a><a href="#how-we-keep-you-informed">How we keep you informed</a><a href="#frequently-asked-questions">Frequently asked questions</a></nav>
+  <h2 id="the-journey-simply">The journey, simply</h2>
   <ProcessSteps lang="en" />
 
-  <h2>The 9 stages in detail</h2>
+  <h2 id="the-9-stages-in-detail">The 9 stages in detail</h2>
   <Lifecycle lang="en" />
 
-  <h2>Standards and practices</h2>
+  <h2 id="standards-and-practices">Standards and practices</h2>
   <Standards lang="en" />
 
-  <h2>Modular engineering</h2>
+  <h2 id="modular-engineering">Modular engineering</h2>
   <Modular lang="en" />
 
-  <h2>What you get on every project</h2>
+  <h2 id="what-you-get-on-every-project">What you get on every project</h2>
   <Commitments lang="en" />
 
-  <h2>How we keep you informed</h2>
+  <h2 id="how-we-keep-you-informed">How we keep you informed</h2>
   <div class="table-wrap">
     <table class="compare">
       <thead><tr><th scope="col">What</th><th scope="col">When</th><th scope="col">Why</th></tr></thead>
@@ -37,7 +38,7 @@ import CtaBand from "../../components/CtaBand.astro";
     </table>
   </div>
 
-  <h2>Frequently asked questions</h2>
+  <h2 id="frequently-asked-questions">Frequently asked questions</h2>
   <Faq lang="en" />
 
   <CtaBand slot="after" lang="en" title="Start with the first version" text="A 30-minute call and, within 72 hours, your idea working." />

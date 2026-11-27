@@ -8,23 +8,24 @@ import Commitments from "../../components/Commitments.astro";
 import Faq from "../../components/Faq.astro";
 import CtaBand from "../../components/CtaBand.astro";
 ---
-<Simple lang="es" wide title="Cómo trabajamos" eyebrow="Metodología" description="Cómo trabaja The Meowpany: un ciclo de vida de 9 etapas con requisitos verificables para avanzar, estimación IFPUG, requisitos ISO/IEC/IEEE 29148, planificación PERT, pruebas trazables y seguridad de la información." lead="Cada proyecto sigue el mismo ciclo de vida de 9 etapas, el que usamos en nuestra plataforma de gestión. Ninguna etapa termina hasta que se cumple lo que exige: no depende de la memoria de nadie.">
-  <h2>El recorrido, en simple</h2>
+<Simple lang="es" wide title="Cómo trabajamos" description="Cómo trabaja The Meowpany: un ciclo de vida de 9 etapas con requisitos verificables para avanzar, estimación IFPUG, requisitos ISO/IEC/IEEE 29148, planificación PERT, pruebas trazables y seguridad de la información." lead="Cada proyecto sigue el mismo ciclo de vida de 9 etapas, el que usamos en nuestra plataforma de gestión. Ninguna etapa termina hasta que se cumple lo que exige: no depende de la memoria de nadie.">
+  <nav class="jump" aria-label="En esta página"><a href="#el-recorrido-en-simple">El recorrido, en simple</a><a href="#las-9-etapas-por-dentro">Las 9 etapas por dentro</a><a href="#estandares-y-practicas">Estándares y prácticas</a><a href="#ingenieria-modular">Ingeniería modular</a><a href="#lo-que-recibe-en-cada-proyecto">Lo que recibe en cada proyecto</a><a href="#como-nos-comunicamos">Cómo nos comunicamos</a><a href="#preguntas-frecuentes">Preguntas frecuentes</a></nav>
+  <h2 id="el-recorrido-en-simple">El recorrido, en simple</h2>
   <ProcessSteps lang="es" />
 
-  <h2>Las 9 etapas por dentro</h2>
+  <h2 id="las-9-etapas-por-dentro">Las 9 etapas por dentro</h2>
   <Lifecycle lang="es" />
 
-  <h2>Estándares y prácticas</h2>
+  <h2 id="estandares-y-practicas">Estándares y prácticas</h2>
   <Standards lang="es" />
 
-  <h2>Ingeniería modular</h2>
+  <h2 id="ingenieria-modular">Ingeniería modular</h2>
   <Modular lang="es" />
 
-  <h2>Lo que recibe en cada proyecto</h2>
+  <h2 id="lo-que-recibe-en-cada-proyecto">Lo que recibe en cada proyecto</h2>
   <Commitments lang="es" />
 
-  <h2>Cómo nos comunicamos</h2>
+  <h2 id="como-nos-comunicamos">Cómo nos comunicamos</h2>
   <div class="table-wrap">
     <table class="compare">
       <thead><tr><th scope="col">Qué</th><th scope="col">Cuándo</th><th scope="col">Para qué</th></tr></thead>
@@ -37,7 +38,7 @@ import CtaBand from "../../components/CtaBand.astro";
     </table>
   </div>
 
-  <h2>Preguntas frecuentes</h2>
+  <h2 id="preguntas-frecuentes">Preguntas frecuentes</h2>
   <Faq lang="es" />
 
   <CtaBand slot="after" lang="es" title="Empecemos por la primera versión" text="Una llamada de 30 minutos y, en 72 horas, su idea funcionando." />

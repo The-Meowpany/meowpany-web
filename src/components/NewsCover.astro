@@ -1,0 +1,47 @@
+---
+// Cover art for a news post, drawn in CSS from the brand palette so every story has an image
+// without stock photos. The topic picks the colourway and the symbol.
+import Icon from "./Icon.astro";
+import type { Topic } from "../news";
+
+interface Props { topic: Topic; size?: "lg" | "md"; label: string }
+const { topic, size = "md", label } = Astro.props;
+const icons: Record<Topic, string> = { launch: "rocket", method: "ruler", company: "sparkles" };
+---
+<div class:list={["cover", topic, size]} aria-hidden="true">
+  <span class="grid"></span>
+  <span class="rings"><i></i><i></i><i></i></span>
+  <span class="symbol"><Icon name={icons[topic]} /></span>
+  <span class="label">{label}</span>
+</div>
+<style>
+  .cover { position: relative; overflow: hidden; isolation: isolate; aspect-ratio: 16 / 9; border-radius: var(--radius-lg); }
+  .cover.launch { background: radial-gradient(120% 120% at 100% 0%, #e7a3bf 0%, transparent 55%), linear-gradient(135deg, #ca678e, #8f3d5f); color: #fff; }
+  .cover.method { background: radial-gradient(110% 120% at 0% 100%, rgb(202 103 142 / 45%) 0%, transparent 55%), linear-gradient(135deg, #433f45, #232025); color: #fff; }
+  .cover.company { background: radial-gradient(120% 120% at 0% 0%, #ffffff 0%, transparent 55%), linear-gradient(135deg, #f5dfe8, #ebbfd1); color: #8f3d5f; }
+  /* On dark pages the covers go deeper, so the pink never glares against the charcoal. */
+  :global([data-theme="dark"]) .cover.launch { background: radial-gradient(120% 120% at 100% 0%, rgb(201 138 163 / 35%) 0%, transparent 55%), linear-gradient(135deg, #8a4664, #4a2335); }
+  :global([data-theme="dark"]) .cover.company { background: radial-gradient(120% 120% at 0% 0%, rgb(201 138 163 / 22%) 0%, transparent 55%), linear-gradient(135deg, #3a2f36, #2a2328); color: #e0a7bd; }
+  :global([data-theme="dark"]) .company .symbol { background: rgb(255 255 255 / 8%); border-color: rgb(224 167 189 / 25%); }
+  /* A faint grid, as on the home page hero. */
+  .grid {
+    position: absolute; inset: 0; z-index: -1; opacity: 0.18;
+    background: linear-gradient(to right, currentColor 1px, transparent 1px) 0 0 / 36px 36px, linear-gradient(to bottom, currentColor 1px, transparent 1px) 0 0 / 36px 36px;
+    mask-image: radial-gradient(70% 80% at 70% 40%, #000 20%, transparent 75%);
+  }
+  .rings { position: absolute; right: -12%; bottom: -30%; width: 70%; aspect-ratio: 1; }
+  .rings i { position: absolute; inset: 0; border-radius: 50%; border: 2px solid currentColor; opacity: 0.16; }
+  .rings i:nth-child(2) { inset: 16%; opacity: 0.22; }
+  .rings i:nth-child(3) { inset: 32%; opacity: 0.3; }
+  .symbol {
+    position: absolute; left: 8%; top: 50%; translate: 0 -50%; display: grid; place-items: center;
+    width: 26%; aspect-ratio: 1; border-radius: 28%; background: rgb(255 255 255 / 16%); border: 1px solid rgb(255 255 255 / 30%);
+    backdrop-filter: blur(6px); transition: transform 500ms var(--ease);
+  }
+  .company .symbol { background: rgb(255 255 255 / 55%); border-color: rgb(143 61 95 / 20%); }
+  .symbol :global(svg) { width: 46%; height: 46%; }
+  .label { position: absolute; left: 8%; bottom: 9%; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+  .lg .label { font-size: 0.85rem; }
+  :global(a:hover) > .cover .symbol, :global(a:hover) .cover .symbol { transform: rotate(-8deg) scale(1.06); }
+  @media (prefers-reduced-motion: reduce) { :global(a:hover) .cover .symbol { transform: none; } }
+</style>

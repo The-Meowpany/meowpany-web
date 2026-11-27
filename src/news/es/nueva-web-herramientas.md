@@ -2,6 +2,7 @@
 title: "Nueva web, con cuatro herramientas gratuitas para pymes"
 date: 2026-11-25
 summary: "Auditoría de su sitio, estimador de proyectos, calculadora de retorno y agenda de llamadas: resultados concretos antes de hablar de precio."
+topic: "company"
 tag: "Novedades"
 ---
 

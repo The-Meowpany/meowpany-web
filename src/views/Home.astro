@@ -2,18 +2,12 @@
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import ServiceCards from "../components/ServiceCards.astro";
-import ProcessSteps from "../components/ProcessSteps.astro";
 import Faq from "../components/Faq.astro";
 import CtaBand from "../components/CtaBand.astro";
-import SupportPlans from "../components/SupportPlans.astro";
 import FirstVersion from "../components/FirstVersion.astro";
-import Commitments from "../components/Commitments.astro";
 import Facts from "../components/Facts.astro";
-import Tools from "../components/Tools.astro";
-import Engagement from "../components/Engagement.astro";
 import Comparison from "../components/Comparison.astro";
-import Audiences from "../components/Audiences.astro";
-import Modular from "../components/Modular.astro";
+import NewsCover from "../components/NewsCover.astro";
 import { formatDate, newsPath, posts } from "../news";
 import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
@@ -27,47 +21,31 @@ const ui = t(lang);
 const copy = {
   es: {
     description: "Sitios web, tiendas en línea y software a medida para pymes. Vea una primera versión funcionando en 72 horas, antes de pagar. Precio cerrado, demostraciones cada 2 semanas y garantía de 60 días.",
-    eyebrow: "Webs, tiendas y software a medida",
     title: ["Desarrollamos su", "sitio, tienda o sistema", "y lo ve funcionando antes de pagar"],
     lead: "En 72 horas tiene una primera versión funcional de su idea. La prueba con su equipo y recién ahí decide si seguimos. Sin anticipo y sin tarjeta.",
-    secondary: "Ver servicios y precios",
+    secondary: "Diagnóstico de 2 minutos",
     trust: ["Precio cerrado antes de avanzar", "Demostración cada 2 semanas", "Garantía de 60 días", "El código es suyo"],
     panel: { title: "Su proyecto", status: "Sin costo hasta acá", rows: [["Llamada de 30 minutos", "Hoy", "done"], ["Alcance por escrito", "Hoy", "done"], ["Primera versión funcional", "En 72 horas", "now"], ["Usted decide si seguimos", "Sin compromiso", "next"]], preview: "Vista previa privada" },
-    servicesEyebrow: "Servicios", servicesTitle: "Todo lo que una pyme necesita para vender y trabajar mejor en línea", servicesLead: "Precios de lista publicados, plazos escritos y lo que incluye cada servicio, sin letra chica.",
-    processEyebrow: "Proceso", processTitle: "De la primera llamada a la puesta en producción", processLead: "Seis pasos con duración conocida. Usted ve el avance real cada dos semanas.",
-    commitEyebrow: "Garantías", commitTitle: "Lo que recibe en todos los proyectos", commitLead: "Sea un sitio de seis páginas o un sistema de gestión, trabajamos con las mismas reglas.",
-    factsEyebrow: "Por qué ahora", factsTitle: "La mayoría de las pymes todavía no aprovecha internet", factsLead: "Datos públicos de Uruguay. Cada cifra enlaza a su fuente.",
-    toolsEyebrow: "Herramientas gratuitas", toolsTitle: "Resultados concretos antes de hablar de precios", toolsLead: "Úselas sin registrarse. Solo nos llega lo que usted decida enviarnos.",
-    supportEyebrow: "Después de la entrega", supportTitle: "Planes de soporte con plazos por escrito", supportLead: "Mes a mes y sin permanencia mínima.",
-    modelsEyebrow: "Formas de trabajar", modelsTitle: "Contrate como le resulte más cómodo", modelsLead: "Un proyecto con precio cerrado, un plan mensual para seguir creciendo o desarrolladores que se suman a su equipo.",
-    compareEyebrow: "Comparación", compareTitle: "Qué recibe con nosotros y qué con las alternativas", compareLead: "La misma pregunta que se haría usted antes de contratar, respondida con hechos.",
-    audienceEyebrow: "Para quién", audienceTitle: "Trabajamos con empresas que ya venden y quieren hacerlo mejor", audienceLead: "Pymes de Uruguay de 5 a 99 personas y equipos del exterior.",
+    servicesTitle: "Todo lo que una pyme necesita para vender y trabajar mejor en línea", servicesLead: "Plazos escritos y lo que incluye cada servicio, sin letra chica. Cada proyecto se cotiza según lo que necesita.",
+    factsTitle: "La mayoría de las pymes todavía no aprovecha internet", factsLead: "Datos públicos de Uruguay. Cada cifra enlaza a su fuente.",
+    compareTitle: "Qué recibe con nosotros y qué con las alternativas", compareLead: "La misma pregunta que se haría usted antes de contratar, respondida con hechos.",
     methodology: "Ver la metodología completa",
-    modularEyebrow: "Ingeniería", modularTitle: "Software a medida, construido sobre piezas probadas", modularLead: "Nuestro protocolo de ingeniería modular: lo común ya está resuelto y verificado, y lo único de su negocio se diseña para usted.",
-    newsEyebrow: "Novedades", newsTitle: "Lo último", newsAll: "Ver todas las novedades",
+    newsTitle: "Lo último", newsAll: "Ver todas las novedades",
     faqTitle: "Preguntas frecuentes",
-    ctaTitle: "Cuéntenos su idea", ctaText: `Treinta minutos alcanzan para saber qué incluiría su primera versión. Los primeros ${launch.clients} clientes tienen precio de lanzamiento.`,
+    ctaTitle: "Cuéntenos su idea", ctaText: `Treinta minutos alcanzan para saber qué incluiría su primera versión. Los primeros ${launch.clients} clientes tienen un descuento sobre su cotización.`,
   },
   en: {
     description: "Websites, online stores and custom software. See a first working version within 72 hours, before you pay. Fixed price, a demo every 2 weeks and a 60-day warranty.",
-    eyebrow: "Websites, stores and custom software",
     title: ["We build your", "website, store or system", "and you see it working before you pay"],
     lead: "Within 72 hours you get a first working version of your idea. Try it with your team, and only then decide whether we go ahead. No deposit, no card.",
-    secondary: "See services and pricing",
+    secondary: "2-minute diagnosis",
     trust: ["Fixed price before you commit", "A demo every 2 weeks", "60-day warranty", "You own the code"],
     panel: { title: "Your project", status: "Free so far", rows: [["30-minute call", "Today", "done"], ["Scope in writing", "Today", "done"], ["First working version", "Within 72 hours", "now"], ["You decide whether we go on", "No strings", "next"]], preview: "Private preview" },
-    servicesEyebrow: "Services", servicesTitle: "What a business needs to sell and work better online", servicesLead: "Published list prices, written timelines and exactly what each service includes.",
-    processEyebrow: "Process", processTitle: "From the first call to going live", processLead: "Six steps with known durations. You see real progress every two weeks.",
-    commitEyebrow: "Guarantees", commitTitle: "What you get on every project", commitLead: "A six-page website or a back-office system, the same rules apply.",
-    factsEyebrow: "Why now", factsTitle: "Most small businesses are still offline", factsLead: "Public figures from Uruguay. Each one links to its source.",
-    toolsEyebrow: "Free tools", toolsTitle: "Concrete results before any talk about price", toolsLead: "No sign-up. We only receive what you choose to send.",
-    supportEyebrow: "After launch", supportTitle: "Support plans with written response times", supportLead: "Month to month, no minimum term.",
-    modelsEyebrow: "Engagement models", modelsTitle: "Work with us the way that suits you", modelsLead: "A fixed-price project, a monthly plan to keep growing, or developers who join your team.",
-    compareEyebrow: "Comparison", compareTitle: "What you get with us, and with the alternatives", compareLead: "The question you would ask before hiring, answered with facts.",
-    audienceEyebrow: "Who we work with", audienceTitle: "Companies that already sell and want to do it better", audienceLead: "Growing businesses, startups and agencies.",
+    servicesTitle: "What a business needs to sell and work better online", servicesLead: "Written timelines and exactly what each service includes. Every project is quoted for what it needs.",
+    factsTitle: "Most small businesses are still offline", factsLead: "Public figures from Uruguay. Each one links to its source.",
+    compareTitle: "What you get with us, and with the alternatives", compareLead: "The question you would ask before hiring, answered with facts.",
     methodology: "See the full methodology",
-    modularEyebrow: "Engineering", modularTitle: "Custom software, built on proven parts", modularLead: "Our modular engineering protocol: what is common is already solved and verified, and what is unique to your business is designed for you.",
-    newsEyebrow: "News", newsTitle: "Latest", newsAll: "See all news",
+    newsTitle: "Latest", newsAll: "See all news",
     faqTitle: "Frequently asked questions",
     ctaTitle: "Tell us your idea", ctaText: "Thirty minutes is enough to know what your first version would include.",
   },
@@ -82,12 +60,11 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     <div class="glow" aria-hidden="true"></div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">{copy.eyebrow}</p>
         <h1>{copy.title[0]} <span class="highlight">{copy.title[1]}</span> {copy.title[2]}</h1>
         <p class="lead">{copy.lead}</p>
         <div class="actions">
           <a class="btn btn-primary" href={`${path("book", lang)}?for=prototype`}>{ui.seeItWorking}<Icon name="arrow-right" /></a>
-          <a class="btn btn-ghost" href={path("services", lang)}>{copy.secondary}</a>
+          <a class="btn btn-ghost" href={path("diagnosis", lang)}><Icon name="stethoscope" />{copy.secondary}</a>
         </div>
         <ul class="trust">
           {copy.trust.map((item) => <li><Icon name="check" />{item}</li>)}
@@ -124,23 +101,11 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   <section class="section soft">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow plain">{copy.servicesEyebrow}</p>
         <h2 class="reveal">{copy.servicesTitle}</h2>
         <p class="lead reveal">{copy.servicesLead}</p>
       </div>
       <ServiceCards lang={lang} />
-      <p class="muted small" style="margin-top:1.25rem">{ui.price.vat}.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.modelsEyebrow}</p>
-        <h2 class="reveal">{copy.modelsTitle}</h2>
-        <p class="lead reveal">{copy.modelsLead}</p>
-      </div>
-      <Engagement lang={lang} />
+      <p class="note">{ui.price.vat}.</p>
     </div>
   </section>
 
@@ -149,56 +114,11 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   <section class="section soft">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow plain">{copy.processEyebrow}</p>
-        <h2 class="reveal">{copy.processTitle}</h2>
-        <p class="lead reveal">{copy.processLead}</p>
-      </div>
-      <ProcessSteps lang={lang} />
-      <p class="more-link"><a class="btn btn-ghost" href={path("process", lang)}>{copy.methodology}<Icon name="arrow-right" /></a></p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.modularEyebrow}</p>
-        <h2 class="reveal">{copy.modularTitle}</h2>
-        <p class="lead reveal">{copy.modularLead}</p>
-      </div>
-      <Modular lang={lang} />
-    </div>
-  </section>
-
-  <section class="section soft">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.compareEyebrow}</p>
         <h2 class="reveal">{copy.compareTitle}</h2>
         <p class="lead reveal">{copy.compareLead}</p>
       </div>
       <Comparison lang={lang} />
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.audienceEyebrow}</p>
-        <h2 class="reveal">{copy.audienceTitle}</h2>
-        <p class="lead reveal">{copy.audienceLead}</p>
-      </div>
-      <Audiences lang={lang} />
-    </div>
-  </section>
-
-  <section class="section soft">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.commitEyebrow}</p>
-        <h2 class="reveal">{copy.commitTitle}</h2>
-        <p class="lead reveal">{copy.commitLead}</p>
-      </div>
-      <Commitments lang={lang} />
+      <p class="more-link"><a class="btn btn-ghost" href={path("process", lang)}>{copy.methodology}<Icon name="arrow-right" /></a></p>
     </div>
   </section>
 
@@ -206,7 +126,6 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     <section class="section">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow plain">{copy.factsEyebrow}</p>
           <h2 class="reveal">{copy.factsTitle}</h2>
           <p class="lead reveal">{copy.factsLead}</p>
         </div>
@@ -216,47 +135,26 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   )}
 
   <section class:list={["section", { soft: lang === "es" }]}>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.toolsEyebrow}</p>
-        <h2 class="reveal">{copy.toolsTitle}</h2>
-        <p class="lead reveal">{copy.toolsLead}</p>
-      </div>
-      <Tools lang={lang} />
-    </div>
-  </section>
-
-  <section class:list={["section", { soft: lang === "en" }]}>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow plain">{copy.supportEyebrow}</p>
-        <h2 class="reveal">{copy.supportTitle}</h2>
-        <p class="lead reveal">{copy.supportLead}</p>
-      </div>
-      <SupportPlans lang={lang} />
-    </div>
-  </section>
-
-  <section class:list={["section", { soft: lang === "es" }]}>
     <div class="wrap faq-grid">
-      <h2 class="reveal">{copy.faqTitle}</h2>
+      <h2 class="reveal title-rule start">{copy.faqTitle}</h2>
       <Faq lang={lang} items={questions} />
     </div>
   </section>
 
   <section class:list={["section", { soft: lang === "en" }]}>
     <div class="wrap">
-      <div class="news-head">
-        <div><p class="eyebrow plain">{copy.newsEyebrow}</p><h2 class="reveal">{copy.newsTitle}</h2></div>
-        <a class="btn btn-ghost btn-sm" href={newsPath(lang)}>{copy.newsAll}</a>
+      <div class="section-head">
+        <h2 class="reveal">{copy.newsTitle}</h2>
       </div>
-      <ol class="latest">
+      <ol class="latest balance">
         {latest.map((post) => (
-          <li class="reveal"><a class="card" href={newsPath(lang, post.slug)}>
-            <p class="news-meta"><span class="badge brand">{post.tag}</span>{formatDate(post.date, lang)}</p>
-            <h3>{post.title}</h3><p class="muted">{post.summary}</p></a></li>
+          <li class="reveal"><a class="story" href={newsPath(lang, post.slug)}>
+            <NewsCover topic={post.topic} label={post.tag} />
+            <p class="news-meta"><span>{post.tag}</span>{formatDate(post.date, lang)}</p>
+            <h3>{post.title}</h3></a></li>
         ))}
       </ol>
+      <p class="more-link"><a class="btn btn-ghost" href={newsPath(lang)}>{copy.newsAll}<Icon name="arrow-right" /></a></p>
     </div>
   </section>
 
@@ -268,7 +166,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .glow {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
-      radial-gradient(60% 55% at 85% 10%, rgb(202 103 142 / 16%), transparent 70%),
+      radial-gradient(60% 55% at 85% 10%, var(--glow), transparent 70%),
       linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
       linear-gradient(to bottom, var(--line) 1px, transparent 1px) 0 0 / 56px 56px;
     mask-image: radial-gradient(80% 70% at 60% 0%, #000 30%, transparent 80%);
@@ -313,9 +211,9 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .chart span:nth-child(7) { animation-delay: 1460ms; }
   @keyframes grow { from { transform: scaleY(0); } }
   @media (prefers-reduced-motion: reduce) {
-    .highlight { background-size: 100% 0.18em; }
     .now .dot::after { display: none; }
-    .hero-copy > *, .panel, .timeline li, .done .dot, .chart span, .highlight { animation: none !important; }
+    .done .dot { animation: none !important; }
+    @keyframes grow { from { opacity: 0; } }
   }
   .trust { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; color: var(--muted); font-size: 0.92rem; }
   .trust li { display: inline-flex; align-items: center; gap: 0.4rem; }
@@ -325,7 +223,8 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .panel-head { display: flex; align-items: center; gap: 0.7rem; padding: 0.25rem 0.25rem 1rem; border-bottom: 1px solid var(--line); }
   .panel-head strong { font-size: 0.98rem; }
   .cat.dark { display: none; }
-  @media (prefers-color-scheme: dark) { .cat.light { display: none; } .cat.dark { display: block; } }
+  :global([data-theme="dark"]) .cat.light { display: none; }
+  :global([data-theme="dark"]) .cat.dark { display: block; }
   .panel-head .badge { margin-left: auto; }
   .timeline { list-style: none; padding: 0.5rem 0.25rem; margin: 0; }
   .timeline li { position: relative; display: grid; grid-template-columns: 18px 1fr auto; gap: 0.75rem; align-items: center; padding: 0.7rem 0; font-size: 0.93rem; }
@@ -354,13 +253,16 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .rows i:nth-child(2) { width: 82%; }
   .rows i:nth-child(3) { width: 64%; }
 
-  .more-link { margin: 1.5rem 0 0; }
-  .news-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-  .news-head h2 { margin: 0; }
-  .latest { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
-  .latest a { display: block; height: 100%; text-decoration: none; color: inherit; }
-  .latest p.muted { font-size: 0.95rem; }
-  .news-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--muted); }
+  .more-link { margin: 2rem 0 0; text-align: center; }
+  .note { margin: 1.5rem 0 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
+  .latest { list-style: none; padding: 0; margin: 0; display: grid; gap: clamp(1.25rem, 3vw, 2rem); }
+  .story { display: grid; gap: 0.6rem; height: 100%; text-decoration: none; color: inherit; }
+  .story h3 { font-size: 1.15rem; line-height: 1.3; margin: 0; transition: color 200ms; }
+  .story:hover h3 { color: var(--primary); }
+  .story :global(.cover) { transition: transform 400ms var(--ease), box-shadow 400ms var(--ease); }
+  .story:hover :global(.cover) { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .news-meta { display: flex; align-items: center; gap: 0.6rem; margin: 0.2rem 0 0; font-size: 0.84rem; color: var(--muted); }
+  .news-meta span { color: var(--primary); font-weight: 700; }
   .faq-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 2rem 4rem; align-items: start; }
   @media (max-width: 920px) {
     .hero-grid, .faq-grid { grid-template-columns: 1fr; }

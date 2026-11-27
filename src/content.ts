@@ -1,7 +1,8 @@
 // Every fact the site states, in both languages, in one place. Figures come from the business plan
-// (revision 99, 17 Nov 2026) and prices from pricing.ts, so a page can never contradict another.
+// (revision 99, 17 Nov 2026), so a page can never contradict another. There is no price list:
+// every project is quoted from its own requirements.
 import type { Lang } from "./i18n";
-import { launch, prices } from "./pricing";
+import { launch, offers } from "./pricing";
 
 export type Service = {
   key: "website" | "store" | "custom" | "support" | "hours";
@@ -11,9 +12,6 @@ export type Service = {
   forWho: string;
   includes: string[];
   notIncluded: string[];
-  price: number;
-  launchPrice?: number;
-  unit: "from" | "perMonth" | "perHour" | "fixed";
   time: string;
 };
 
@@ -24,30 +22,30 @@ export const services: Record<Lang, Service[]> = {
       summary: "Un sitio propio, rápido y fácil de encontrar en Google, que presenta su empresa y convierte visitas en consultas.",
       forWho: "Empresas que hoy dependen solo de redes sociales o tienen un sitio desactualizado.",
       includes: [
-        `Hasta ${prices.website.includedPages} páginas, diseñadas primero para celulares`,
+        "Las páginas que su negocio necesita, diseñadas primero para celulares",
         "Textos ordenados y SEO básico: títulos, descripciones, mapa del sitio y datos estructurados",
         "Ficha de Google Business Profile",
         "Formulario de contacto, botón de WhatsApp y analítica",
         "Dominio y certificado HTTPS configurados",
         "Capacitación para editar los contenidos",
       ],
-      notIncluded: [`Cada página adicional: USD ${prices.website.extraPage}`, "Redacción de textos largos y fotografía profesional", "El costo del dominio y del alojamiento, que se paga a cada proveedor"],
-      price: prices.website.from, launchPrice: launch.website, unit: "fixed", time: "2 a 3 semanas",
+      notIncluded: ["Redacción de textos largos y fotografía profesional", "El costo del dominio y del alojamiento, que se paga a cada proveedor"],
+      time: "2 a 3 semanas",
     },
     {
       key: "store", icon: "shopping-bag", title: "Tienda en línea",
       summary: "Venta las 24 horas con pagos, envíos y facturación electrónica conectados, sin cargar cada venta a mano.",
       forWho: "Comercios que venden por WhatsApp o Instagram y quieren cobrar en línea.",
       includes: [
-        `Catálogo de hasta ${prices.store.largeCatalogThreshold} productos, carrito y cuentas de clientes`,
+        "Catálogo de productos, carrito y cuentas de clientes",
         "Cobro con Mercado Pago y tarjetas",
         "Envíos, retiro en local y control de stock",
         "Integración con la facturación electrónica (CFE) de la DGI a través de su proveedor",
         "Avisos por correo de cada pedido",
         "Capacitación para su equipo",
       ],
-      notIncluded: [`Catálogo de más de ${prices.store.largeCatalogThreshold} productos: + USD ${prices.store.largeCatalog}`, `Cada medio de pago adicional: + USD ${prices.store.extraPayment}`, "Las comisiones de las pasarelas de pago y del proveedor de facturación"],
-      price: prices.store.from, launchPrice: launch.store, unit: "fixed", time: "4 a 6 semanas",
+      notIncluded: ["La carga inicial de catálogos grandes, que se cotiza según la cantidad de productos", "Las comisiones de las pasarelas de pago y del proveedor de facturación"],
+      time: "4 a 6 semanas",
     },
     {
       key: "custom", icon: "workflow", title: "Software y aplicaciones a medida",
@@ -61,15 +59,15 @@ export const services: Record<Lang, Service[]> = {
         "Manuales, capacitación y traspaso del código y de los accesos",
       ],
       notIncluded: ["Licencias o servicios de terceros que el sistema use", "Cambios fuera del alcance aprobado, que se cotizan aparte"],
-      price: prices.custom.from, unit: "from", time: "2 a 4 meses",
+      time: "2 a 4 meses",
     },
     {
       key: "support", icon: "life-buoy", title: "Soporte y mantenimiento",
       summary: "Un equipo que responde con plazos por escrito, mantiene su sitio o sistema al día y le dedica horas de mejoras cada mes.",
       forWho: "Cualquier cliente que quiera seguir creciendo después de la entrega sin contratar a nadie.",
       includes: ["Tres planes, con plazo de respuesta y horas de mejoras definidos", "Actualizaciones de seguridad", "Registro de cada pedido y de las horas usadas"],
-      notIncluded: [`Horas de mejoras por encima de las del plan: USD ${prices.hours.rate} por hora`],
-      price: prices.support.basic, unit: "perMonth", time: "Mes a mes",
+      notIncluded: ["Horas de mejoras por encima de las del plan, que se cotizan antes de usarlas"],
+      time: "Mes a mes",
     },
     {
       key: "hours", icon: "globe", title: "Desarrolladores para el exterior",
@@ -77,7 +75,7 @@ export const services: Record<Lang, Service[]> = {
       forWho: "Equipos y agencias del exterior que necesitan sumar capacidad.",
       includes: ["Horario superpuesto con la costa este de EE. UU.", "Contratos y facturación en dólares", "Informe semanal de horas y de trabajo", "Dos semanas de prueba sin penalidad"],
       notIncluded: [],
-      price: prices.hours.rate, launchPrice: launch.hourly, unit: "perHour", time: "Continuo",
+      time: "Continuo",
     },
   ],
   en: [
@@ -86,30 +84,30 @@ export const services: Record<Lang, Service[]> = {
       summary: "A fast website you own, easy to find on Google, that presents your business and turns visits into enquiries.",
       forWho: "Businesses that rely only on social media or have an outdated site.",
       includes: [
-        `Up to ${prices.website.includedPages} pages, designed for phones first`,
+        "The pages your business needs, designed for phones first",
         "Clear copy and basic SEO: titles, descriptions, sitemap and structured data",
         "Google Business Profile listing",
         "Contact form, WhatsApp button and analytics",
         "Domain and HTTPS certificate set up",
         "Training to edit the content",
       ],
-      notIncluded: [`Each extra page: USD ${prices.website.extraPage}`, "Long-form copywriting and professional photography", "Domain and hosting fees, paid to each provider"],
-      price: prices.website.from, launchPrice: launch.website, unit: "fixed", time: "2 to 3 weeks",
+      notIncluded: ["Long-form copywriting and professional photography", "Domain and hosting fees, paid to each provider"],
+      time: "2 to 3 weeks",
     },
     {
       key: "store", icon: "shopping-bag", title: "Online store",
       summary: "Sell around the clock with payments, shipping and e-invoicing connected, without entering each sale by hand.",
       forWho: "Shops that sell through WhatsApp or Instagram and want to take payments online.",
       includes: [
-        `Catalog of up to ${prices.store.largeCatalogThreshold} products, cart and customer accounts`,
+        "Product catalog, cart and customer accounts",
         "Payments with Mercado Pago and cards",
         "Shipping, pick-up and stock control",
         "Uruguayan e-invoicing (DGI CFE) through your provider",
         "Email notice of every order",
         "Training for your team",
       ],
-      notIncluded: [`Catalogs over ${prices.store.largeCatalogThreshold} products: + USD ${prices.store.largeCatalog}`, `Each extra payment method: + USD ${prices.store.extraPayment}`, "Payment gateway and e-invoicing provider fees"],
-      price: prices.store.from, launchPrice: launch.store, unit: "fixed", time: "4 to 6 weeks",
+      notIncluded: ["Initial upload of large catalogs, quoted by number of products", "Payment gateway and e-invoicing provider fees"],
+      time: "4 to 6 weeks",
     },
     {
       key: "custom", icon: "workflow", title: "Custom software and apps",
@@ -123,15 +121,15 @@ export const services: Record<Lang, Service[]> = {
         "Manuals, training and hand-over of the code and every credential",
       ],
       notIncluded: ["Third-party licences or services the system uses", "Changes outside the approved scope, quoted separately"],
-      price: prices.custom.from, unit: "from", time: "2 to 4 months",
+      time: "2 to 4 months",
     },
     {
       key: "support", icon: "life-buoy", title: "Support and maintenance",
       summary: "A team that replies within written response times, keeps your site or system up to date and spends improvement hours on it every month.",
       forWho: "Any client who wants to keep growing after launch without hiring.",
       includes: ["Three plans with set response times and improvement hours", "Security updates", "A record of every request and the hours used"],
-      notIncluded: [`Improvement hours beyond the plan: USD ${prices.hours.rate} an hour`],
-      price: prices.support.basic, unit: "perMonth", time: "Month to month",
+      notIncluded: ["Improvement hours beyond the plan, quoted before they are used"],
+      time: "Month to month",
     },
     {
       key: "hours", icon: "globe", title: "Developers for hire",
@@ -139,7 +137,7 @@ export const services: Record<Lang, Service[]> = {
       forWho: "Teams and agencies abroad that need more capacity.",
       includes: ["Overlap with US Eastern business hours", "Contracts and invoices in USD", "Weekly report of hours and work", "A two-week trial with no penalty"],
       notIncluded: [],
-      price: prices.hours.rate, launchPrice: launch.hourly, unit: "perHour", time: "Ongoing",
+      time: "Ongoing",
     },
   ],
 };
@@ -200,15 +198,17 @@ export const facts: Record<Lang, { value: string; text: string; source: string; 
   ],
 };
 
-/** The four free tools, each one giving a concrete result before any sale. */
-export const tools: Record<Lang, { key: "audit" | "estimate" | "roi" | "book"; icon: string; title: string; text: string }[]> = {
+/** The free tools, each one giving a concrete result before any sale. */
+export const tools: Record<Lang, { key: "diagnosis" | "audit" | "estimate" | "roi" | "book"; icon: string; title: string; text: string }[]> = {
   es: [
+    { key: "diagnosis", icon: "stethoscope", title: "Diagnóstico de 2 minutos", text: "Cinco preguntas sobre cómo trabaja hoy y una recomendación concreta de por dónde empezar." },
     { key: "audit", icon: "gauge", title: "Auditoría web", text: "Velocidad, accesibilidad, buenas prácticas y SEO de su sitio en celulares, con las correcciones ordenadas por impacto." },
     { key: "estimate", icon: "calculator", title: "Estimador de proyectos", text: "Describa su sistema y reciba una propuesta imprimible con alcance, horas, plazo y rango de precio." },
     { key: "roi", icon: "trending-up", title: "Calculadora de retorno", text: "Cuánto le cuesta por mes el trabajo manual y en cuántos meses se paga el proyecto." },
     { key: "book", icon: "calendar-check", title: "Llamada de 30 minutos", text: "Hable de su idea con quien la va a construir, sin compromiso." },
   ],
   en: [
+    { key: "diagnosis", icon: "stethoscope", title: "2-minute diagnosis", text: "Five questions about how you work today and a concrete recommendation of where to start." },
     { key: "audit", icon: "gauge", title: "Website audit", text: "Speed, accessibility, best practices and SEO of your site on phones, with fixes ranked by impact." },
     { key: "estimate", icon: "calculator", title: "Project estimator", text: "Describe your system and get a printable proposal with scope, hours, timeline and price range." },
     { key: "roi", icon: "trending-up", title: "Return calculator", text: "What manual work costs you every month and how many months the project takes to pay for itself." },
@@ -219,8 +219,10 @@ export const tools: Record<Lang, { key: "audit" | "estimate" | "roi" | "book"; i
 export const faq: Record<Lang, { q: string; a: string }[]> = {
   es: [
     { q: "¿Cuánto tarda un proyecto?", a: "La primera versión, 72 horas desde que acordamos su alcance. Después: un sitio, de 2 a 3 semanas; una tienda, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
-    { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos de más de USD 6.000 se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta, también en 3 cuotas. Los precios son en dólares; los clientes de Uruguay suman IVA (22 %)." },
-    { q: "¿Qué es el precio de lanzamiento?", a: `Los primeros 5 clientes pagan USD ${launch.website} por un sitio (en lugar de USD ${prices.website.from}) y USD ${launch.store} por una tienda (en lugar de USD ${prices.store.from}), y tienen el primer mes de soporte gratis, a cambio de que publiquemos el caso y un testimonio.` },
+    { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos más grandes se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta, también en 3 cuotas. Facturamos en dólares; los clientes de Uruguay suman IVA (22 %)." },
+    { q: "¿Por qué no publican una lista de precios?", a: "Porque dos proyectos que parecen iguales rara vez lo son: cambian las funciones, las integraciones, el contenido y el plazo. En lugar de un precio genérico que después crece, medimos su proyecto, se lo mostramos funcionando y le enviamos un precio cerrado que no cambia salvo que usted amplíe el alcance. Si quiere una referencia antes de hablar, el estimador le da un rango para su caso." },
+    { q: "¿Tienen descuentos o beneficios?", a: `Sí, permanentes y por escrito: ${offers.starterSupportMonths} meses de soporte incluidos con cada sitio o tienda, ${offers.annualFreeMonths} meses sin cargo pagando el soporte anual, un mes gratis para usted y para la empresa que nos recomiende, condiciones especiales para emprendimientos nuevos, ONG y socios de cámaras con convenio, y hasta ${offers.codeOnlyInstallments} cuotas sin interés si se lleva solo el código. Están todos en la página de beneficios.` },
+    { q: "¿Qué son las condiciones de lanzamiento?", a: `Los primeros ${launch.clients} clientes reciben un descuento sobre su cotización y el primer mes de soporte gratis, a cambio de que publiquemos el caso y un testimonio.` },
     { q: "¿Quién es dueño del código y del dominio?", a: "Usted. El dominio se registra a su nombre y lo desarrollado para su proyecto es suyo. Si incluimos módulos de nuestra biblioteca, recibe también su código fuente con una licencia perpetua para usarlo y modificarlo. Al terminar le entregamos el código, los accesos y los manuales." },
     { q: "¿Trabajan con la tecnología que ya usamos?", a: "Sí. Elegimos la tecnología según su problema y lo que su empresa ya usa, y la acordamos con usted en la propuesta. Como las reglas de su negocio quedan separadas de la tecnología, también se pueden integrar con sus sistemas actuales." },
     { q: "¿Qué cubre la garantía?", a: "Durante 60 días desde la puesta en producción corregimos sin costo cualquier error de lo entregado, es decir, lo que no funciona como dice el alcance aprobado. Los cambios o funciones nuevas se cotizan aparte o se cubren con un plan de soporte." },
@@ -229,7 +231,9 @@ export const faq: Record<Lang, { q: string; a: string }[]> = {
   ],
   en: [
     { q: "How long does a project take?", a: "The first version, 72 hours from agreeing on its scope. Then a website takes 2 to 3 weeks, a store 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
-    { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; projects over USD 6,000 are paid by milestones. We bill in US dollars." },
+    { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; larger projects are paid by milestones. We bill in US dollars." },
+    { q: "Why don't you publish a price list?", a: "Because two projects that look alike rarely are: features, integrations, content and timelines differ. Instead of a generic price that grows later, we size your project, show it to you working and send a fixed price that won't change unless you widen the scope. If you want a reference before we talk, the estimator gives you a range for your case." },
+    { q: "Do you offer discounts?", a: `Yes, standing and in writing: ${offers.starterSupportMonths} months of support included with every website or store, ${offers.annualFreeMonths} months free on annual support, a free month for you and for any company you refer, terms for new businesses, non-profits and partner chambers, and up to ${offers.codeOnlyInstallments} interest-free instalments if you take the code only. They are all on the offers page.` },
     { q: "Who owns the code?", a: "You do. What we build for your project is yours. If it includes modules from our library, you also get their source code with a perpetual licence to use and change it. At hand-over you get the code, every credential and the manuals." },
     { q: "Can you work with the technology we already use?", a: "Yes. We pick the technology for your problem and what your company already runs, and agree on it in the proposal. Because your business rules are kept separate from the technology, they also integrate with your existing systems." },
     { q: "What does the warranty cover?", a: "For 60 days after go-live we fix, at no cost, anything delivered that doesn't work as the approved scope says. Changes and new features are quoted separately or covered by a support plan." },
@@ -360,13 +364,13 @@ export const security: Record<Lang, string[]> = {
 export const engagement: Record<Lang, { icon: string; name: string; best: string; text: string; terms: string[] }[]> = {
   es: [
     { icon: "package-check", name: "Proyecto llave en mano", best: "Sitios, tiendas y sistemas con un alcance claro.", text: "Nos encargamos de todo, de la especificación a la puesta en producción.", terms: ["Precio cerrado", "Primera versión gratis en 72 horas", "Garantía de 60 días"] },
-    { icon: "refresh-cw", name: "Evolución mensual", best: "Productos que crecen mes a mes después de la entrega.", text: "Un plan con plazos de respuesta y horas de mejoras por mes.", terms: ["Desde USD 50 por mes", "Sin permanencia mínima", "Informe de horas usadas"] },
-    { icon: "users", name: "Desarrolladores dedicados", best: "Equipos y agencias del exterior que necesitan más capacidad.", text: "Desarrolladores que se suman a su equipo, en su horario y con sus herramientas.", terms: ["USD 35 por hora", "Por hora o tiempo completo", "Dos semanas de prueba sin penalidad"] },
+    { icon: "refresh-cw", name: "Evolución mensual", best: "Productos que crecen mes a mes después de la entrega.", text: "Un plan con plazos de respuesta y horas de mejoras por mes.", terms: ["Plazos de respuesta por escrito", "Sin permanencia mínima", "Informe de horas usadas"] },
+    { icon: "users", name: "Desarrolladores dedicados", best: "Equipos y agencias del exterior que necesitan más capacidad.", text: "Desarrolladores que se suman a su equipo, en su horario y con sus herramientas.", terms: ["Por hora o tiempo completo", "Horario compatible con EE. UU.", "Dos semanas de prueba sin penalidad"] },
   ],
   en: [
     { icon: "package-check", name: "Turnkey project", best: "Websites, stores and systems with a clear scope.", text: "We take care of everything, from the specification to go-live.", terms: ["Fixed price", "Free first version in 72 hours", "60-day warranty"] },
-    { icon: "refresh-cw", name: "Monthly evolution", best: "Products that keep growing after launch.", text: "A plan with response times and improvement hours every month.", terms: ["From USD 50 a month", "No minimum term", "Report of hours used"] },
-    { icon: "users", name: "Dedicated developers", best: "Teams and agencies abroad that need more capacity.", text: "Developers who join your team, in your hours and with your tools.", terms: ["USD 35 an hour", "Hourly or full time", "Two-week trial, no penalty"] },
+    { icon: "refresh-cw", name: "Monthly evolution", best: "Products that keep growing after launch.", text: "A plan with response times and improvement hours every month.", terms: ["Written response times", "No minimum term", "Report of hours used"] },
+    { icon: "users", name: "Dedicated developers", best: "Teams and agencies abroad that need more capacity.", text: "Developers who join your team, in your hours and with your tools.", terms: ["Hourly or full time", "Overlap with US hours", "Two-week trial, no penalty"] },
   ],
 };
 
@@ -386,20 +390,19 @@ export const audiences: Record<Lang, { icon: string; name: string; text: string 
   ],
 };
 
-/** How we compare, with published 2026 market prices (business plan, sections 2 and 8.5). */
+/** How we compare with the usual alternatives (business plan, sections 2 and 8.5). */
 export const comparison = {
   es: {
     columns: ["", "Plataforma de autoservicio", "Freelancer", "Agencia mediana", "The Meowpany"],
     rows: [
-      ["Precio de un sitio institucional", "No aplica", "USD 400 a 1.200", "USD 800 a 2.500", "USD 1.000 (lanzamiento: USD 800)"],
       ["Ve su proyecto funcionando antes de pagar", "Plantilla de prueba", "Rara vez", "Rara vez", "Sí, en 72 horas"],
       ["Alcance y precio cerrado por escrito", "No", "Depende", "Sí", "Sí, con especificación aprobada"],
       ["Avance visible", "No aplica", "Depende", "Reuniones", "Demostración cada 2 semanas e informe semanal"],
       ["Pruebas documentadas", "No", "Rara vez", "Depende", "Informe de pruebas en cada entrega"],
-      ["Soporte con plazos escritos", "Ayuda general", "Depende de la persona", "Planes propios", "Desde USD 50 por mes, sin permanencia"],
+      ["Soporte con plazos escritos", "Ayuda general", "Depende de la persona", "Planes propios", "Planes con plazos escritos, sin permanencia"],
       ["El código es suyo", "No", "Depende", "Depende", "Sí, con manuales y accesos"],
     ],
-    note: "Rangos de precio publicados en 2026 por estudios y agencias de Uruguay, recopilados en nuestro plan de negocio.",
+    note: "Comparación basada en las ofertas publicadas por proveedores de Uruguay en 2026.",
   },
   en: {
     columns: ["", "Self-service platform", "Freelancer", "Mid-size agency", "The Meowpany"],
@@ -408,7 +411,7 @@ export const comparison = {
       ["Scope and fixed price in writing", "No", "It depends", "Yes", "Yes, with an approved specification"],
       ["Visible progress", "n/a", "It depends", "Meetings", "A demo every 2 weeks and a weekly report"],
       ["Documented testing", "No", "Rarely", "It depends", "A test report with every delivery"],
-      ["Support with written response times", "General help", "Depends on the person", "Own plans", "From USD 50 a month, no minimum term"],
+      ["Support with written response times", "General help", "Depends on the person", "Own plans", "Plans with written response times, no minimum term"],
       ["You own the code", "No", "It depends", "It depends", "Yes, with manuals and credentials"],
     ],
     note: "Comparison based on published offers of providers in Uruguay in 2026.",
@@ -449,7 +452,7 @@ export const modular: Record<Lang, { intro: string; points: { icon: string; titl
 export const about: Record<Lang, { short: string; facts: string[] }> = {
   es: {
     short: "The Meowpany es un estudio de ingeniería de software de Montevideo. Diseñamos y desarrollamos sitios web, tiendas en línea y software a medida para pymes de Uruguay, y sumamos desarrolladores a equipos de Estados Unidos. Cada proyecto sigue un proceso documentado de 9 etapas, con precio cerrado, y empieza con una primera versión funcional gratis en 72 horas.",
-    facts: ["100 % remoto desde Montevideo", "Español e inglés", "Precios en dólares"],
+    facts: ["100 % remoto desde Montevideo", "Español e inglés", "Cotizaciones en dólares"],
   },
   en: {
     short: "The Meowpany is a software engineering studio in Montevideo, Uruguay. We design and build websites, online stores and custom software, and add developers to teams in the United States. Every project follows a documented 9-stage process at a fixed price, and starts with a free first working version within 72 hours.",

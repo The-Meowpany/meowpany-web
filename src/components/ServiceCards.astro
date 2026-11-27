@@ -1,22 +1,20 @@
 ---
-// Services with what each includes, what it doesn't, its timeline and its list and launch prices.
+// Services with what each includes, what it doesn't and its timeline. Prices are quoted per project.
 // `detailed` shows the full card (services page); without it the card is a summary.
 import Icon from "./Icon.astro";
 import { services } from "../content";
-import { money, path, type Lang, t } from "../i18n";
+import { path, type Lang } from "../i18n";
 
 interface Props { lang: Lang; detailed?: boolean; only?: string[] }
 const { lang, detailed = false, only } = Astro.props;
-const ui = t(lang);
 const list = services[lang].filter((s) => !only || only.includes(s.key));
 const copy = {
-  es: { includes: "Incluye", excludes: "Aparte", forWho: "Para", launch: "Precio de lanzamiento", more: "Ver detalle", quote: "Cotizar" },
-  en: { includes: "Includes", excludes: "Not included", forWho: "For", launch: "Launch price", more: "See details", quote: "Get a quote" },
+  es: { includes: "Incluye", excludes: "Aparte", forWho: "Para", price: "Precio según su proyecto", more: "Ver detalle", quote: "Cotizar" },
+  en: { includes: "Includes", excludes: "Not included", forWho: "For", price: "Priced for your project", more: "See details", quote: "Get a quote" },
 }[lang];
-const unitLabel = { from: ui.price.from, perMonth: ui.price.perMonth, perHour: ui.price.perHour, fixed: "" };
 const anchor = (key: string) => (key === "hours" ? "exterior" : key);
 ---
-<div class:list={["services", { detailed }]}>
+<div class:list={["services", "balance", { detailed }]}>
   {list.map((s) => (
     <article class="card service reveal" id={detailed ? anchor(s.key) : undefined}>
       <div class="top">
@@ -31,20 +29,14 @@ const anchor = (key: string) => (key === "hours" ? "exterior" : key);
       {detailed && s.notIncluded.length > 0 && <h4>{copy.excludes}</h4>}
       {detailed && s.notIncluded.length > 0 && <ul class="dash-list">{s.notIncluded.map((item) => <li>{item}</li>)}</ul>}
       <div class="bottom">
-        <div>
-          <p class="price">
-            {s.unit === "from" && <small>{unitLabel.from} </small>}{money(s.price, lang)}
-            {(s.unit === "perMonth" || s.unit === "perHour") && <small> {unitLabel[s.unit]}</small>}
-          </p>
-          {s.launchPrice && <p class="launch small">{copy.launch}: <strong>{money(s.launchPrice, lang)}</strong></p>}
-        </div>
+        <p class="quoted small">{copy.price}</p>
         <a class="more" href={detailed ? path("quote", lang) : `${path("services", lang)}#${anchor(s.key)}`}>{detailed ? copy.quote : copy.more}<Icon name="arrow-right" /></a>
       </div>
     </article>
   ))}
 </div>
 <style>
-  .services { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+  .services { display: grid; gap: 1rem; }
   .service { display: flex; flex-direction: column; }
   .top { display: flex; justify-content: space-between; align-items: flex-start; }
   .top .badge :global(svg) { width: 13px; height: 13px; }
@@ -53,9 +45,9 @@ const anchor = (key: string) => (key === "hours" ? "exterior" : key);
   h4 { margin: 1.1rem 0 0.6rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
   .check-list { font-size: 0.95rem; }
   .dash-list { font-size: 0.92rem; }
-  .bottom { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--line); display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .bottom { margin-top: auto; padding-top: 1.1rem; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .detailed .bottom { margin-top: 1.5rem; }
-  .launch { margin: 0.2rem 0 0; color: var(--primary); }
+  .quoted { margin: 0; color: var(--muted); }
   .more { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; white-space: nowrap; }
   .more :global(svg) { width: 15px; height: 15px; transition: transform 150ms var(--ease); }
   .more:hover :global(svg) { transform: translateX(2px); }

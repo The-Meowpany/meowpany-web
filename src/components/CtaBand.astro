@@ -31,7 +31,8 @@ const whatsapp = whatsappLink(copy.whatsappText);
   /* Same cat as the rest of the page: it follows the theme. */
   .mark-dark { display: none; }
   .mark { animation: float 5s var(--ease) infinite; transform-origin: 50% 80%; }
-  @media (prefers-color-scheme: dark) { .mark-light { display: none; } .mark-dark { display: block; } }
+  :global([data-theme="dark"]) .mark-light { display: none; }
+  :global([data-theme="dark"]) .mark-dark { display: block; }
   .panel {
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
     padding: clamp(1.75rem, 4vw, 3rem); border-radius: 24px; color: #f3f0f2;
@@ -43,6 +44,5 @@ const whatsapp = whatsappLink(copy.whatsappText);
   .buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; }
   .on-dark { background: transparent; color: #ffffff; border-color: #4a454c; }
   .on-dark:hover { border-color: #ffffff; color: #ffffff; }
-  @media (prefers-color-scheme: dark) { .btn-primary { background: var(--brand); color: #1a0f14; } }
   @media (max-width: 860px) { .panel { grid-template-columns: 1fr; } .buttons { justify-content: flex-start; } }
 </style>
