@@ -3,7 +3,6 @@ import Icon from "./Icon.astro";
 import { path, type Lang, t } from "../i18n";
 import { whatsappLink } from "../site";
 import { withBase } from "../lib/url";
-import SparklePattern from "./SparklePattern.astro";
 
 interface Props { lang: Lang; title: string; text: string }
 const { lang, title, text } = Astro.props;
@@ -13,7 +12,6 @@ const whatsapp = whatsappLink(copy.whatsappText);
 <section class="cta">
   <div class="wrap">
     <div class="panel reveal">
-      <SparklePattern spacing={110} size={22} speed={14} opacity={0.12} />
       <img class="mark mark-light" src={withBase("/brand/mark.svg")} width="76" height="60" alt="" />
       <img class="mark mark-dark" src={withBase("/brand/mark-dark.svg")} width="76" height="60" alt="" />
       <div class="text">
@@ -34,7 +32,6 @@ const whatsapp = whatsappLink(copy.whatsappText);
   .mark-dark { display: none; }
   @media (prefers-color-scheme: dark) { .mark-light { display: none; } .mark-dark { display: block; } }
   .panel {
-    position: relative; isolation: isolate; overflow: hidden;
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
     padding: clamp(1.75rem, 4vw, 3rem); border-radius: 24px; color: #f3f0f2;
     background: radial-gradient(120% 140% at 0% 0%, rgb(202 103 142 / 28%), transparent 55%), var(--surface-dark);

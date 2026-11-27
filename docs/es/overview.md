@@ -47,7 +47,7 @@ Web3Forms y el correo como respaldo. Sumar un proveedor es sumar un adaptador, s
 | `src/lib/` | Lógica del navegador con pruebas unitarias. `leads.ts`, `audit.ts` y `estimator.ts` son los módulos `web-leads`, `web-audit` y `estimator` de meowpany-engineering (0.1.0); se cambian primero allí |
 | `src/news/` | Novedades en Markdown (`es/` y `en/`): un archivo nuevo es una novedad nueva, en el listado, en el RSS y en la portada |
 | `src/site.ts` → `availability` | Horario de llamadas, anticipación, horizonte y feriados de la agenda (`src/lib/slots.ts`) |
-| `src/views/Brand.astro` | El manual de marca (`/marca/`, `/en/brand/`); el patrón de destellos es `src/components/SparklePattern.astro` |
+| `src/views/Brand.astro` | El manual de marca (`/marca/`, `/en/brand/`) |
 | `src/styles/global.css` | El sistema de diseño, sobre los colores de la marca: rosa capucha #CA678E, carbón #433F45 y gris cálido |
 | `public/brand/` | Los activos reales de la marca, tomados de Core: el gato (SVG) y el logotipo (PNG, con una copia clara para fondos oscuros) |
 | `src/views/` | Diseños de página compartidos por las rutas en español y en inglés |

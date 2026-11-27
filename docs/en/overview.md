@@ -47,7 +47,7 @@ an email fallback. Adding a provider means adding an adapter, not touching the f
 | `src/lib/` | Browser logic with unit tests. `leads.ts`, `audit.ts` and `estimator.ts` are the `web-leads`, `web-audit` and `estimator` modules of meowpany-engineering (0.1.0); change them there first |
 | `src/news/` | News posts in Markdown (`es/` and `en/`); a new file is a new post, listed, in the RSS feed and on the home page |
 | `src/site.ts` → `availability` | Call hours, notice, horizon and holidays for the booking calendar (`src/lib/slots.ts`) |
-| `src/views/Brand.astro` | The brand book (`/marca/`, `/en/brand/`); the sparkle pattern is `src/components/SparklePattern.astro` |
+| `src/views/Brand.astro` | The brand book (`/marca/`, `/en/brand/`) |
 | `src/styles/global.css` | The design system, built on the brand colours: hood pink #CA678E, charcoal #433F45, warm grey |
 | `public/brand/` | The real brand assets from Core: the cat mark (SVG) and the wordmark (PNG, plus a light copy for dark backgrounds) |
 | `src/views/` | Page layouts shared by the Spanish and English routes |

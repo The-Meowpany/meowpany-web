@@ -1,7 +1,6 @@
 ---
-// The Meowpany brand book: logo, colour, type, pattern, voice and downloads, in one page.
+// The Meowpany brand book: logo, colour, type, imagery, voice and downloads, in one page.
 import Base from "../layouts/Base.astro";
-import SparklePattern from "../components/SparklePattern.astro";
 import { type Lang } from "../i18n";
 import { withBase } from "../lib/url";
 
@@ -10,7 +9,7 @@ const { lang } = Astro.props;
 const b = (file: string) => withBase(`/brand/${file}`);
 
 const colors = [
-  { name: "Rosa capucha / Hood pink", hex: "#CA678E", role: { es: "Color de la marca: el gato, el destello, los acentos.", en: "Brand colour: the cat, the sparkle, accents." }, ink: "#ffffff" },
+  { name: "Rosa capucha / Hood pink", hex: "#CA678E", role: { es: "Color de la marca: el gato y los acentos.", en: "Brand colour: the cat and accents." }, ink: "#ffffff" },
   { name: "Rosa 600", hex: "#B04F76", role: { es: "Botones y enlaces sobre blanco (contraste AA).", en: "Buttons and links on white (AA contrast)." }, ink: "#ffffff" },
   { name: "Rosa 50", hex: "#FBF1F5", role: { es: "Fondos de destacados y etiquetas.", en: "Highlight and tag backgrounds." }, ink: "#8f3d5f" },
   { name: "Carbón / Charcoal", hex: "#433F45", role: { es: "Texto secundario, el gato en modo oscuro.", en: "Secondary text, the cat in dark mode." }, ink: "#ffffff" },
@@ -21,10 +20,10 @@ const colors = [
 
 const copy = {
   es: {
-    title: "Marca", description: "Manual de marca de The Meowpany: logo, colores, tipografía, patrón, voz y tono, y archivos para descargar.",
+    title: "Marca", description: "Manual de marca de The Meowpany: logo, colores, tipografía, imágenes, voz y tono, y archivos para descargar.",
     eyebrow: "Manual de marca", h1: "La marca The Meowpany",
     lead: "Cómo se ve, cómo se escribe y cómo se usa. Para nuestro equipo, la prensa y cualquiera que trabaje con nosotros.",
-    toc: ["Logo", "Colores", "Tipografía", "Patrón", "Iconos e imágenes", "Voz y tono", "Descargas"],
+    toc: ["Logo", "Colores", "Tipografía", "Iconos e imágenes", "Voz y tono", "Descargas"],
     logo: {
       intro: "El logo tiene dos partes: el gato con capucha (el isotipo) y el nombre The Meowpany™ (el logotipo). Se usan juntos o el gato solo cuando el espacio es chico.",
       lightTab: "Modo claro", darkTab: "Modo oscuro",
@@ -39,23 +38,19 @@ const copy = {
       sample: "Su primera versión, funcionando en 72 horas", body: "Antes de invertir, prueba su idea convertida en software real. Si no lo convence, no sigue y no paga.",
       scale: ["Título principal: Fira Sans 800, de 38 a 66 px", "Títulos de sección: Fira Sans 700, de 28 a 42 px", "Texto: Inter 400, 16,5 px, interlineado 1,65", "Etiquetas: Inter 650, 12 px, mayúsculas con espaciado"],
     },
-    pattern: {
-      intro: "El destello de cuatro puntas, en rosa capucha, se repite en una grilla que avanza en diagonal. Cada destello «respira»: crece y se achica un 5 % y se balancea 5° en ciclos de 4 segundos.",
-      rules: ["Siempre detrás del contenido y con poca opacidad (entre 6 % y 15 %), salvo en piezas de marca como esta.", "Sobre gris cálido o carbón; nunca sobre fotos.", "Quieto para quien pide menos movimiento en su dispositivo."],
-    },
-    imagery: ["Iconos: Lucide, trazo uniforme de 2 px, en rosa 600 sobre rosa 50.", "Imágenes: capturas reales de proyectos y fotos del equipo. Nada de fotos genéricas de bancos de imágenes.", "Ilustraciones: el destello y el gato; sin personajes ni escenas inventadas."],
+    imagery: ["Iconos: Lucide, trazo uniforme de 2 px, en rosa 600 sobre rosa 50.", "Imágenes: capturas reales de proyectos y fotos del equipo. Nada de fotos genéricas de bancos de imágenes.", "Ilustraciones: el gato; sin personajes ni escenas inventadas."],
     voice: {
       intro: "Hablamos como un buen profesional que explica las cosas claras.",
       rules: [["Trato de usted", "En todo el sitio, propuestas y correos con clientes de Uruguay."], ["Concreto", "Plazos, precios y hechos en lugar de adjetivos: «72 horas», no «rapidísimo»."], ["Sin jerga", "Hablamos de los problemas del cliente (vender en línea, ahorrar tiempo), no de tecnologías."], ["Honesto", "Si algo no existe todavía, no lo mostramos: ni casos inventados ni logos de clientes que no tenemos."], ["Un guiño felino, a veces", "El gato puede aparecer en una página de error o un mensaje de éxito. Nunca en precios, contratos ni términos legales."]],
     },
-    downloads: "Archivos originales", files: [["Gato rosa (SVG)", "mark.svg"], ["Gato carbón (SVG)", "mark-dark.svg"], ["Logotipo carbón (PNG)", "wordmark-dark.png"], ["Logotipo claro (PNG)", "wordmark-light.png"], ["Destello (SVG)", "sparkle.svg"], ["Destello (PNG)", "sparkle.png"]],
+    downloads: "Archivos originales", files: [["Gato rosa (SVG)", "mark.svg"], ["Gato carbón (SVG)", "mark-dark.svg"], ["Logotipo carbón (PNG)", "wordmark-dark.png"], ["Logotipo claro (PNG)", "wordmark-light.png"]],
     copyHex: "Copiar", copied: "Copiado",
   },
   en: {
-    title: "Brand", description: "The Meowpany brand book: logo, colours, typography, pattern, voice and tone, and downloadable files.",
+    title: "Brand", description: "The Meowpany brand book: logo, colours, typography, imagery, voice and tone, and downloadable files.",
     eyebrow: "Brand book", h1: "The Meowpany brand",
     lead: "How it looks, how it writes and how it is used. For our team, the press and anyone working with us.",
-    toc: ["Logo", "Colours", "Typography", "Pattern", "Icons and imagery", "Voice and tone", "Downloads"],
+    toc: ["Logo", "Colours", "Typography", "Icons and imagery", "Voice and tone", "Downloads"],
     logo: {
       intro: "The logo has two parts: the hooded cat (the mark) and the name The Meowpany™ (the wordmark). Use them together, or the cat alone when space is tight.",
       lightTab: "Light mode", darkTab: "Dark mode",
@@ -70,24 +65,19 @@ const copy = {
       sample: "Your first version, working in 72 hours", body: "Before you invest, try your idea as real software. If it doesn't convince you, you stop and pay nothing.",
       scale: ["Main title: Fira Sans 800, 38 to 66 px", "Section titles: Fira Sans 700, 28 to 42 px", "Body: Inter 400, 16.5 px, line height 1.65", "Labels: Inter 650, 12 px, spaced capitals"],
     },
-    pattern: {
-      intro: "The four-point sparkle, in hood pink, repeats on a grid that drifts diagonally. Each sparkle breathes: it grows and shrinks 5 % and sways 5° on 4-second cycles.",
-      rules: ["Always behind content and faint (6 % to 15 % opacity), except in brand pieces like this one.", "On warm grey or charcoal, never on photos.", "Still for people who ask their device for less motion."],
-    },
-    imagery: ["Icons: Lucide, even 2 px stroke, in pink 600 on pink 50.", "Imagery: real project screenshots and team photos. No generic stock photos.", "Illustration: the sparkle and the cat; no made-up characters or scenes."],
+    imagery: ["Icons: Lucide, even 2 px stroke, in pink 600 on pink 50.", "Imagery: real project screenshots and team photos. No generic stock photos.", "Illustration: the cat; no made-up characters or scenes."],
     voice: {
       intro: "We talk like a good professional who explains things plainly.",
       rules: [["Concrete", "Timelines, prices and facts instead of adjectives: \"72 hours\", not \"super fast\"."], ["No jargon", "We talk about the client's problems (selling online, saving time), not technologies."], ["Honest", "If something doesn't exist yet, we don't show it: no made-up cases or logos of clients we don't have."], ["A feline wink, sometimes", "The cat may appear on an error page or a success message. Never in prices, contracts or legal terms."]],
     },
-    downloads: "Original files", files: [["Pink cat (SVG)", "mark.svg"], ["Charcoal cat (SVG)", "mark-dark.svg"], ["Charcoal wordmark (PNG)", "wordmark-dark.png"], ["Light wordmark (PNG)", "wordmark-light.png"], ["Sparkle (SVG)", "sparkle.svg"], ["Sparkle (PNG)", "sparkle.png"]],
+    downloads: "Original files", files: [["Pink cat (SVG)", "mark.svg"], ["Charcoal cat (SVG)", "mark-dark.svg"], ["Charcoal wordmark (PNG)", "wordmark-dark.png"], ["Light wordmark (PNG)", "wordmark-light.png"]],
     copyHex: "Copy", copied: "Copied",
   },
 }[lang];
-const ids = ["logo", "color", "type", "pattern", "imagery", "voice", "downloads"];
+const ids = ["logo", "color", "type", "imagery", "voice", "downloads"];
 ---
 <Base lang={lang} title={copy.title} description={copy.description}>
-  <header class="brand-hero">
-    <SparklePattern spacing={150} size={46} speed={22} opacity={1} />
+  <header class="page-head">
     <div class="wrap">
       <p class="eyebrow">{copy.eyebrow}</p>
       <h1>{copy.h1}</h1>
@@ -144,34 +134,24 @@ const ids = ["logo", "color", "type", "pattern", "imagery", "voice", "downloads"
     </div>
   </section>
 
-  <section class="section soft" id="pattern">
-    <div class="wrap">
-      <h2>{copy.toc[3]}</h2>
-      <p class="lead">{copy.pattern.intro}</p>
-      <div class="pattern-demo grey"><SparklePattern spacing={110} size={34} speed={20} opacity={1} /></div>
-      <div class="pattern-demo charcoal"><SparklePattern spacing={110} size={34} speed={20} opacity={0.9} /></div>
-      <ul class="check-list">{copy.pattern.rules.map((r) => <li><span>{r}</span></li>)}</ul>
-    </div>
-  </section>
-
-  <section class="section" id="imagery">
+  <section class="section soft" id="imagery">
     <div class="wrap narrow">
-      <h2>{copy.toc[4]}</h2>
+      <h2>{copy.toc[3]}</h2>
       <ul class="check-list">{copy.imagery.map((r) => <li><span>{r}</span></li>)}</ul>
     </div>
   </section>
 
-  <section class="section soft" id="voice">
+  <section class="section" id="voice">
     <div class="wrap">
-      <h2>{copy.toc[5]}</h2>
+      <h2>{copy.toc[4]}</h2>
       <p class="lead">{copy.voice.intro}</p>
       <dl class="voice">{copy.voice.rules.map(([t, d]) => <div class="card"><dt>{t}</dt><dd class="muted">{d}</dd></div>)}</dl>
     </div>
   </section>
 
-  <section class="section" id="downloads">
+  <section class="section soft" id="downloads">
     <div class="wrap">
-      <h2>{copy.toc[6]}</h2>
+      <h2>{copy.toc[5]}</h2>
       <ul class="files">{copy.files.map(([label, file]) => <li><a class="card file" href={b(file)} download><span>{label}</span><span class="muted small">{file}</span></a></li>)}</ul>
     </div>
   </section>
@@ -191,13 +171,9 @@ const ids = ["logo", "color", "type", "pattern", "imagery", "voice", "downloads"
 </script>
 
 <style>
-  .brand-hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(4rem, 9vw, 7rem) 0; background: linear-gradient(to bottom, #d9d9d9, #c8c8c8); color: #2b282d; }
-  .brand-hero h1 { color: #2b282d; }
-  .brand-hero .lead { color: #433f45; }
-  .brand-hero .eyebrow { background: rgb(255 255 255 / 70%); }
   .toc { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.75rem; }
-  .toc a { padding: 0.4rem 0.85rem; border-radius: 999px; background: rgb(255 255 255 / 80%); color: #2b282d; text-decoration: none; font-size: 0.9rem; font-weight: 550; }
-  .toc a:hover { background: #ffffff; }
+  .toc a { padding: 0.4rem 0.85rem; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink-2); text-decoration: none; font-size: 0.9rem; font-weight: 550; }
+  .toc a:hover { border-color: var(--ink-2); color: var(--ink); }
   .variants { margin: 2rem 0; max-width: 720px; }
   .switch { display: inline-flex; padding: 4px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); margin-bottom: 1rem; }
   .switch input { position: absolute; opacity: 0; pointer-events: none; }
@@ -226,9 +202,6 @@ const ids = ["logo", "color", "type", "pattern", "imagery", "voice", "downloads"
   .glyphs { color: var(--muted); font-size: 1.1rem; margin: 0; }
   .display-glyphs { font-family: var(--font-display); font-weight: 700; }
   .scale { margin-top: 1.5rem; }
-  .pattern-demo { position: relative; isolation: isolate; overflow: hidden; height: 240px; border-radius: var(--radius-lg); margin: 2rem 0 1rem; }
-  .pattern-demo.grey { background: linear-gradient(to bottom, #d9d9d9, #c8c8c8); }
-  .pattern-demo.charcoal { background: #2b282d; }
   .voice { margin: 2rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
   .voice dt { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin-bottom: 0.35rem; }
   .voice dd { margin: 0; }

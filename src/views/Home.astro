@@ -14,7 +14,6 @@ import Engagement from "../components/Engagement.astro";
 import Comparison from "../components/Comparison.astro";
 import Audiences from "../components/Audiences.astro";
 import Modular from "../components/Modular.astro";
-import SparklePattern from "../components/SparklePattern.astro";
 import { formatDate, newsPath, posts } from "../news";
 import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
@@ -81,7 +80,6 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
 <Base lang={lang} title="The Meowpany" description={copy.description}>
   <section class="hero">
     <div class="glow" aria-hidden="true"></div>
-    <SparklePattern opacity={0.07} />
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">{copy.eyebrow}</p>
@@ -266,7 +264,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
 </Base>
 
 <style>
-  .hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
+  .hero { position: relative; overflow: hidden; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
   .glow {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
