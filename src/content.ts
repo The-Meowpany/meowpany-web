@@ -172,7 +172,7 @@ export const commitments: Record<Lang, { icon: string; title: string; text: stri
     { icon: "presentation", title: "Avance que se puede ver", text: "Una demostración cada 2 semanas y un informe semanal con horas, tareas cumplidas y próximas." },
     { icon: "flask-conical", title: "Pruebas documentadas", text: "Cada requisito tiene sus pruebas; recibe un informe de lo probado en cada entrega." },
     { icon: "shield-check", title: "Garantía de 60 días", text: "Corregimos sin costo los errores de lo entregado durante 60 días desde la puesta en producción." },
-    { icon: "key-round", title: "Todo es suyo", text: "Al terminar le entregamos el código, los accesos, los manuales y la documentación." },
+    { icon: "key-round", title: "Todo es suyo", text: "Al terminar le entregamos el código, los accesos, los manuales y la documentación, con licencia perpetua sobre los módulos reutilizados." },
   ],
   en: [
     { icon: "file-check", title: "Scope in writing", text: "Before each stage you know exactly what gets built, with criteria to call it done." },
@@ -180,7 +180,7 @@ export const commitments: Record<Lang, { icon: string; title: string; text: stri
     { icon: "presentation", title: "Progress you can see", text: "A demo every 2 weeks and a weekly report with hours, finished and upcoming work." },
     { icon: "flask-conical", title: "Documented testing", text: "Every requirement has its tests; each delivery comes with a report of what was tested." },
     { icon: "shield-check", title: "60-day warranty", text: "We fix defects in what we delivered at no cost for 60 days after go-live." },
-    { icon: "key-round", title: "You own everything", text: "At the end you get the code, every credential, the manuals and the documentation." },
+    { icon: "key-round", title: "You own everything", text: "At the end you get the code, every credential, the manuals and the documentation, with a perpetual licence to the reused modules." },
   ],
 };
 
@@ -221,7 +221,8 @@ export const faq: Record<Lang, { q: string; a: string }[]> = {
     { q: "¿Cuánto tarda un proyecto?", a: "La primera versión, 72 horas desde que acordamos su alcance. Después: un sitio, de 2 a 3 semanas; una tienda, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
     { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos de más de USD 6.000 se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta, también en 3 cuotas. Los precios son en dólares; los clientes de Uruguay suman IVA (22 %)." },
     { q: "¿Qué es el precio de lanzamiento?", a: `Los primeros 5 clientes pagan USD ${launch.website} por un sitio (en lugar de USD ${prices.website.from}) y USD ${launch.store} por una tienda (en lugar de USD ${prices.store.from}), y tienen el primer mes de soporte gratis, a cambio de que publiquemos el caso y un testimonio.` },
-    { q: "¿Quién es dueño del código y del dominio?", a: "Usted. El dominio se registra a su nombre y, al terminar, le entregamos el código, los accesos y los manuales." },
+    { q: "¿Quién es dueño del código y del dominio?", a: "Usted. El dominio se registra a su nombre y lo desarrollado para su proyecto es suyo. Si incluimos módulos de nuestra biblioteca, recibe también su código fuente con una licencia perpetua para usarlo y modificarlo. Al terminar le entregamos el código, los accesos y los manuales." },
+    { q: "¿Trabajan con la tecnología que ya usamos?", a: "Sí. Elegimos la tecnología según su problema y lo que su empresa ya usa, y la acordamos con usted en la propuesta. Como las reglas de su negocio quedan separadas de la tecnología, también se pueden integrar con sus sistemas actuales." },
     { q: "¿Qué cubre la garantía?", a: "Durante 60 días desde la puesta en producción corregimos sin costo cualquier error de lo entregado, es decir, lo que no funciona como dice el alcance aprobado. Los cambios o funciones nuevas se cotizan aparte o se cubren con un plan de soporte." },
     { q: "¿Qué pasa después de la entrega?", a: "Puede seguir con un plan de soporte mensual, sin permanencia mínima, o sin él. Si no contrata soporte, el sistema sigue siendo suyo y puede mantenerlo quien usted elija." },
     { q: "¿Trabajan con empresas de fuera de Uruguay?", a: "Sí. Trabajamos en forma remota, facturamos en dólares y nuestro horario se superpone con el de la costa este de Estados Unidos." },
@@ -229,7 +230,8 @@ export const faq: Record<Lang, { q: string; a: string }[]> = {
   en: [
     { q: "How long does a project take?", a: "The first version, 72 hours from agreeing on its scope. Then a website takes 2 to 3 weeks, a store 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
     { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; projects over USD 6,000 are paid by milestones. We bill in US dollars." },
-    { q: "Who owns the code?", a: "You do. At hand-over you get the code, every credential and the manuals." },
+    { q: "Who owns the code?", a: "You do. What we build for your project is yours. If it includes modules from our library, you also get their source code with a perpetual licence to use and change it. At hand-over you get the code, every credential and the manuals." },
+    { q: "Can you work with the technology we already use?", a: "Yes. We pick the technology for your problem and what your company already runs, and agree on it in the proposal. Because your business rules are kept separate from the technology, they also integrate with your existing systems." },
     { q: "What does the warranty cover?", a: "For 60 days after go-live we fix, at no cost, anything delivered that doesn't work as the approved scope says. Changes and new features are quoted separately or covered by a support plan." },
     { q: "What happens after launch?", a: "You can continue with a monthly support plan, with no minimum term, or without one. Either way the system is yours." },
     { q: "How much do your working hours overlap with mine?", a: "Uruguay is 1 to 2 hours ahead of US Eastern time, so most of the working day overlaps." },
@@ -413,24 +415,34 @@ export const comparison = {
   },
 };
 
-/** Technologies the team works with today, by layer. */
-export const stack: Record<Lang, { area: string; items: string[] }[]> = {
-  es: [
-    { area: "Sitios web", items: ["Astro", "TypeScript", "HTML y CSS accesibles"] },
-    { area: "Aplicaciones", items: ["React", "Tauri (escritorio)", "Aplicaciones web progresivas"] },
-    { area: "Servidores y lógica", items: ["Rust", "Python y Django", "Node.js"] },
-    { area: "Datos", items: ["PostgreSQL", "SQLite"] },
-    { area: "Calidad y entrega", items: ["GitHub y GitHub Actions", "Pruebas automatizadas", "Despliegue continuo"] },
-    { area: "Integraciones", items: ["Mercado Pago y tarjetas", "Facturación electrónica (CFE)", "WhatsApp y correo"] },
-  ],
-  en: [
-    { area: "Websites", items: ["Astro", "TypeScript", "Accessible HTML and CSS"] },
-    { area: "Apps", items: ["React", "Tauri (desktop)", "Progressive web apps"] },
-    { area: "Back end", items: ["Rust", "Python and Django", "Node.js"] },
-    { area: "Data", items: ["PostgreSQL", "SQLite"] },
-    { area: "Quality and delivery", items: ["GitHub and GitHub Actions", "Automated testing", "Continuous deployment"] },
-    { area: "Integrations", items: ["Payments", "Uruguayan e-invoicing (CFE)", "WhatsApp and email"] },
-  ],
+/** How projects are engineered: a library of tested modules, each project still built to measure. */
+export const modular: Record<Lang, { intro: string; points: { icon: string; title: string; text: string }[]; modules: string[]; modulesTitle: string }> = {
+  es: {
+    intro: "No empezamos cada proyecto de cero. Mantenemos una biblioteca propia de módulos ya construidos, probados y documentados, y diseñamos a medida solo lo que su negocio tiene de único.",
+    points: [
+      { icon: "boxes", title: "Módulos probados", text: "Cada módulo tiene un contrato documentado (qué hace, qué no hace, sus límites), pruebas automáticas y número de versión. Un módulo entra a la biblioteca solo si pasa todas sus verificaciones." },
+      { icon: "puzzle", title: "A medida igual", text: "Los módulos resuelven lo común; las reglas de su negocio se construyen para usted. El resultado no es una plantilla con opciones: es su sistema." },
+      { icon: "layers", title: "El negocio separado de la tecnología", text: "Las reglas de su negocio no dependen de la base de datos, del proveedor de pagos ni de la pantalla. Cambiar uno de ellos no obliga a rehacer el resto." },
+      { icon: "timer", title: "Menos plazo, menos errores", text: "Lo que ya funciona en otros proyectos no se vuelve a escribir ni a depurar. Por eso podemos mostrarle una primera versión en 72 horas." },
+      { icon: "file-check-2", title: "Entrega verificable", text: "Cada entrega pasa por un proceso que revisa los archivos e incluye una suma de verificación de cada uno, para que pueda comprobar que recibió exactamente lo entregado." },
+      { icon: "key-round", title: "Sin dependencia de nosotros", text: "Recibe el código fuente completo, también el de los módulos de la biblioteca, con una licencia perpetua para usarlo y modificarlo." },
+    ],
+    modulesTitle: "Algunos módulos de la biblioteca",
+    modules: ["Importes y monedas exactos", "Cobros, pagos parciales y devoluciones", "Registro de auditoría a prueba de alteraciones", "Formularios y recepción de pedidos", "Auditoría web", "Estimación por puntos de función"],
+  },
+  en: {
+    intro: "We don't start each project from scratch. We keep our own library of modules that are already built, tested and documented, and design to measure only what is unique to your business.",
+    points: [
+      { icon: "boxes", title: "Tested modules", text: "Each module has a documented contract (what it does, what it doesn't, its limits), automated tests and a version number. A module joins the library only if it passes every check." },
+      { icon: "puzzle", title: "Still built to measure", text: "Modules cover what is common; your business rules are built for you. The result is not a template with options: it is your system." },
+      { icon: "layers", title: "Business separate from technology", text: "Your business rules don't depend on the database, the payment provider or the screens. Changing one of them doesn't mean rebuilding the rest." },
+      { icon: "timer", title: "Shorter timelines, fewer defects", text: "What already works in other projects isn't written or debugged again. That is how we can show you a first version within 72 hours." },
+      { icon: "file-check-2", title: "Verifiable delivery", text: "Every delivery goes through a process that reviews the files and includes a checksum for each one, so you can confirm you received exactly what was delivered." },
+      { icon: "key-round", title: "No lock-in", text: "You get the full source code, including the library modules, with a perpetual licence to use and change it." },
+    ],
+    modulesTitle: "Some modules in the library",
+    modules: ["Exact amounts and currencies", "Charges, partial payments and refunds", "Tamper-evident audit trail", "Forms and lead delivery", "Website audit", "Function point estimating"],
+  },
 };
 
 /** What the company is, in the footer and wherever a short presentation is needed. */

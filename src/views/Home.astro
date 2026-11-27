@@ -13,6 +13,7 @@ import Tools from "../components/Tools.astro";
 import Engagement from "../components/Engagement.astro";
 import Comparison from "../components/Comparison.astro";
 import Audiences from "../components/Audiences.astro";
+import Modular from "../components/Modular.astro";
 import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
 import { launch } from "../pricing";
@@ -41,6 +42,7 @@ const copy = {
     compareEyebrow: "Comparación", compareTitle: "Qué recibe con nosotros y qué con las alternativas", compareLead: "La misma pregunta que se haría usted antes de contratar, respondida con hechos.",
     audienceEyebrow: "Para quién", audienceTitle: "Trabajamos con empresas que ya venden y quieren hacerlo mejor", audienceLead: "Pymes de Uruguay de 5 a 99 personas y equipos del exterior.",
     methodology: "Ver la metodología completa",
+    modularEyebrow: "Ingeniería", modularTitle: "Software a medida, construido sobre piezas probadas", modularLead: "Nuestro protocolo de ingeniería modular: lo común ya está resuelto y verificado, y lo único de su negocio se diseña para usted.",
     faqTitle: "Preguntas frecuentes",
     ctaTitle: "Cuéntenos su idea", ctaText: `Treinta minutos alcanzan para saber qué incluiría su primera versión. Los primeros ${launch.clients} clientes tienen precio de lanzamiento.`,
   },
@@ -62,6 +64,7 @@ const copy = {
     compareEyebrow: "Comparison", compareTitle: "What you get with us, and with the alternatives", compareLead: "The question you would ask before hiring, answered with facts.",
     audienceEyebrow: "Who we work with", audienceTitle: "Companies that already sell and want to do it better", audienceLead: "Growing businesses, startups and agencies.",
     methodology: "See the full methodology",
+    modularEyebrow: "Engineering", modularTitle: "Custom software, built on proven parts", modularLead: "Our modular engineering protocol: what is common is already solved and verified, and what is unique to your business is designed for you.",
     faqTitle: "Frequently asked questions",
     ctaTitle: "Tell us your idea", ctaText: "Thirty minutes is enough to know what your first version would include.",
   },
@@ -154,6 +157,17 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   <section class="section">
     <div class="wrap">
       <div class="section-head">
+        <p class="eyebrow plain">{copy.modularEyebrow}</p>
+        <h2 class="reveal">{copy.modularTitle}</h2>
+        <p class="lead reveal">{copy.modularLead}</p>
+      </div>
+      <Modular lang={lang} />
+    </div>
+  </section>
+
+  <section class="section soft">
+    <div class="wrap">
+      <div class="section-head">
         <p class="eyebrow plain">{copy.compareEyebrow}</p>
         <h2 class="reveal">{copy.compareTitle}</h2>
         <p class="lead reveal">{copy.compareLead}</p>
@@ -162,7 +176,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
-  <section class="section soft">
+  <section class="section">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow plain">{copy.audienceEyebrow}</p>
@@ -173,7 +187,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
-  <section class="section">
+  <section class="section soft">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow plain">{copy.commitEyebrow}</p>
@@ -185,7 +199,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   </section>
 
   {lang === "es" && (
-    <section class="section soft">
+    <section class="section">
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow plain">{copy.factsEyebrow}</p>
@@ -197,7 +211,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </section>
   )}
 
-  <section class:list={["section", { soft: lang === "en" }]}>
+  <section class:list={["section", { soft: lang === "es" }]}>
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow plain">{copy.toolsEyebrow}</p>
@@ -208,7 +222,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
-  <section class:list={["section", { soft: lang === "es" }]}>
+  <section class:list={["section", { soft: lang === "en" }]}>
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow plain">{copy.supportEyebrow}</p>
@@ -219,7 +233,7 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
-  <section class="section">
+  <section class:list={["section", { soft: lang === "es" }]}>
     <div class="wrap faq-grid">
       <h2 class="reveal">{copy.faqTitle}</h2>
       <Faq lang={lang} items={questions} />

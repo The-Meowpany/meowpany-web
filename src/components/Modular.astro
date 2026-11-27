@@ -1,0 +1,35 @@
+---
+// How projects are engineered: the module library and what it means for the client.
+import Icon from "./Icon.astro";
+import { modular } from "../content";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const data = modular[lang];
+---
+<p class="intro">{data.intro}</p>
+<div class="points">
+  {data.points.map((point) => (
+    <article class="card reveal">
+      <span class="icon"><Icon name={point.icon} /></span>
+      <h3>{point.title}</h3>
+      <p class="muted">{point.text}</p>
+    </article>
+  ))}
+</div>
+<div class="library reveal">
+  <p class="label">{data.modulesTitle}</p>
+  <ul>{data.modules.map((name) => <li class="badge brand">{name}</li>)}</ul>
+</div>
+<style>
+  .intro { font-size: 1.08rem; color: var(--ink-2); max-width: 48rem; margin-bottom: 1.5rem; }
+  .points { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .icon { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; background: var(--brand-soft); color: var(--primary); border: 1px solid var(--brand-line); margin-bottom: 1rem; }
+  .icon :global(svg) { width: 20px; height: 20px; }
+  .points p { font-size: 0.95rem; }
+  .library { margin-top: 1.25rem; padding: 1.25rem 1.5rem; border: 1px dashed var(--line-strong); border-radius: var(--radius-lg); }
+  .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 650; margin-bottom: 0.75rem; }
+  .library ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .library li { margin: 0; font-size: 0.85rem; padding: 0.3rem 0.75rem; }
+</style>
