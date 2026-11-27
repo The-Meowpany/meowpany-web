@@ -1,4 +1,5 @@
 // Routes and shared interface text in both languages. Page content lives next to each view.
+import { withBase, withoutBase } from "./lib/url.ts";
 
 export type Lang = "es" | "en";
 export const languages: Lang[] = ["es", "en"];
@@ -18,6 +19,7 @@ export const routes = {
   estimate: { es: "/estimar/", en: "/en/estimate/" },
   roi: { es: "/retorno/", en: "/en/roi/" },
   book: { es: "/agendar/", en: "/en/book/" },
+  firstVersion: { es: "/#primera-version", en: "/en/#first-version" },
   privacy: { es: "/privacidad/", en: "/en/privacy/" },
   terms: { es: "/terminos/", en: "/en/terms/" },
 } as const;
@@ -28,8 +30,9 @@ export const ui = {
   es: {
     tagline: "Software a medida para pymes",
     skip: "Saltar al contenido",
-    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar una llamada" },
+    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar una llamada", firstVersion: "Véalo antes de pagar" },
     quote: "Cotizar",
+    seeItWorking: "Quiero verlo funcionando",
     menu: "Menú",
     close: "Cerrar",
     switchTo: "English",
@@ -51,8 +54,9 @@ export const ui = {
   en: {
     tagline: "Custom software for growing businesses",
     skip: "Skip to content",
-    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call" },
+    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "See it before you pay" },
     quote: "Get a quote",
+    seeItWorking: "I want to see it working",
     menu: "Menu",
     close: "Close",
     switchTo: "Español",
@@ -74,16 +78,18 @@ export const ui = {
 } as const;
 
 export const t = (lang: Lang) => ui[lang];
-export const path = (key: RouteKey, lang: Lang) => routes[key][lang];
+/** A route with the site's base path, ready for an href. */
+export const path = (key: RouteKey, lang: Lang) => withBase(routes[key][lang]);
 
 /** Finds the same page in the other language, so the language switch keeps the reader in place. */
 export function alternate(pathname: string, lang: Lang): string {
   const other: Lang = lang === "es" ? "en" : "es";
-  const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const local = withoutBase(pathname);
+  const normalized = local.endsWith("/") ? local : `${local}/`;
   for (const key of Object.keys(routes) as RouteKey[]) {
-    if (routes[key][lang] === normalized) return routes[key][other];
+    if (routes[key][lang] === normalized) return withBase(routes[key][other]);
   }
-  return routes.home[other];
+  return withBase(routes.home[other]);
 }
 
 export const money = (amount: number, lang: Lang) =>

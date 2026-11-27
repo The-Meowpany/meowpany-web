@@ -6,12 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:local": "MEOWPANY_LOCAL_BUILD=1 astro build",
     "preview": "astro preview",
     "check": "astro check",
     "postinstall": "node scripts/use-wasm-compiler.mjs",
     "telemetry-off": "astro telemetry disable",
-    "test": "node --test src/lib/*.test.ts"
+    "test": "node --experimental-strip-types --test src/lib/*.test.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.5",

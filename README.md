@@ -11,4 +11,5 @@ El sitio web público de The Meowpany: un sitio estático y bilingüe (español 
 
 ```sh
 npm ci --force && npm run dev   # http://localhost:4321
+npm test && npm run build       # unit tests, then the static site in dist/
 ```

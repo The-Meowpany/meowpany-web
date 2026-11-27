@@ -2,9 +2,8 @@
 import { faq } from "../content";
 import type { Lang } from "../i18n";
 
-interface Props { lang: Lang }
-const { lang } = Astro.props;
-const items = faq[lang];
+interface Props { lang: Lang; items?: readonly { q: string; a: string }[] }
+const { lang, items = faq[lang] } = Astro.props;
 const schema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",

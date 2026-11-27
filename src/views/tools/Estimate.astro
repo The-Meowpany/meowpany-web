@@ -1,9 +1,10 @@
 ---
-// Project estimator. The visitor describes the system in business terms; Core turns the answers
-// into function points with the same engine the team uses, and this page renders the proposal.
+// Project estimator. The visitor describes the system in business terms and src/lib/estimator.ts
+// turns the answers into function points, with the same rules and calibration the team uses in Core.
+// If the visitor leaves an email, the proposal is also delivered to the team (src/lib/leads.ts).
 import Base from "../../layouts/Base.astro";
 import { path, type Lang } from "../../i18n";
-import { site } from "../../site";
+import { services, site } from "../../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -29,7 +30,9 @@ const copy = {
     fn: "Función", type: "Tipo", weight: "Peso", size2: "Tamaño", effort: "Esfuerzo estimado", duration: "Duración estimada",
     price: "Rango de precio", points: "puntos de función", hours: "horas", weeks: "semanas con un equipo de 40 horas semanales",
     method: "Cómo se calculó",
-    terms: "Condiciones", termsList: ["Es una estimación previa: el precio cerrado se fija después de una reunión de relevamiento.", "50 % de anticipo y 50 % en la entrega; por hitos en proyectos de más de USD 6.000.", "Una demostración cada 2 semanas y garantía de 60 días.", "Clientes de Uruguay: + IVA."],
+    terms: "Condiciones", termsList: ["Es una estimación previa: el precio cerrado se fija después de una reunión de relevamiento.", "Antes de pagar nada, ve una primera versión funcional en 72 horas. Si no lo convence, no sigue y no paga.", "Si decide avanzar: 50 % al continuar y 50 % en la entrega; por hitos en proyectos de más de USD 6.000.", "Una demostración cada 2 semanas y garantía de 60 días.", "Clientes de Uruguay: + IVA."],
+    sent: "También le enviamos esta propuesta a nuestro equipo: lo contactamos en menos de un día hábil.",
+    drafted: "Abrimos su correo con la propuesta para enviárnosla. Así la revisamos con usted.",
     print: "Imprimir o guardar como PDF", book: "Agendar una llamada para cerrar el alcance", edit: "Modificar las respuestas",
     vat: "+ IVA",
   },
@@ -54,7 +57,9 @@ const copy = {
     fn: "Function", type: "Type", weight: "Weight", size2: "Size", effort: "Estimated effort", duration: "Estimated duration",
     price: "Price range", points: "function points", hours: "hours", weeks: "weeks with a 40-hour-a-week team",
     method: "How it was calculated",
-    terms: "Terms", termsList: ["This is a preliminary estimate: the fixed price is set after a discovery meeting.", "50 % up front and 50 % on delivery; milestones for projects over USD 6,000.", "A demo every 2 weeks and a 60-day warranty."],
+    terms: "Terms", termsList: ["This is a preliminary estimate: the fixed price is set after a discovery meeting.", "Before paying anything, you see a first working version within 72 hours. If it doesn't convince you, you stop and pay nothing.", "If you go ahead: 50 % to continue and 50 % on delivery; milestones for projects over USD 6,000.", "A demo every 2 weeks and a 60-day warranty."],
+    sent: "We also sent this proposal to our team: we'll reach out within one business day.",
+    drafted: "Your email app opened with the proposal, ready to send us so we can go through it with you.",
     print: "Print or save as PDF", book: "Book a call to settle the scope", edit: "Change the answers",
     vat: "",
   },
@@ -67,7 +72,7 @@ const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.com
       <h1>{copy.title}</h1>
       <p class="lead">{copy.lead}</p>
 
-      <form id="estimate-form" class="card" novalidate data-endpoint={`${site.coreUrl}/public/estimates/`}
+      <form id="estimate-form" class="card" novalidate data-email={site.email} data-inbox={services.web3formsKey}
         data-lang={lang} data-rows={JSON.stringify(rowText)}>
         <p><label>{copy.project}<br /><input name="project_name" required maxlength="150" placeholder={copy.projectHint} /></label></p>
 
@@ -121,6 +126,9 @@ const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.com
 </Base>
 
 <script>
+  import { COMPLEXITY_LABELS, estimate, InvalidAnswers, KIND_LABELS, type Answers, type Estimate } from "../../lib/estimator";
+  import { isBot, isEmail, leadSink } from "../../lib/leads";
+
   const form = document.getElementById("estimate-form") as HTMLFormElement;
   const output = document.getElementById("proposal") as HTMLElement;
   const status = form.querySelector<HTMLElement>("[data-status]")!;
@@ -177,28 +185,42 @@ const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.com
       .filter((item) => item.name);
   }
 
-  function render(result: any) {
+  type Proposal = Estimate & { reference: string; projectName: string };
+
+  // A short reference the visitor and the team can quote, without a server to number proposals.
+  const reference = () => {
+    const now = new Date();
+    const date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+    return `P-${date}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  };
+
+  function render(result: Proposal, note: string) {
+    const language = lang === "es" ? "es" : "en";
+    const number = (v: number) => v.toLocaleString(lang === "es" ? "es-UY" : "en-US");
     output.replaceChildren(
-      el("h2", `${text.proposal} ${result.proposal}: ${result.project_name}`),
+      el("h2", `${text.proposal} ${result.reference}: ${result.projectName}`),
       el("p", new Date().toLocaleDateString(lang === "es" ? "es-UY" : "en-US", { dateStyle: "long" })),
       el("table", [el("tbody", [
-        el("tr", [el("th", text.size2, { scope: "row" }), el("td", `${result.adjusted_points} ${text.points}`)]),
+        el("tr", [el("th", text.size2, { scope: "row" }), el("td", `${number(result.adjustedPoints)} ${text.points}`)]),
         el("tr", [el("th", text.effort, { scope: "row" }), el("td", `${result.hours} ${text.hours}`)]),
-        el("tr", [el("th", text.duration, { scope: "row" }), el("td", `${result.weeks} ${text.weeks}`)]),
-        el("tr", [el("th", text.price, { scope: "row" }), el("td", `${money(result.price_low_usd)} – ${money(result.price_high_usd)} ${text.vat}`)]),
+        el("tr", [el("th", text.duration, { scope: "row" }), el("td", `${number(result.weeks)} ${text.weeks}`)]),
+        el("tr", [el("th", text.price, { scope: "row" }), el("td", `${money(result.priceLow)} – ${money(result.priceHigh)} ${text.vat}`)]),
       ])]),
       el("h3", text.scope),
       el("table", [
         el("caption", text.functionsCaption),
         el("thead", [el("tr", [el("th", text.fn), el("th", text.type), el("th", text.weight)])]),
-        el("tbody", result.functions.map((f: any) => el("tr", [el("td", f.name), el("td", `${f.kind_label} · ${f.complexity}`), el("td", String(f.weight))]))),
+        el("tbody", result.functions.map((f) => el("tr", [
+          el("td", f.name), el("td", `${KIND_LABELS[language][f.kind]} · ${COMPLEXITY_LABELS[language][f.complexity]}`), el("td", String(f.weight)),
+        ]))),
       ]),
       el("h3", text.method),
       el("p", lang === "es"
-        ? `${result.unadjusted_points} puntos sin ajustar × factor de ajuste ${result.adjustment_factor} = ${result.adjusted_points} puntos ajustados. ${result.hours} horas a USD ${result.hourly_rate_usd} por hora.`
-        : `${result.unadjusted_points} unadjusted points × adjustment factor ${result.adjustment_factor} = ${result.adjusted_points} adjusted points. ${result.hours} hours at USD ${result.hourly_rate_usd} an hour.`),
+        ? `${result.unadjustedPoints} puntos sin ajustar × factor de ajuste ${number(result.adjustmentFactor)} = ${number(result.adjustedPoints)} puntos ajustados. ${result.hours} horas a USD ${result.hourlyRate} por hora.`
+        : `${result.unadjustedPoints} unadjusted points × adjustment factor ${number(result.adjustmentFactor)} = ${number(result.adjustedPoints)} adjusted points. ${result.hours} hours at USD ${result.hourlyRate} an hour.`),
       el("h3", text.terms),
       el("ul", text.termsList.map((term: string) => el("li", term))),
+      ...(note ? [el("p", note, { class: "notice" })] : []),
       el("p", [
         el("button", text.print, { type: "button", class: "btn btn-accent", "data-print": "" }), document.createTextNode(" "),
         el("a", text.book, { href: output.dataset.book!, class: "btn btn-ghost" }), document.createTextNode(" "),
@@ -215,37 +237,45 @@ const rowText = { remove: copy.remove, sizes: copy.sizes, complexities: copy.com
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (isBot(form)) return;
     const data = new FormData(form);
-    const projectName = String(data.get("project_name") ?? "").trim();
+    const projectName = String(data.get("project_name") ?? "").trim().slice(0, 150);
     if (!projectName) return form.querySelector<HTMLInputElement>("input[name=project_name]")!.focus();
-    const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
-    button.disabled = true;
-    status.textContent = text.running;
+    const answers: Answers = {
+      entities: collect("entities"), reports: collect("reports"), integrations: collect("integrations"),
+      online_payments: data.has("online_payments"), notifications: data.has("notifications"),
+      multiple_locations: data.has("multiple_locations"), multilingual: data.has("multilingual"),
+      roles: Number(data.get("roles") || 1), scale: String(data.get("scale")), logic: String(data.get("logic")),
+    };
+    let result: Proposal;
     try {
-      const response = await fetch(form.dataset.endpoint!, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          project_name: projectName, language: lang,
-          name: data.get("name"), company: data.get("company"), email: data.get("email"), website: data.get("website"),
-          answers: {
-            entities: collect("entities"), reports: collect("reports"), integrations: collect("integrations"),
-            online_payments: data.has("online_payments"), notifications: data.has("notifications"),
-            multiple_locations: data.has("multiple_locations"), multilingual: data.has("multilingual"),
-            roles: Number(data.get("roles") || 1), scale: data.get("scale"), logic: data.get("logic"),
-          },
-        }),
-      });
-      const body = await response.json();
-      if (!response.ok) {
-        const missing = body.fields?.entities === "required";
-        throw new Error(missing ? text.entities : text.fail);
-      }
-      status.textContent = "";
-      render(body);
+      result = { ...estimate(answers, lang === "es" ? "es" : "en"), reference: reference(), projectName };
     } catch (error) {
-      status.textContent = error instanceof Error && error.message !== "Failed to fetch" ? error.message : text.fail;
-    } finally {
-      button.disabled = false;
+      status.textContent = error instanceof InvalidAnswers && error.fields.entities === "required" ? text.entities : text.fail;
+      return;
     }
+    status.textContent = "";
+
+    let note = "";
+    const email = String(data.get("email") ?? "").trim();
+    if (isEmail(email)) {
+      const sink = leadSink({ web3formsKey: form.dataset.inbox ?? "", email: form.dataset.email ?? "" });
+      const delivery = await sink.send({
+        kind: "estimate", language: lang, name: String(data.get("name") ?? "").trim() || email, email,
+        company: String(data.get("company") ?? ""),
+        details: {
+          Proposal: result.reference, Project: projectName, "Adjusted points": result.adjustedPoints, Hours: result.hours,
+          "Price range (USD)": `${result.priceLow} - ${result.priceHigh}`,
+          Stores: answers.entities.map((e) => `${e.name} (${e.size})`).join(", "),
+          Reports: answers.reports.map((r) => `${r.name} (${r.complexity})`).join(", "),
+          Integrations: answers.integrations.map((i) => i.name).join(", "),
+          Extras: Object.entries({ payments: answers.online_payments, notifications: answers.notifications, locations: answers.multiple_locations, multilingual: answers.multilingual })
+            .filter(([, on]) => on).map(([key]) => key).join(", "),
+          Roles: answers.roles, Scale: answers.scale, Logic: answers.logic,
+        },
+      });
+      note = delivery === "sent" ? text.sent : text.drafted;
+    }
+    render(result, note);
   });
 </script>

@@ -6,6 +6,8 @@ import ProcessSteps from "../components/ProcessSteps.astro";
 import Faq from "../components/Faq.astro";
 import CtaBand from "../components/CtaBand.astro";
 import SupportPlans from "../components/SupportPlans.astro";
+import FirstVersion from "../components/FirstVersion.astro";
+import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
 
 interface Props { lang: Lang }
@@ -14,15 +16,15 @@ const ui = t(lang);
 
 const copy = {
   es: {
-    description: "Sitios, tiendas en línea y sistemas a medida para pymes de Uruguay, con precio cerrado, demostraciones cada 2 semanas y soporte real.",
-    eyebrow: "The Meowpany · Montevideo",
-    title: "Software para su pyme, con precio cerrado y soporte real",
-    lead: "Sitios, tiendas en línea y sistemas a medida que venden más y le ahorran tiempo. Usted sabe cuánto paga, ve el avance cada 2 semanas y el código es suyo.",
-    secondary: "Ver servicios",
+    description: "Desarrollamos su App o Software y lo ve funcionando en 72 horas, antes de pagar. Sistemas a medida, apps, tiendas y sitios para pymes, con precio cerrado y soporte real.",
+    eyebrow: "Desarrollo de apps y software · Montevideo",
+    title: ["Desarrollamos su", "App o Software", "y lo ve funcionando antes de pagar"],
+    lead: "En 72 horas tiene una primera versión funcional de su idea. La prueba, la muestra a su equipo y recién ahí decide si avanzamos. Sin anticipo y sin tarjeta.",
+    secondary: "Cómo funciona",
     promises: [
-      ["badge-check", "Precio cerrado antes de empezar"],
-      ["calendar", "Una demostración cada 2 semanas"],
-      ["shield-check", "Garantía de 60 días"],
+      ["rocket", "Primera versión en 72 horas"],
+      ["wallet", "Nada que pagar hasta verla funcionando"],
+      ["badge-check", "Precio cerrado si decide avanzar"],
       ["code-xml", "El código y los accesos son suyos"],
     ],
     servicesTitle: "Lo que hacemos",
@@ -37,15 +39,15 @@ const copy = {
     ctaText: "En 2 minutos obtiene un precio estimado. Respondemos en menos de un día hábil.",
   },
   en: {
-    description: "Websites, online stores and custom systems built in Uruguay, with fixed prices, a demo every 2 weeks and real support.",
-    eyebrow: "The Meowpany · Montevideo, Uruguay",
-    title: "Custom software with fixed prices and real support",
-    lead: "Websites, online stores and custom systems that sell more and save time. You know the price up front, see progress every 2 weeks and own the code.",
-    secondary: "See services",
+    description: "We build your app or software and you see it working within 72 hours, before you pay. Custom systems, apps, stores and websites from Uruguay, with fixed prices and real support.",
+    eyebrow: "App and software development · Montevideo, Uruguay",
+    title: ["We build your", "app or software", "and you see it working before you pay"],
+    lead: "Within 72 hours you get a first working version of your idea. Try it, show it to your team, and only then decide whether we go ahead. No deposit, no card.",
+    secondary: "How it works",
     promises: [
-      ["badge-check", "Fixed price before we start"],
-      ["calendar", "A demo every 2 weeks"],
-      ["shield-check", "60-day warranty"],
+      ["rocket", "First version in 72 hours"],
+      ["wallet", "Nothing to pay until you see it working"],
+      ["badge-check", "A fixed price if you go ahead"],
       ["code-xml", "You own the code and every credential"],
     ],
     servicesTitle: "What we do",
@@ -60,17 +62,20 @@ const copy = {
     ctaText: "Get an estimated price in 2 minutes. We reply within one business day.",
   },
 }[lang];
+
+// The offer's questions come first; the general payment question is replaced by the offer's own.
+const questions = [...firstVersion.faq[lang], ...faq[lang].slice(0, 1), ...faq[lang].slice(2)];
 ---
 <Base lang={lang} title="The Meowpany" description={copy.description}>
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">{copy.eyebrow}</p>
-        <h1>{copy.title}</h1>
+        <h1>{copy.title[0]} <span class="highlight">{copy.title[1]}</span> {copy.title[2]}</h1>
         <p class="lead">{copy.lead}</p>
         <div class="actions">
-          <a class="btn btn-accent" href={path("quote", lang)}>{ui.quote}<Icon name="arrow-right" /></a>
-          <a class="btn btn-ghost" href={path("services", lang)}>{copy.secondary}</a>
+          <a class="btn btn-accent" href={`${path("book", lang)}?for=prototype`}>{ui.seeItWorking}<Icon name="arrow-right" /></a>
+          <a class="btn btn-ghost" href={path("firstVersion", lang)}>{copy.secondary}<Icon name="arrow-down" /></a>
         </div>
       </div>
       <figure class="hero-art" aria-hidden="true">
@@ -80,7 +85,7 @@ const copy = {
           <g class="code" font-family="ui-monospace, monospace" font-size="15">
             <text x="68" y="112" fill="var(--primary)">const cat = new Meowpany();</text>
             <text x="68" y="140" fill="var(--muted)">{lang === "es" ? 'cat.build("su tienda");' : 'cat.build("your store");'}</text>
-            <text x="68" y="168" fill="var(--muted)">{lang === "es" ? 'cat.ship({ demo: "2 sem" });' : 'cat.ship({ demo: "2 wk" });'}</text>
+            <text x="68" y="168" fill="var(--muted)">{lang === "es" ? 'cat.ship({ demo: "72 h" });' : 'cat.ship({ demo: "72 h" });'}</text>
             <text x="68" y="196" fill="var(--muted)">cat.support(60);</text>
             <rect class="caret" x="68" y="210" width="10" height="18" fill="var(--accent)" />
           </g>
@@ -99,6 +104,8 @@ const copy = {
       </ul>
     </div>
   </section>
+
+  <FirstVersion lang={lang} id={lang === "es" ? "primera-version" : "first-version"} />
 
   <section class="section soft">
     <div class="wrap">
@@ -134,7 +141,7 @@ const copy = {
   <section class="section soft">
     <div class="wrap narrow">
       <h2 class="reveal">{copy.faqTitle}</h2>
-      <Faq lang={lang} />
+      <Faq lang={lang} items={questions} />
     </div>
   </section>
 
@@ -145,6 +152,10 @@ const copy = {
   .hero { padding: clamp(2.5rem, 7vw, 5.5rem) 0 2.5rem; }
   .hero-grid { display: grid; gap: 2rem; grid-template-columns: 1.15fr 0.85fr; align-items: center; }
   .hero-art { margin: 0; }
+  .highlight {
+    background: linear-gradient(100deg, var(--primary), color-mix(in srgb, var(--primary) 55%, #8b5cf6));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .hero-art svg { width: 100%; height: auto; filter: drop-shadow(0 12px 30px rgb(15 23 42 / 12%)); }
   .caret { animation: blink 1.1s steps(1) infinite; }
   .eyes { transform-origin: 40px 42px; animation: cat-blink 5s infinite; }

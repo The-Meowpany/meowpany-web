@@ -7,8 +7,8 @@ const { lang } = Astro.props;
 const copy = t(lang);
 const current = Astro.url.pathname;
 const links = lang === "es"
-  ? (["services", "pricing", "audit", "estimate", "process"] as const)
-  : (["services", "pricing", "hire", "audit", "estimate"] as const);
+  ? (["firstVersion", "services", "pricing", "audit", "estimate"] as const)
+  : (["firstVersion", "services", "pricing", "hire", "audit"] as const);
 ---
 <header class="site-header">
   <div class="wrap bar">

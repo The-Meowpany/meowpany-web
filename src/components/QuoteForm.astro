@@ -1,9 +1,9 @@
 ---
-// Three-step quote form. It shows an estimate from the published price list and sends the request
-// to Core, where it lands as a new lead. If Core cannot be reached, it offers email instead.
-import { type Lang } from "../i18n";
+// Three-step quote form. It shows an estimate from the published price list and delivers the
+// request through src/lib/leads.ts: straight to the company inbox, or as an email ready to send.
+import { path, type Lang } from "../i18n";
 import { prices } from "../pricing";
-import { site } from "../site";
+import { services, site } from "../site";
 
 interface Props { lang: Lang; preset?: string }
 const { lang, preset = "" } = Astro.props;
@@ -19,7 +19,8 @@ const copy = {
     estimate: "Precio estimado", from: "desde", perMonth: "por mes", note: "Es una estimación de la lista de precios. El precio final, cerrado, va en la propuesta. Clientes de Uruguay: + IVA.",
     next: "Siguiente", back: "Atrás", send: "Enviar pedido",
     sending: "Enviando...", ok: "Recibimos su pedido. Le responderemos en menos de un día hábil.",
-    fail: "No pudimos enviar el formulario. Escríbanos a", required: "Complete su nombre y un correo válido.",
+    drafted: "Abrimos su correo con el pedido ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
+    required: "Complete su nombre y un correo válido.",
     privacy: "Usamos sus datos solo para responderle. Ver la política de privacidad.",
   },
   en: {
@@ -32,17 +33,17 @@ const copy = {
     estimate: "Estimated price", from: "from", perMonth: "per month", note: "This is an estimate from our price list. The final, fixed price goes in the proposal.",
     next: "Next", back: "Back", send: "Send request",
     sending: "Sending...", ok: "Done! We got your request and will reply within one business day.",
-    fail: "We couldn't send the form. Please email us at", required: "Please add your name and a valid email.",
+    drafted: "Your email app opened with the request written out: just send it. If it didn't open, email us at",
+    required: "Please add your name and a valid email.",
     privacy: "We only use your details to reply to you. See our privacy policy.",
   },
 }[lang];
-const privacyHref = lang === "es" ? "/privacidad/" : "/en/privacy/";
+const privacyHref = path("privacy", lang);
 ---
 <form class="quote card" novalidate
-  data-endpoint={`${site.coreUrl}/sales/api/leads/`}
-  data-lang={lang} data-email={site.email}
+  data-lang={lang} data-email={site.email} data-inbox={services.web3formsKey}
   data-prices={JSON.stringify(prices)}
-  data-text={JSON.stringify({ from: copy.from, perMonth: copy.perMonth, sending: copy.sending, ok: copy.ok, fail: copy.fail, required: copy.required, send: copy.send })}>
+  data-text={JSON.stringify({ from: copy.from, perMonth: copy.perMonth, sending: copy.sending, ok: copy.ok, drafted: copy.drafted, required: copy.required, send: copy.send })}>
 
   <fieldset data-step="1">
     <legend>{copy.step1}</legend>
@@ -94,6 +95,7 @@ const privacyHref = lang === "es" ? "/privacidad/" : "/en/privacy/";
 
 <script>
   import { estimate, type QuoteInput, type ServiceKey } from "../pricing";
+  import { isBot, isEmail, leadSink } from "../lib/leads";
 
   for (const form of document.querySelectorAll<HTMLFormElement>("form.quote")) {
     const text = JSON.parse(form.dataset.text ?? "{}");
@@ -139,37 +141,33 @@ const privacyHref = lang === "es" ? "/privacidad/" : "/en/privacy/";
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const email = value("email").trim();
-      if (!value("name").trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (!value("name").trim() || !isEmail(email)) {
         status.textContent = text.required;
         status.className = "status error";
         return;
       }
+      if (isBot(form)) return;
       submit.disabled = true;
       submit.textContent = text.sending;
-      const payload = {
-        name: value("name"), company: value("company"), email, phone: value("phone"),
-        message: value("message"), service: service(), estimated_price_usd: current().amount,
-        language: lang, website: value("website"),
-      };
-      try {
-        const response = await fetch(form.dataset.endpoint!, {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-        });
-        if (!response.ok) throw new Error(String(response.status));
+      const sink = leadSink({ web3formsKey: form.dataset.inbox ?? "", email: form.dataset.email ?? "" });
+      const delivery = await sink.send({
+        kind: "quote", language: lang, name: value("name").trim(), email, company: value("company"), phone: value("phone"),
+        message: value("message"), details: { Service: service(), "Estimated price (USD)": current().amount },
+      });
+      if (delivery === "sent") {
         form.querySelectorAll("fieldset, .nav-buttons, .estimate").forEach((el) => el.setAttribute("hidden", ""));
         status.textContent = text.ok;
         status.className = "status ok";
-      } catch {
-        status.innerHTML = "";
-        status.append(`${text.fail} `);
+      } else {
+        status.replaceChildren(`${text.drafted} `);
         const link = document.createElement("a");
         link.href = `mailto:${form.dataset.email}`;
         link.textContent = form.dataset.email ?? "";
-        status.append(link);
-        status.className = "status error";
-        submit.disabled = false;
-        submit.textContent = text.send;
+        status.append(link, ".");
+        status.className = "status ok";
       }
+      submit.disabled = false;
+      submit.textContent = text.send;
     });
 
     render();

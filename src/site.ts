@@ -6,8 +6,19 @@ export const site = {
   whatsapp: "", // International format without "+" or spaces, e.g. "598991234567".
   linkedin: "https://www.linkedin.com/company/meowpany",
   city: "Montevideo, Uruguay",
-  // Core receives quote requests. A production build refuses to run without PUBLIC_CORE_URL (astro.config.mjs).
-  coreUrl: import.meta.env.PUBLIC_CORE_URL ?? "http://127.0.0.1:8000",
+};
+
+// The site is static, so the forms rely on services that work straight from the browser. Every key
+// here is public by design (each service ties it to the site's domain); none of them is a secret.
+// While a value is empty, that feature falls back to email (see src/lib/leads.ts).
+export const services = {
+  // Web3Forms delivers form submissions to the company inbox (https://web3forms.com, free plan).
+  web3formsKey: "",
+  // Cal.com public booking link, e.g. "https://cal.com/meowpany/30min" (free plan).
+  bookingUrl: "",
+  // Google PageSpeed Insights API key (free), restricted to the site's domain. Without one Google
+  // usually refuses with "quota exceeded", and the audit page offers email instead.
+  pagespeedKey: "",
 };
 
 export const whatsappLink = (text: string) =>

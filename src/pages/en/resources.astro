@@ -1,8 +1,9 @@
 ---
+import { path } from "../../i18n";
 import Simple from "../../views/Simple.astro";
 ---
 <Simple lang="en" title="Resources" description="Guides and a free website audit." lead="Practical guides and a free audit of your current website.">
   <h2>Free website audit</h2>
   <p>We review your current site for speed, mobile use, search visibility and security, and send a short report with the 5 most important fixes. No strings attached.</p>
-  <p><a class="btn btn-accent" href="/en/contact/">Request my audit</a></p>
+  <p><a class="btn btn-accent" href={path("contact", "en")}>Request my audit</a></p>
 </Simple>

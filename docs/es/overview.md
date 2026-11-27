@@ -1,15 +1,16 @@
 # The Meowpany · sitio web
 
 El sitio web público de The Meowpany: un sitio estático y bilingüe (español e inglés) hecho con
-[Astro](https://astro.build). Cada página lleva al formulario de cotización, que envía las solicitudes
-a [Core](https://github.com/the-meowpany/meowpany-core), la aplicación interna de la empresa.
+[Astro](https://astro.build), publicado en GitHub Pages. No tiene servidor propio: los formularios
+hablan con servicios gratuitos directamente desde el navegador y, si un servicio no está configurado
+o no responde, abren el programa de correo del visitante.
 
 ## Ejecutarlo
 
 ```sh
 npm ci --force       # ver abajo; también cambia al compilador WebAssembly en CPU sin AVX2
 npm run dev          # http://localhost:4321
-npm run build:local  # sitio estático en dist/, con los formularios apuntando a un Core local
+npm run build        # sitio estático en dist/
 npm run preview      # sirve dist/ en segundo plano; `npx astro preview stop` lo detiene
 ```
 
@@ -18,23 +19,20 @@ instalarlo en x64 sin esa opción. No cambia nada más en este proyecto (0 vulne
 conflictos de dependencias pares), pero también silenciaría un conflicto nuevo, así que revise
 `npm ls` después de agregar una dependencia.
 
-Una compilación de producción necesita la dirección de Core y no se ejecuta sin ella:
-
-```sh
-PUBLIC_CORE_URL=https://core.meowpany.com npm run build   # el origen debe estar permitido en public/_headers
-```
-
-Ejecute Core al mismo tiempo (`http://127.0.0.1:8000`) para probar el formulario de cotización de
-punta a punta.
+`SITE_URL` y `BASE_PATH` fijan la dirección pública para los enlaces canónicos y el mapa del sitio;
+el workflow de Pages los completa. Sin ellos, la compilación asume la raíz del dominio.
 
 ## Herramientas gratuitas
 
 | Página | Qué obtiene el visitante | Respaldada por |
 | --- | --- | --- |
-| `/auditoria/`, `/en/audit/` | Una auditoría real de su sitio, con las correcciones ordenadas por impacto | Core `POST /public/audits/` |
-| `/estimar/`, `/en/estimate/` | Una propuesta imprimible dimensionada con puntos de función IFPUG | Core `POST /public/estimates/` |
+| `/auditoria/`, `/en/audit/` | Una auditoría real de su sitio, con las correcciones ordenadas por impacto | `src/lib/audit.ts`: Google PageSpeed Insights desde el navegador |
+| `/estimar/`, `/en/estimate/` | Una propuesta imprimible dimensionada con puntos de función IFPUG | `src/lib/estimator.ts`, en el navegador, con la calibración de Core |
 | `/retorno/`, `/en/roi/` | Cuánto le cuesta el trabajo manual y en cuánto tiempo se recupera la inversión | `src/lib/roi.ts`, en el navegador |
-| `/agendar/`, `/en/book/` | Una llamada de 30 minutos en un horario libre, con invitación de calendario | Horarios y reservas de Core |
+| `/agendar/`, `/en/book/` | Una llamada de 30 minutos, o la primera versión funcional gratis (`?for=prototype`) | Enlace de Cal.com, o una solicitud por `src/lib/leads.ts` |
+
+Todos los formularios entregan por `src/lib/leads.ts`: un contrato `LeadSink` con un adaptador de
+Web3Forms y el correo como respaldo. Sumar un proveedor es sumar un adaptador, sin tocar los formularios.
 
 `npm test` ejecuta las pruebas unitarias de `src/lib/`.
 
@@ -43,20 +41,24 @@ punta a punta.
 | Ruta | Qué contiene |
 | --- | --- |
 | `src/i18n.ts` | Las rutas en ambos idiomas y los textos compartidos de la interfaz |
-| `src/content.ts` | Servicios, pasos del proceso y preguntas frecuentes en ambos idiomas |
+| `src/content.ts` | Servicios, pasos del proceso, preguntas frecuentes y la oferta de primera versión en ambos idiomas |
 | `src/pricing.ts` | Precios de lista y la estimación de la cotización. Los precios se cambian solo aquí |
-| `src/site.ts` | Correo, número de WhatsApp, LinkedIn y la URL de Core |
+| `src/site.ts` | Correo, número de WhatsApp, LinkedIn y las claves públicas de los servicios de formularios, agenda y auditoría |
+| `src/lib/` | Lógica del navegador con pruebas unitarias: estimador, auditoría, envío de solicitudes, retorno, enlaces con ruta base |
 | `src/views/` | Diseños de página compartidos por las rutas en español y en inglés |
 | `src/locales/es/` | Las páginas en español, con nombre en inglés según la página que reflejan; sus URL en español salen de `src/i18n.ts` |
 | `src/pages/` | La página de inicio en español y las rutas en inglés bajo `/en/` |
-| `public/_headers` | Encabezados de seguridad para Cloudflare Pages o Netlify |
+| `src/layouts/Base.astro` | La estructura de la página, incluida la Content-Security-Policy (Pages no puede enviar encabezados) |
 
 ## Antes de publicar
 
 - Configure el número de WhatsApp en `src/site.ts`; mientras esté vacío, los botones de WhatsApp
   quedan ocultos.
-- Compile con `PUBLIC_CORE_URL=https://core.meowpany.com npm run build` y agregue ese origen a
-  `connect-src` en `public/_headers`.
+- Cree una clave de acceso gratuita de Web3Forms para el correo de la empresa y póngala en
+  `services.web3formsKey` de `src/site.ts`. Mientras tanto, los formularios abren el correo del visitante.
+- Cree una clave gratuita de la API de PageSpeed Insights restringida al dominio del sitio y póngala
+  en `services.pagespeedKey`: sin ella, Google suele rechazar las auditorías por falta de cupo.
+- Opcional: un enlace de reservas de Cal.com (`services.bookingUrl`).
 - Inscriba la base de datos de contactos ante la URCDP antes de publicar el formulario (Ley 18.331).
 
 ## CPU antiguas
