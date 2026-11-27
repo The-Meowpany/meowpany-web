@@ -25,7 +25,7 @@ jobs:
           node-version: "26"
           cache: npm
       - id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       # --force only skips npm's platform check for the WebAssembly compiler package (see ci.yml).
       - run: npm ci --force
       - run: npm test
