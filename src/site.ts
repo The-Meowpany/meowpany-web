@@ -22,6 +22,19 @@ export const services = {
   pagespeedKey: "",
 };
 
+// When calls can be booked, in the team's time zone. The agenda shows these slots in the visitor's
+// own time zone; a request is confirmed by email, since a static site cannot lock a slot.
+export const availability = {
+  timeZone: "America/Montevideo",
+  days: [1, 2, 3, 4, 5], // Monday to Friday
+  from: "10:00",
+  until: "17:30", // last start, for calls that end at 18:00
+  slotMinutes: 30,
+  horizonDays: 21,
+  noticeHours: 24,
+  closed: ["2026-12-24", "2026-12-25", "2026-12-31", "2027-01-01", "2027-01-06"],
+};
+
 // One Gmail inbox, one alias per channel. Gmail delivers user+anything@gmail.com to user@gmail.com
 // and keeps the full address in "To", so a filter per alias files each message under its own label
 // (docs/es/email.md lists the aliases and the filters).

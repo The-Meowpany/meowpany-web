@@ -20,6 +20,8 @@ export const routes = {
   roi: { es: "/retorno/", en: "/en/roi/" },
   book: { es: "/agendar/", en: "/en/book/" },
   firstVersion: { es: "/#primera-version", en: "/en/#first-version" },
+  brand: { es: "/marca/", en: "/en/brand/" },
+  news: { es: "/novedades/", en: "/en/news/" },
   privacy: { es: "/privacidad/", en: "/en/privacy/" },
   terms: { es: "/terminos/", en: "/en/terms/" },
 } as const;
@@ -30,7 +32,7 @@ export const ui = {
   es: {
     tagline: "Webs, tiendas y software a medida para pymes",
     skip: "Saltar al contenido",
-    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis" },
+    nav: { services: "Servicios", work: "Casos", pricing: "Precios", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis", brand: "Marca", news: "Novedades" },
     quote: "Cotizar",
     seeItWorking: "Quiero verlo funcionando",
     menu: "Menú",
@@ -54,7 +56,7 @@ export const ui = {
   en: {
     tagline: "Websites, stores and custom software",
     skip: "Skip to content",
-    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version" },
+    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version", brand: "Brand", news: "News" },
     quote: "Get a quote",
     seeItWorking: "I want to see it working",
     menu: "Menu",
@@ -86,6 +88,8 @@ export function alternate(pathname: string, lang: Lang): string {
   const other: Lang = lang === "es" ? "en" : "es";
   const local = withoutBase(pathname);
   const normalized = local.endsWith("/") ? local : `${local}/`;
+  // Posts have their own slug in each language: the switch leads to the other language's news.
+  if (normalized.startsWith(routes.news[lang]) && normalized !== routes.news[lang]) return withBase(routes.news[other]);
   for (const key of Object.keys(routes) as RouteKey[]) {
     if (routes[key][lang] === normalized) return withBase(routes[key][other]);
   }

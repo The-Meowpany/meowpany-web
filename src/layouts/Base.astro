@@ -74,6 +74,7 @@ const contentPolicy = [
     <meta property="og:locale" content={lang === "es" ? "es_UY" : "en_US"} />
     <meta property="og:locale:alternate" content={otherLang === "es" ? "es_UY" : "en_US"} />
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#content">{t(lang).skip}</a>

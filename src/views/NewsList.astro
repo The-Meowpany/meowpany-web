@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import { formatDate, newsPath, posts } from "../news";
+import { withBase } from "../lib/url";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const copy = {
+  es: { title: "Novedades", description: "Novedades de The Meowpany: lanzamientos, método de trabajo y guías para pymes.", lead: "Lanzamientos, cómo trabajamos y guías prácticas. Sin relleno.", rss: "Suscribirse por RSS", read: "Leer" },
+  en: { title: "News", description: "News from The Meowpany: launches, how we work and practical guides.", lead: "Launches, how we work and practical guides. No filler.", rss: "Subscribe via RSS", read: "Read" },
+}[lang];
+const list = posts(lang);
+const feed = withBase(lang === "es" ? "/novedades/rss.xml" : "/en/news/rss.xml");
+---
+<Base lang={lang} title={copy.title} description={copy.description}>
+  <link slot="head" rel="alternate" type="application/rss+xml" title={`The Meowpany · ${copy.title}`} href={feed} />
+  <header class="page-head">
+    <div class="wrap">
+      <p class="eyebrow">{copy.title}</p>
+      <h1>{copy.title}</h1>
+      <p class="lead">{copy.lead}</p>
+      <div class="actions"><a class="btn btn-ghost btn-sm" href={feed}>{copy.rss}</a></div>
+    </div>
+  </header>
+  <section class="section">
+    <div class="wrap">
+      <ol class="posts">
+        {list.map((post) => (
+          <li class="reveal">
+            <a class="card post" href={newsPath(lang, post.slug)}>
+              <p class="meta"><span class="badge brand">{post.tag}</span><time datetime={post.date.toISOString().slice(0, 10)}>{formatDate(post.date, lang)}</time></p>
+              <h2>{post.title}</h2>
+              <p class="muted">{post.summary}</p>
+              <span class="read">{copy.read} →</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Base>
+<style>
+  .posts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+  .post { display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; }
+  .meta { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--muted); }
+  .post h2 { font-size: 1.35rem; margin: 0.25rem 0 0.6rem; }
+  .read { margin-top: auto; color: var(--primary); font-weight: 600; font-size: 0.92rem; }
+</style>

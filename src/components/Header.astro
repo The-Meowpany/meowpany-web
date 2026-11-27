@@ -8,8 +8,8 @@ const { lang } = Astro.props;
 const copy = t(lang);
 const current = Astro.url.pathname;
 const links = lang === "es"
-  ? (["services", "firstVersion", "process", "pricing", "about"] as const)
-  : (["services", "firstVersion", "hire", "pricing", "about"] as const);
+  ? (["services", "firstVersion", "process", "pricing", "news", "about"] as const)
+  : (["services", "firstVersion", "hire", "pricing", "news", "about"] as const);
 const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
 ---
 <header class="site-header">
@@ -68,7 +68,7 @@ const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
   .nav ul { display: flex; gap: 0.1rem; list-style: none; margin: 0 auto; padding: 0; }
   .nav ul a {
     display: inline-flex; align-items: center; min-height: 38px; padding: 0 0.75rem; border-radius: 9px;
-    color: var(--muted); text-decoration: none; font-size: 0.94rem; font-weight: 500; transition: color 150ms, background-color 150ms;
+    color: var(--muted); text-decoration: none; font-size: 0.93rem; font-weight: 500; white-space: nowrap; transition: color 150ms, background-color 150ms;
   }
   .nav ul a:hover { color: var(--ink); background: var(--soft); }
   .nav ul a[aria-current="page"] { color: var(--ink); }
@@ -84,7 +84,7 @@ const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
   .bars::before { top: -4.5px; }
   .bars::after { top: 4.5px; }
 
-  @media (max-width: 1020px) {
+  @media (max-width: 1180px) {
     .toggle { display: inline-flex; }
     .nav {
       display: none; position: fixed; inset: 66px 0 0 0; background: var(--bg); padding: 1.25rem 20px 2rem;

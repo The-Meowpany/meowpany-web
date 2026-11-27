@@ -14,6 +14,8 @@ import Engagement from "../components/Engagement.astro";
 import Comparison from "../components/Comparison.astro";
 import Audiences from "../components/Audiences.astro";
 import Modular from "../components/Modular.astro";
+import SparklePattern from "../components/SparklePattern.astro";
+import { formatDate, newsPath, posts } from "../news";
 import { faq, firstVersion } from "../content";
 import { path, type Lang, t } from "../i18n";
 import { launch } from "../pricing";
@@ -43,6 +45,7 @@ const copy = {
     audienceEyebrow: "Para quién", audienceTitle: "Trabajamos con empresas que ya venden y quieren hacerlo mejor", audienceLead: "Pymes de Uruguay de 5 a 99 personas y equipos del exterior.",
     methodology: "Ver la metodología completa",
     modularEyebrow: "Ingeniería", modularTitle: "Software a medida, construido sobre piezas probadas", modularLead: "Nuestro protocolo de ingeniería modular: lo común ya está resuelto y verificado, y lo único de su negocio se diseña para usted.",
+    newsEyebrow: "Novedades", newsTitle: "Lo último", newsAll: "Ver todas las novedades",
     faqTitle: "Preguntas frecuentes",
     ctaTitle: "Cuéntenos su idea", ctaText: `Treinta minutos alcanzan para saber qué incluiría su primera versión. Los primeros ${launch.clients} clientes tienen precio de lanzamiento.`,
   },
@@ -65,17 +68,20 @@ const copy = {
     audienceEyebrow: "Who we work with", audienceTitle: "Companies that already sell and want to do it better", audienceLead: "Growing businesses, startups and agencies.",
     methodology: "See the full methodology",
     modularEyebrow: "Engineering", modularTitle: "Custom software, built on proven parts", modularLead: "Our modular engineering protocol: what is common is already solved and verified, and what is unique to your business is designed for you.",
+    newsEyebrow: "News", newsTitle: "Latest", newsAll: "See all news",
     faqTitle: "Frequently asked questions",
     ctaTitle: "Tell us your idea", ctaText: "Thirty minutes is enough to know what your first version would include.",
   },
 }[lang];
 
 // The offer's questions first; the general payment question is replaced by the offer's own.
+const latest = posts(lang).slice(0, 3);
 const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pag|pay/i.test(item.q.slice(0, 12)))];
 ---
 <Base lang={lang} title="The Meowpany" description={copy.description}>
   <section class="hero">
     <div class="glow" aria-hidden="true"></div>
+    <SparklePattern opacity={0.07} />
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">{copy.eyebrow}</p>
@@ -240,11 +246,27 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
     </div>
   </section>
 
+  <section class:list={["section", { soft: lang === "en" }]}>
+    <div class="wrap">
+      <div class="news-head">
+        <div><p class="eyebrow plain">{copy.newsEyebrow}</p><h2 class="reveal">{copy.newsTitle}</h2></div>
+        <a class="btn btn-ghost btn-sm" href={newsPath(lang)}>{copy.newsAll}</a>
+      </div>
+      <ol class="latest">
+        {latest.map((post) => (
+          <li class="reveal"><a class="card" href={newsPath(lang, post.slug)}>
+            <p class="news-meta"><span class="badge brand">{post.tag}</span>{formatDate(post.date, lang)}</p>
+            <h3>{post.title}</h3><p class="muted">{post.summary}</p></a></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
   <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
 </Base>
 
 <style>
-  .hero { position: relative; overflow: hidden; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
+  .hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
   .glow {
     position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
@@ -295,6 +317,12 @@ const questions = [...firstVersion.faq[lang], ...faq[lang].filter((item) => !/pa
   .rows i:nth-child(3) { width: 64%; }
 
   .more-link { margin: 1.5rem 0 0; }
+  .news-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .news-head h2 { margin: 0; }
+  .latest { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .latest a { display: block; height: 100%; text-decoration: none; color: inherit; }
+  .latest p.muted { font-size: 0.95rem; }
+  .news-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--muted); }
   .faq-grid { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 2rem 4rem; align-items: start; }
   @media (max-width: 920px) {
     .hero-grid, .faq-grid { grid-template-columns: 1fr; }

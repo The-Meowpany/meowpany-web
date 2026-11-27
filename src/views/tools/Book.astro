@@ -1,38 +1,50 @@
 ---
-// Book a 30-minute intro call. With a booking link set in src/site.ts the visitor picks a free slot
-// there; the request form below always works too and reaches the team through src/lib/leads.ts.
-// "?for=prototype" preselects the free first working version, the entry point of that offer.
+// Interactive agenda for a 30-minute intro call. Slots come from the weekly availability in
+// src/site.ts (src/lib/slots.ts) and are shown in the visitor's time zone. A static site cannot lock
+// a slot, so the request reaches the team through src/lib/leads.ts and is confirmed by email; the
+// visitor can hold the time in their calendar meanwhile. "?for=prototype" preselects the free first
+// working version, the entry point of that offer.
 import Base from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 import type { Lang } from "../../i18n";
-import { inbox, services } from "../../site";
+import { availability, inbox, services } from "../../site";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = {
   es: {
-    title: "Agendar una llamada", description: "Reserve 30 minutos con The Meowpany para hablar de su proyecto, sin ir y venir de correos.",
+    title: "Agendar una llamada", description: "Elija día y hora para una videollamada de 30 minutos con The Meowpany, en su zona horaria.",
     lead: "Una videollamada de 30 minutos para entender qué quiere resolver. Si busca la primera versión funcional gratis, en esta llamada acordamos qué va a incluir.",
-    pick: "Elegir un horario libre", pickText: "Vea los horarios disponibles en su zona horaria y reserve en un paso. Recibe la invitación para su calendario.",
-    or: "¿Prefiere que lo contactemos nosotros?",
+    stepDay: "1. Elija el día", stepTime: "2. Elija la hora", stepYou: "3. Sus datos",
+    zone: "Horarios en su zona horaria", noDay: "Elija un día del calendario.", none: "No hay horarios libres ese día.",
+    weekdays: ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"], prev: "Semanas anteriores", next: "Semanas siguientes",
+    chosen: "Llamada elegida", team: "en Montevideo",
     reason: "Motivo", reasons: { prototype: "Quiero ver mi App o Software funcionando antes de pagar", quote: "Quiero un presupuesto", other: "Otra consulta" },
-    name: "Nombre", company: "Empresa (opcional)", email: "Correo", phone: "Teléfono o WhatsApp (opcional)",
-    topic: "Cuéntenos su idea en pocas líneas", when: "¿Cuándo le queda bien? (opcional)", whenHint: "Por ejemplo: martes o jueves de tarde",
-    submit: "Pedir la llamada", sending: "Enviando...", required: "Complete su nombre y un correo válido.",
-    sent: "Listo. Le escribimos en menos de un día hábil para confirmar el horario.",
-    drafted: "Abrimos su correo con el pedido ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
+    name: "Nombre", company: "Empresa (opcional)", email: "Correo", phone: "Teléfono o WhatsApp (opcional)", topic: "Cuéntenos su idea en pocas líneas",
+    submit: "Pedir esta llamada", sending: "Enviando...", required: "Elija un horario y complete su nombre y un correo válido.",
+    sentTitle: "Pedido recibido", sent: "Le escribimos en menos de un día hábil para confirmar la llamada y enviarle el enlace de la videollamada. Mientras tanto, puede reservar el horario en su calendario.",
+    draftedTitle: "Falta un paso", drafted: "Abrimos su correo con el pedido ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
+    google: "Agregar a Google Calendar", ics: "Descargar para otro calendario", eventTitle: "Llamada con The Meowpany (por confirmar)",
+    eventText: "Videollamada de 30 minutos. Le confirmamos por correo y le enviamos el enlace.",
+    note: "Llamadas de lunes a viernes, de 10:00 a 18:00 de Montevideo, con al menos 24 horas de anticipación. El horario queda reservado cuando lo confirmamos por correo.",
+    alt: "¿Prefiere otro canal?", altCal: "Reservar en nuestro calendario en línea",
   },
   en: {
-    title: "Book a call", description: "Book 30 minutes with The Meowpany to talk about your project, without the email back-and-forth.",
+    title: "Book a call", description: "Pick a day and time for a 30-minute video call with The Meowpany, in your time zone.",
     lead: "A 30-minute video call to understand what you want to solve. If you are after the free first working version, this is where we agree on what it will include.",
-    pick: "Pick a free slot", pickText: "See the available times in your time zone and book in one step. You get a calendar invitation.",
-    or: "Would you rather we reach out?",
+    stepDay: "1. Pick a day", stepTime: "2. Pick a time", stepYou: "3. Your details",
+    zone: "Times in your time zone", noDay: "Pick a day on the calendar.", none: "No free times that day.",
+    weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], prev: "Earlier weeks", next: "Later weeks",
+    chosen: "Your call", team: "in Montevideo",
     reason: "Reason", reasons: { prototype: "I want to see my app or software working before paying", quote: "I want a quote", other: "Something else" },
-    name: "Name", company: "Company (optional)", email: "Email", phone: "Phone or WhatsApp (optional)",
-    topic: "Tell us your idea in a few lines", when: "When suits you? (optional)", whenHint: "For example: Tuesday or Thursday afternoon",
-    submit: "Request the call", sending: "Sending...", required: "Please add your name and a valid email.",
-    sent: "Done. We'll write within one business day to confirm the time.",
-    drafted: "Your email app opened with the request written out: just send it. If it didn't open, email us at",
+    name: "Name", company: "Company (optional)", email: "Email", phone: "Phone (optional)", topic: "Tell us your idea in a few lines",
+    submit: "Request this call", sending: "Sending...", required: "Pick a time and add your name and a valid email.",
+    sentTitle: "Request received", sent: "We'll write within one business day to confirm the call and send the video link. Meanwhile, you can hold the time in your calendar.",
+    draftedTitle: "One more step", drafted: "Your email app opened with the request written out: just send it. If it didn't open, email us at",
+    google: "Add to Google Calendar", ics: "Download for another calendar", eventTitle: "Call with The Meowpany (to be confirmed)",
+    eventText: "30-minute video call. We'll confirm by email and send the link.",
+    note: "Calls Monday to Friday, 10:00 to 18:00 Montevideo time (1 to 2 hours ahead of US Eastern), booked at least 24 hours ahead. The time is held once we confirm it by email.",
+    alt: "Prefer another way?", altCal: "Book on our online calendar",
   },
 }[lang];
 ---
@@ -45,84 +57,247 @@ const copy = {
     </div>
   </header>
   <section class="section">
-    <div class="wrap narrow">
-
-      {services.bookingUrl && (
-        <div class="card pick">
-          <h2>{copy.pick}</h2>
-          <p>{copy.pickText}</p>
-          <p><a class="btn btn-accent" href={services.bookingUrl} target="_blank" rel="noopener">{copy.pick}<Icon name="arrow-up-right" /></a></p>
+    <div class="wrap">
+      <div id="agenda" class="agenda" data-lang={lang} data-availability={JSON.stringify(availability)} data-text={JSON.stringify(copy)}
+        data-email={inbox("llamadas")} data-email-prototype={inbox("primeraversion")} data-inbox={services.web3formsKey}>
+        <div class="card pane">
+          <div class="pane-head">
+            <h2 class="step">{copy.stepDay}</h2>
+            <div class="arrows">
+              <button type="button" data-prev aria-label={copy.prev}><Icon name="chevron-left" /></button>
+              <button type="button" data-next aria-label={copy.next}><Icon name="chevron-right" /></button>
+            </div>
+          </div>
+          <p class="month" data-month></p>
+          <div class="weekdays" aria-hidden="true">{copy.weekdays.map((d) => <span>{d}</span>)}</div>
+          <div class="days" role="grid" data-days></div>
         </div>
-      )}
 
-      {services.bookingUrl && <h2 class="or">{copy.or}</h2>}
-      <form id="book-form" class="card" novalidate data-lang={lang} data-email={inbox("llamadas")} data-email-prototype={inbox("primeraversion")} data-inbox={services.web3formsKey}
-        data-text={JSON.stringify(copy)}>
-        <p><label>{copy.reason}<br />
-          <select name="reason">{Object.entries(copy.reasons).map(([value, label]) => <option value={value}>{label}</option>)}</select></label></p>
-        <p><label>{copy.name}<br /><input name="name" autocomplete="name" required maxlength="200" /></label></p>
-        <p><label>{copy.company}<br /><input name="company" autocomplete="organization" maxlength="200" /></label></p>
-        <p><label>{copy.email}<br /><input name="email" type="email" autocomplete="email" required maxlength="254" /></label></p>
-        <p><label>{copy.phone}<br /><input name="phone" type="tel" autocomplete="tel" maxlength="40" /></label></p>
-        <p><label>{copy.topic}<br /><textarea name="message" rows="4" maxlength="4000"></textarea></label></p>
-        <p><label>{copy.when}<br /><input name="when" maxlength="200" placeholder={copy.whenHint} /></label></p>
-        <p hidden><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></p>
-        <p><button class="btn btn-accent" type="submit">{copy.submit}</button></p>
-        <p role="status" aria-live="polite" data-status></p>
-      </form>
+        <div class="card pane">
+          <h2 class="step">{copy.stepTime}</h2>
+          <p class="zone muted small" data-zone>{copy.zone}</p>
+          <p class="day-label" data-day-label>{copy.noDay}</p>
+          <div class="times" data-times role="radiogroup" aria-label={copy.stepTime}></div>
+        </div>
+
+        <form class="card pane" novalidate data-form>
+          <h2 class="step">{copy.stepYou}</h2>
+          <div class="chosen" data-chosen hidden>
+            <span class="label">{copy.chosen}</span>
+            <strong data-chosen-local></strong>
+            <span class="muted small" data-chosen-team></span>
+          </div>
+          <label>{copy.reason}
+            <select name="reason">{Object.entries(copy.reasons).map(([value, label]) => <option value={value}>{label}</option>)}</select></label>
+          <label>{copy.name}<input name="name" autocomplete="name" required maxlength="200" /></label>
+          <label>{copy.email}<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+          <label>{copy.company}<input name="company" autocomplete="organization" maxlength="200" /></label>
+          <label>{copy.phone}<input name="phone" type="tel" autocomplete="tel" maxlength="40" /></label>
+          <label>{copy.topic}<textarea name="message" rows="3" maxlength="4000"></textarea></label>
+          <label hidden>Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+          <button class="btn btn-primary" type="submit">{copy.submit}<Icon name="arrow-right" /></button>
+          <p class="status" role="status" aria-live="polite" data-status></p>
+        </form>
+      </div>
+
+      <div class="done card" data-done hidden tabindex="-1">
+        <span class="done-icon"><Icon name="calendar-check" /></span>
+        <h2 data-done-title></h2>
+        <p data-done-text></p>
+        <p class="done-when" data-done-when></p>
+        <div class="actions" data-done-actions>
+          <a class="btn btn-primary" data-google target="_blank" rel="noopener">{copy.google}</a>
+          <a class="btn btn-ghost" data-ics download="the-meowpany-call.ics">{copy.ics}</a>
+        </div>
+      </div>
+
+      <p class="muted small note">{copy.note}</p>
+      {services.bookingUrl && <p class="small">{copy.alt} <a href={services.bookingUrl} target="_blank" rel="noopener">{copy.altCal}</a></p>}
     </div>
   </section>
 </Base>
 
 <script>
+  import { byDay, googleCalendarUrl, icsEvent, slots, zonedDate, type Availability } from "../../lib/slots";
   import { isBot, isEmail, leadSink } from "../../lib/leads";
 
-  const form = document.getElementById("book-form") as HTMLFormElement;
-  const text = JSON.parse(form.dataset.text!);
-  const status = form.querySelector<HTMLElement>("[data-status]")!;
-  const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+  const root = document.getElementById("agenda") as HTMLElement;
+  const text = JSON.parse(root.dataset.text!);
+  const availability: Availability = JSON.parse(root.dataset.availability!);
+  const lang = root.dataset.lang === "es" ? "es-UY" : "en-US";
+  const visitorZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const $ = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
+  const form = $<HTMLFormElement>("[data-form]");
+  const status = $("[data-status]");
   const reason = form.querySelector<HTMLSelectElement>("select[name=reason]")!;
+  const done = document.querySelector<HTMLElement>("[data-done]")!;
 
   const preset = new URLSearchParams(location.search).get("for");
   if (preset && [...reason.options].some((o) => o.value === preset)) reason.value = preset;
+
+  const days = byDay(slots(availability, new Date()), visitorZone);
+  const dateKeys = [...days.keys()];
+  const today = zonedDate(new Date(), visitorZone).date;
+  let selectedDay = dateKeys[0] ?? "";
+  let selectedSlot: Date | null = null;
+  let weekOffset = 0;
+
+  $("[data-zone]").textContent = `${text.zone}: ${visitorZone.replace(/_/g, " ")}`;
+  const fmt = (options: Intl.DateTimeFormatOptions, zone = visitorZone) => new Intl.DateTimeFormat(lang, { timeZone: zone, ...options });
+  const dayTitle = fmt({ weekday: "long", day: "numeric", month: "long" });
+  const clock = root.dataset.lang === "es" ? { hourCycle: "h23" as const } : {};
+  const time = fmt({ hour: "2-digit", minute: "2-digit", ...clock });
+  const teamTime = fmt({ weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", ...clock }, availability.timeZone);
+  const fromKey = (key: string) => { const [y, m, d] = key.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)); };
+  const keyOf = (date: Date) => date.toISOString().slice(0, 10);
+
+  // Three weeks at a time, Monday first, starting with the current week.
+  function renderDays() {
+    const start = fromKey(today);
+    start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() + 6) % 7) + weekOffset * 21);
+    const cells: HTMLButtonElement[] = [];
+    for (let i = 0; i < 21; i++) {
+      const date = new Date(start);
+      date.setUTCDate(start.getUTCDate() + i);
+      const key = keyOf(date);
+      const free = days.get(key)?.length ?? 0;
+      const cell = document.createElement("button");
+      cell.type = "button";
+      cell.textContent = String(date.getUTCDate());
+      cell.disabled = free === 0;
+      cell.className = "day";
+      if (key === today) cell.classList.add("today");
+      if (key === selectedDay) cell.setAttribute("aria-pressed", "true");
+      cell.setAttribute("aria-label", `${fmt({ weekday: "long", day: "numeric", month: "long" }, "UTC").format(date)}${free ? "" : ` (${text.none})`}`);
+      cell.addEventListener("click", () => { selectedDay = key; selectedSlot = null; renderDays(); renderTimes(); renderChosen(); });
+      cells.push(cell);
+    }
+    $("[data-days]").replaceChildren(...cells);
+    const first = new Date(start), last = new Date(start);
+    last.setUTCDate(start.getUTCDate() + 20);
+    const month = fmt({ month: "long", year: "numeric" }, "UTC");
+    const label = month.format(first) === month.format(last) ? month.format(first) : `${month.format(first)} – ${month.format(last)}`;
+    $("[data-month]").textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    $<HTMLButtonElement>("[data-prev]").disabled = weekOffset === 0;
+    const lastKey = dateKeys[dateKeys.length - 1];
+    $<HTMLButtonElement>("[data-next]").disabled = !lastKey || keyOf(last) >= lastKey;
+  }
+
+  function renderTimes() {
+    const list = days.get(selectedDay) ?? [];
+    $("[data-day-label]").textContent = selectedDay ? dayTitle.format(list[0] ?? fromKey(selectedDay)) : text.noDay;
+    const buttons = list.map((start) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "time";
+      button.setAttribute("role", "radio");
+      button.setAttribute("aria-checked", String(selectedSlot?.getTime() === start.getTime()));
+      button.textContent = time.format(start);
+      button.addEventListener("click", () => { selectedSlot = start; renderTimes(); renderChosen(); form.querySelector<HTMLInputElement>("input[name=name]")?.focus(); });
+      return button;
+    });
+    $("[data-times]").replaceChildren(...(buttons.length ? buttons : [Object.assign(document.createElement("p"), { className: "muted", textContent: text.none })]));
+  }
+
+  function renderChosen() {
+    const box = $("[data-chosen]");
+    box.hidden = !selectedSlot;
+    if (!selectedSlot) return;
+    $("[data-chosen-local]").textContent = `${dayTitle.format(selectedSlot)}, ${time.format(selectedSlot)}`;
+    $("[data-chosen-team]").textContent = `${teamTime.format(selectedSlot)} ${text.team}`;
+  }
+
+  $("[data-prev]").addEventListener("click", () => { weekOffset = Math.max(0, weekOffset - 1); renderDays(); });
+  $("[data-next]").addEventListener("click", () => { weekOffset += 1; renderDays(); });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (isBot(form)) return;
     const data = new FormData(form);
     const value = (name: string) => String(data.get(name) ?? "").trim();
-    if (!value("name") || !isEmail(value("email"))) {
+    if (!selectedSlot || !value("name") || !isEmail(value("email"))) {
       status.textContent = text.required;
       return;
     }
+    const slot = selectedSlot;
+    const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
     button.disabled = true;
     status.textContent = text.sending;
-    const mailbox = reason.value === "prototype" ? form.dataset.emailPrototype : form.dataset.email;
-    const delivery = await leadSink({ web3formsKey: form.dataset.inbox ?? "", email: mailbox ?? "" }).send({
+    const mailbox = reason.value === "prototype" ? root.dataset.emailPrototype : root.dataset.email;
+    const delivery = await leadSink({ web3formsKey: root.dataset.inbox ?? "", email: mailbox ?? "" }).send({
       kind: reason.value === "prototype" ? "prototype" : "call",
-      language: form.dataset.lang ?? "es", name: value("name"), email: value("email"), company: value("company"),
+      language: root.dataset.lang ?? "es", name: value("name"), email: value("email"), company: value("company"),
       phone: value("phone"), message: value("message"),
-      details: { Reason: reason.value, "Preferred time": value("when"), "Time zone": Intl.DateTimeFormat().resolvedOptions().timeZone },
+      details: {
+        Reason: reason.value,
+        "Requested time (Montevideo)": `${teamTime.format(slot)} (${slot.toISOString()})`,
+        "Requested time (visitor)": `${dayTitle.format(slot)} ${time.format(slot)} ${visitorZone}`,
+      },
     });
     button.disabled = false;
-    if (delivery === "sent") {
-      form.querySelectorAll("p:not([data-status])").forEach((p) => p.setAttribute("hidden", ""));
-      status.textContent = text.sent;
-    } else {
-      const link = document.createElement("a");
-      link.href = `mailto:${mailbox}`;
-      link.textContent = mailbox ?? "";
-      status.replaceChildren(`${text.drafted} `, link, ".");
+    status.textContent = "";
+    root.hidden = true;
+    done.hidden = false;
+    const sent = delivery === "sent";
+    done.querySelector("[data-done-title]")!.textContent = sent ? text.sentTitle : text.draftedTitle;
+    const doneText = done.querySelector("[data-done-text]")!;
+    doneText.textContent = sent ? text.sent : `${text.drafted} `;
+    if (!sent) {
+      const link = Object.assign(document.createElement("a"), { href: `mailto:${mailbox}`, textContent: mailbox ?? "" });
+      doneText.append(link, ".");
     }
-    status.setAttribute("tabindex", "-1");
-    status.focus();
+    done.querySelector("[data-done-when]")!.textContent = `${dayTitle.format(slot)}, ${time.format(slot)} · ${teamTime.format(slot)} ${text.team}`;
+    done.querySelector<HTMLAnchorElement>("[data-google]")!.href = googleCalendarUrl(slot, availability.slotMinutes, text.eventTitle, text.eventText);
+    const ics = icsEvent(slot, availability.slotMinutes, text.eventTitle, text.eventText, `${slot.getTime()}@meowpany`);
+    done.querySelector<HTMLAnchorElement>("[data-ics]")!.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    done.focus();
   });
+
+  renderDays();
+  renderTimes();
 </script>
 
 <style>
-  .narrow { max-width: 760px; }
-  .pick { margin-bottom: 2rem; }
-  .pick h2 { margin-top: 0; }
-  .or { font-size: 1.3rem; }
-  select, input, textarea { width: 100%; }
+  .agenda { display: grid; grid-template-columns: 1.05fr 0.85fr 1.1fr; gap: 1rem; align-items: start; }
+  .pane { padding: 1.4rem; }
+  .pane-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .step { font-family: var(--font); font-size: 1rem; font-weight: 650; letter-spacing: 0; margin: 0 0 0.75rem; }
+  .pane-head .step { margin: 0; }
+  .arrows { display: flex; gap: 0.3rem; }
+  .arrows button, .days :global(.day), .times :global(.time) { font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 10px; }
+  .arrows button { width: 34px; height: 34px; display: grid; place-items: center; padding: 0; }
+  .arrows button:disabled { opacity: 0.35; cursor: default; }
+  .arrows :global(svg) { width: 16px; height: 16px; }
+  .month { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin: 1rem 0 0.75rem; }
+  .weekdays, .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; }
+  .weekdays span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); text-align: center; font-weight: 600; padding-bottom: 0.25rem; }
+  .days :global(.day) { aspect-ratio: 1; min-height: 38px; font-weight: 600; font-variant-numeric: tabular-nums; background: var(--brand-soft); border-color: var(--brand-line); color: var(--primary); transition: background-color 150ms, color 150ms; }
+  .days :global(.day:hover:not(:disabled)) { background: var(--primary); color: var(--primary-ink); }
+  .days :global(.day:disabled) { background: transparent; border-color: transparent; color: var(--muted); opacity: 0.55; cursor: default; font-weight: 450; }
+  .days :global(.day.today) { box-shadow: inset 0 0 0 1.5px var(--ink-2); }
+  .days :global(.day[aria-pressed="true"]) { background: var(--primary); color: var(--primary-ink); border-color: var(--primary); }
+  .zone { margin: 0 0 1rem; }
+  .day-label { font-weight: 650; margin-bottom: 0.75rem; }
+  .day-label::first-letter { text-transform: uppercase; }
+  .times { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 0.45rem; max-height: 360px; overflow-y: auto; padding-right: 0.2rem; }
+  .times :global(.time) { min-height: 40px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .times :global(.time:hover) { border-color: var(--primary); color: var(--primary); }
+  .times :global(.time[aria-checked="true"]) { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); }
+  form.pane { display: grid; gap: 0.8rem; max-width: none; }
+  form.pane label { display: grid; gap: 0.3rem; font-size: 0.92rem; }
+  form.pane .btn { margin-top: 0.4rem; }
+  .chosen { display: grid; gap: 0.15rem; padding: 0.85rem 1rem; border-radius: var(--radius); background: var(--brand-soft); border: 1px solid var(--brand-line); }
+  .chosen .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary); font-weight: 650; }
+  .chosen strong::first-letter { text-transform: uppercase; }
+  .status:empty { display: none; }
+  .status { color: var(--error); margin: 0; }
+  .done { max-width: 640px; margin: 0 auto; text-align: center; padding: 2.5rem; }
+  .done-icon { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--brand-soft); color: var(--primary); margin-bottom: 1rem; }
+  .done-icon :global(svg) { width: 28px; height: 28px; }
+  .done-when { font-weight: 650; }
+  .done-when::first-letter { text-transform: uppercase; }
+  .done .actions { justify-content: center; }
+  .note { margin-top: 1.5rem; max-width: 60rem; }
+  @media (max-width: 1020px) { .agenda { grid-template-columns: 1fr 1fr; } form.pane { grid-column: 1 / -1; } }
+  @media (max-width: 680px) { .agenda { grid-template-columns: 1fr; } }
 </style>

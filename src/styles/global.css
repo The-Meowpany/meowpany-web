@@ -126,7 +126,7 @@ strong { font-weight: 650; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   min-height: 46px; padding: 0.7rem 1.25rem; border-radius: 12px; border: 1px solid transparent;
-  font: inherit; font-size: 0.98rem; font-weight: 600; letter-spacing: -0.005em; text-decoration: none; cursor: pointer;
+  font: inherit; font-size: 0.98rem; font-weight: 600; letter-spacing: -0.005em; text-decoration: none; cursor: pointer; white-space: nowrap;
   transition: background-color 160ms var(--ease), border-color 160ms var(--ease), box-shadow 160ms var(--ease), transform 160ms var(--ease);
 }
 .btn:active { transform: translateY(1px); }

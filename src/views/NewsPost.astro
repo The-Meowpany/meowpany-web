@@ -1,0 +1,43 @@
+---
+import Base from "../layouts/Base.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { formatDate, newsPath, type Post } from "../news";
+import type { Lang } from "../i18n";
+
+interface Props { lang: Lang; post: Post }
+const { lang, post } = Astro.props;
+const html = await post.html();
+const copy = {
+  es: { back: "← Todas las novedades", ctaTitle: "¿Lo vemos con su proyecto?", ctaText: "Una llamada de 30 minutos y, en 72 horas, su idea funcionando." },
+  en: { back: "← All news", ctaTitle: "Shall we try it with your project?", ctaText: "A 30-minute call and, within 72 hours, your idea working." },
+}[lang];
+const schema = { "@context": "https://schema.org", "@type": "Article", headline: post.title, datePublished: post.date.toISOString(), description: post.summary, author: { "@type": "Organization", name: "The Meowpany" } };
+---
+<Base lang={lang} title={post.title} description={post.summary}>
+  <article>
+    <header class="page-head">
+      <div class="wrap narrow">
+        <p class="meta"><a href={newsPath(lang)}>{copy.back}</a></p>
+        <p class="meta"><span class="badge brand">{post.tag}</span><time datetime={post.date.toISOString().slice(0, 10)}>{formatDate(post.date, lang)}</time></p>
+        <h1>{post.title}</h1>
+        <p class="lead">{post.summary}</p>
+      </div>
+    </header>
+    <div class="section">
+      <div class="wrap narrow body" set:html={html}></div>
+    </div>
+  </article>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <CtaBand lang={lang} title={copy.ctaTitle} text={copy.ctaText} />
+</Base>
+<style>
+  .meta { display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .meta a { text-decoration: none; font-weight: 600; }
+  .body { font-size: 1.05rem; }
+  .body :global(h2) { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin-top: 2.25rem; }
+  .body :global(p), .body :global(li) { color: var(--ink-2); }
+  .body :global(li) { margin-bottom: 0.45rem; }
+  .body :global(table) { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .body :global(th), .body :global(td) { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
+  .body :global(thead th) { background: var(--soft); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+</style>

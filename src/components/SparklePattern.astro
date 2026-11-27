@@ -1,0 +1,92 @@
+---
+// The Meowpany sparkle pattern: a seamless grid of the four-point brand sparkle drifting diagonally,
+// each sparkle breathing (±5 % size) and swaying (±5°) on a 4-second cycle. Port of the team's
+// seamless-pattern animation. Decorative only; people who ask for less motion get it still.
+interface Props {
+  /** Distance between sparkles, in CSS pixels. */
+  spacing?: number;
+  /** Sparkle size, in CSS pixels. */
+  size?: number;
+  /** Pixels per second the pattern drifts to the right (it drifts down at half that speed). */
+  speed?: number;
+  opacity?: number;
+  color?: string;
+  class?: string;
+}
+const { spacing = 120, size = 26, speed = 18, opacity = 0.14, color = "#ca678e", class: className } = Astro.props;
+---
+<canvas class:list={["sparkle-pattern", className]} aria-hidden="true"
+  data-spacing={spacing} data-size={size} data-speed={speed} data-color={color} style={`opacity:${opacity}`}></canvas>
+
+<script>
+  // The sparkle outline on a 400 × 400 grid: four rounded tips joined by straight sides.
+  const SPARKLE = new Path2D(
+    "M177 20Q200-16 223 20L268 132L380 177Q416 200 380 223L268 268L223 380Q200 416 177 380L132 268L20 223Q-16 200 20 177L132 132Z",
+  );
+  const CYCLE = 4000;
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  for (const canvas of document.querySelectorAll<HTMLCanvasElement>("canvas.sparkle-pattern")) {
+    const context = canvas.getContext("2d");
+    if (!context) continue;
+    const spacing = Number(canvas.dataset.spacing);
+    const size = Number(canvas.dataset.size);
+    const speed = Number(canvas.dataset.speed);
+    const color = canvas.dataset.color ?? "#ca678e";
+    let width = 0;
+    let height = 0;
+    let visible = true;
+
+    const resize = () => {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.clientWidth;
+      height = canvas.clientHeight;
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    };
+
+    const draw = (time: number) => {
+      const phase = ((time % CYCLE) / CYCLE) * Math.PI * 2;
+      const moving = !still.matches;
+      const offsetX = moving ? ((time / 1000) * speed) % spacing : 0;
+      const offsetY = moving ? ((time / 1000) * speed * 0.5) % spacing : 0;
+      const scale = (size / 400) * (moving ? 1 + 0.05 * Math.sin(phase) : 1);
+      const angle = moving ? ((5 * Math.PI) / 180) * Math.sin(phase) : 0;
+      const wobble = moving ? 3 * Math.sin(phase) : 0;
+      context.clearRect(0, 0, width, height);
+      context.fillStyle = color;
+      // Rows are offset by half a step, so the grid reads as a pattern and not as a table.
+      for (let row = -1; row * spacing - offsetY < height + spacing; row++) {
+        const shift = row % 2 === 0 ? 0 : spacing / 2;
+        for (let col = -1; col * spacing - offsetX + shift < width + spacing; col++) {
+          const x = col * spacing - offsetX + shift + wobble;
+          const y = row * spacing - offsetY + wobble;
+          context.save();
+          context.translate(x, y);
+          context.rotate(angle);
+          context.scale(scale, scale);
+          context.translate(-200, -200);
+          context.fill(SPARKLE);
+          context.restore();
+        }
+      }
+    };
+
+    const loop = (time: number) => {
+      if (visible) draw(time);
+      if (!still.matches) requestAnimationFrame(loop);
+    };
+
+    resize();
+    new ResizeObserver(() => { resize(); draw(performance.now()); }).observe(canvas);
+    // Only animate while the pattern is on screen.
+    new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(canvas);
+    still.addEventListener("change", () => requestAnimationFrame(loop));
+    requestAnimationFrame(loop);
+  }
+</script>
+
+<style>
+  .sparkle-pattern { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+</style>
