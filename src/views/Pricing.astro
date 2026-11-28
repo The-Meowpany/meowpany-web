@@ -175,10 +175,12 @@ const copy = {
   .terms h3 { font-size: 1.15rem; margin-bottom: 1rem; }
   .vat { margin: 1rem 0 0; }
   .links { margin: clamp(2.5rem, 5vw, 3.5rem) auto 0; max-width: 980px; }
-  .link { display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; text-decoration: none; color: inherit; }
-  .link strong { display: block; margin-bottom: 0.25rem; font-size: 1.05rem; }
-  .link .muted { font-size: 0.93rem; }
-  .link > :global(svg) { width: 18px; height: 18px; color: var(--primary); transition: transform 200ms var(--ease); }
+  /* Icon, text and arrow all start on the same line, so two cards with different copy still line up. */
+  .link { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1rem; align-items: start; text-decoration: none; color: inherit; }
+  .link .icon { width: 40px; height: 40px; margin: 0; }
+  .link strong { display: block; margin-bottom: 0.3rem; font-size: 1.05rem; }
+  .link .muted { font-size: 0.93rem; line-height: 1.5; }
+  .link > :global(svg) { width: 18px; height: 18px; margin-top: 0.35rem; color: var(--primary); transition: transform 200ms var(--ease); }
   .link:hover > :global(svg) { transform: translateX(3px); }
   @media (max-width: 760px) { .terms { grid-template-columns: minmax(0, 1fr); gap: 2rem; } .terms > div + div { border-left: 0; padding-left: 0; } }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
