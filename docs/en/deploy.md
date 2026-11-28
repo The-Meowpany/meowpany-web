@@ -9,7 +9,8 @@ The site is plain static files published with GitHub Pages, which is free for pu
    it is secret: the keys in `src/site.ts` are public by design.
 2. In the repository settings, under **Pages**, set **Source** to **GitHub Actions**.
 3. Push to `master`, or run the `pages` workflow by hand. The site appears at
-   `https://the-meowpany.github.io/meowpany-web/`.
+   `https://meowpany.us.ci/`. The GitHub Pages address
+   (`https://the-meowpany.github.io/meowpany-web/`) redirects to the custom domain.
 4. Fill in `src/site.ts`: the Web3Forms access key (free, tied to the company inbox) and a PageSpeed
    Insights API key restricted to the site's domain (free; audits need it), and optionally the
    Cal.com booking link.
@@ -18,17 +19,24 @@ The site is plain static files published with GitHub Pages, which is free for pu
 
 ## Custom domain
 
-When `meowpany.com` is bought:
+The site is published at `https://meowpany.us.ci/`, at the root of the domain. DNS points
+`meowpany.us.ci` to `the-meowpany.github.io` with a `CNAME`, and GitHub Pages serves the site there.
 
-1. In **Pages**, set the custom domain to `meowpany.com` and turn on **Enforce HTTPS**.
-2. At the DNS provider, add the `A` and `AAAA` records GitHub lists for apex domains, and a `CNAME`
-   from `www` to `the-meowpany.github.io`. Verify the domain for the organization so nobody else can
-   claim it.
-3. Redirect `themeowpany.com` to `https://meowpany.com` at its registrar.
-4. Turn on DNSSEC, and add SPF, DKIM and DMARC records for the email provider.
+The workflow builds with `BASE_PATH="/"` and takes `SITE_URL` from the repository variable `SITE_URL`
+(or from `https://meowpany.us.ci` when it is not set). It never uses the repository name as the base
+path: on a custom domain that path does not exist, and the CSS, images and internal links return 404.
 
-The workflow reads the address from the Pages settings, so links, canonical URLs and the sitemap move
-to the new domain on the next deployment without code changes.
+To move to another domain:
+
+1. In **Pages**, set the new domain and turn on **Enforce HTTPS**.
+2. Point the domain at GitHub Pages at its DNS provider. Verify the domain for the organization so
+   nobody else can claim it.
+3. Update the repository variable `SITE_URL`.
+4. Redirect the old domain at its registrar.
+5. Turn on DNSSEC, and add SPF, DKIM and DMARC records for the email provider.
+
+`public/meowpany-web/index.html` keeps the old GitHub Pages address alive and redirects it to the
+custom domain root.
 
 ## What Pages cannot do
 

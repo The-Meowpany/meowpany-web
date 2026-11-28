@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://meowpany.us.ci/sitemap-index.xml

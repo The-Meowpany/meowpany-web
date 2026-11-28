@@ -25,11 +25,12 @@ const localizedRoutes = {
   },
 };
 
-// Canonical URLs, hreflang links and the sitemap need the public address. The Pages workflow passes
-// it in (SITE_URL and BASE_PATH, e.g. https://the-meowpany.github.io and /meowpany-web); a custom
-// domain makes BASE_PATH "/". Local builds default to the domain root.
+// Canonical URLs, hreflang links and the sitemap need the public address. The site is served from
+// the root of its custom domain, so assets and internal links are always root-relative. The Pages
+// workflow passes SITE_URL and BASE_PATH; both default to the production address here so a local
+// build produces the same paths as the deployed site.
 export default defineConfig({
-  site: process.env.SITE_URL || "https://meowpany.com",
+  site: process.env.SITE_URL || "https://meowpany.us.ci",
   base: process.env.BASE_PATH || "/",
   trailingSlash: "always",
   i18n: {

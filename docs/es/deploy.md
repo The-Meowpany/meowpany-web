@@ -9,7 +9,8 @@ El sitio son archivos estáticos que se publican con GitHub Pages, gratuito para
    nada secreto en él: las claves de `src/site.ts` son públicas por diseño.
 2. En la configuración del repositorio, en **Pages**, elegir **GitHub Actions** como **Source**.
 3. Hacer push a `master` o ejecutar a mano el workflow `pages`. El sitio queda en
-   `https://the-meowpany.github.io/meowpany-web/`.
+   `https://meowpany.us.ci/`. La dirección de GitHub Pages
+   (`https://the-meowpany.github.io/meowpany-web/`) redirige a la dirección propia.
 4. Completar `src/site.ts`: la clave de acceso de Web3Forms (gratuita, ligada al correo de la empresa),
    una clave de la API de PageSpeed Insights restringida al dominio del sitio (gratuita; la auditoría
    la necesita) y, si se quiere, el enlace de reservas de Cal.com.
@@ -18,17 +19,24 @@ El sitio son archivos estáticos que se publican con GitHub Pages, gratuito para
 
 ## Dominio propio
 
-Cuando se compre `meowpany.com`:
+El sitio se publica en `https://meowpany.us.ci/`, en la raíz del dominio. El `CNAME` del DNS apunta a
+`the-meowpany.github.io` y GitHub Pages sirve el sitio con esa dirección.
 
-1. En **Pages**, poner `meowpany.com` como dominio propio y activar **Enforce HTTPS**.
-2. En el proveedor de DNS, agregar los registros `A` y `AAAA` que GitHub indica para dominios raíz y
-   un `CNAME` de `www` a `the-meowpany.github.io`. Verificar el dominio para la organización, así nadie
-   más puede reclamarlo.
-3. Redirigir `themeowpany.com` a `https://meowpany.com` desde su registrador.
-4. Activar DNSSEC y agregar los registros SPF, DKIM y DMARC del proveedor de correo.
+El workflow compila con `BASE_PATH="/"` y toma `SITE_URL` de la variable de repositorio `SITE_URL`
+(o de `https://meowpany.us.ci` si no está definida). No se usa la ruta del repositorio como base: en un
+dominio propio esa ruta no existe y los archivos CSS, las imágenes y los enlaces internos devuelven 404.
 
-El workflow toma la dirección de la configuración de Pages, así que los enlaces, las URL canónicas y el
-mapa del sitio pasan al dominio nuevo en la siguiente publicación, sin cambiar código.
+Para cambiar de dominio:
+
+1. En **Pages**, poner el dominio nuevo y activar **Enforce HTTPS**.
+2. En el proveedor de DNS, apuntar el dominio a GitHub Pages. Verificar el dominio para la
+   organización, así nadie más puede reclamarlo.
+3. Actualizar la variable `SITE_URL` del repositorio.
+4. Redirigir el dominio anterior desde su registrador.
+5. Activar DNSSEC y agregar los registros SPF, DKIM y DMARC del proveedor de correo.
+
+La página `public/meowpany-web/index.html` mantiene viva la dirección anterior de GitHub Pages y
+redirige a la raíz del dominio propio.
 
 ## Lo que Pages no puede hacer
 

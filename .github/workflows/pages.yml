@@ -31,9 +31,11 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
-          # The public address: the-meowpany.github.io under /meowpany-web, or the custom domain at /.
-          SITE_URL: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # The custom domain serves the site at its root. Set the SITE_URL repository variable if the
+          # public address changes; never derive the base path from the repository name, because that
+          # produces /meowpany-web/ URLs that do not exist on the custom domain.
+          SITE_URL: ${{ vars.SITE_URL || 'https://meowpany.us.ci' }}
+          BASE_PATH: "/"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
