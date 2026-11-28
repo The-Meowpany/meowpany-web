@@ -182,6 +182,9 @@ const copy = {
   .link .muted { font-size: 0.93rem; line-height: 1.5; }
   .link > :global(svg) { width: 18px; height: 18px; margin-top: 0.35rem; color: var(--primary); transition: transform 200ms var(--ease); }
   .link:hover > :global(svg) { transform: translateX(3px); }
+  /* Side by side the cards are too narrow for the copy: the headline wraps in one and not the other,
+     and the paragraphs start at different heights. Below 900px they read better as a single column. */
+  @media (max-width: 940px) { .links { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 760px) { .terms { grid-template-columns: minmax(0, 1fr); gap: 2rem; } .terms > div + div { border-left: 0; padding-left: 0; } }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
   .step, .driver { position: relative; display: flex; flex-direction: column; gap: 0.5rem; }
