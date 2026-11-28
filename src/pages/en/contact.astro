@@ -9,10 +9,10 @@ const whatsapp = whatsappLink("Hi, I'd like to ask about a project.");
   <div class="channels balance">
     <a class="card channel" href={`mailto:${site.email}`}><strong>Email</strong><span>{site.email}</span><small class="muted">Any question. Within one business day.</small></a>
     <a class="card channel" href={path("book", "en")}><strong>30-minute call</strong><span>Book</span><small class="muted">By video, no strings attached.</small></a>
-    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>Our founder's WhatsApp</strong><span>{site.whatsappDisplay}</span><small class="muted">The personal number of The Meowpany's founder, who answers personally. Quick questions during business hours.</small></a>}
+    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>WhatsApp</strong><span>{site.whatsappDisplay}</span><small class="muted">Direct answers during business hours. Quick questions.</small></a>}
     <a class="card channel" href={site.linkedin} rel="noopener"><strong>LinkedIn</strong><span>The Meowpany</span><small class="muted">For companies and teams abroad.</small></a>
   </div>
-  <p class="muted small">We work remotely from Montevideo, Uruguay.</p>
+  <p class="muted small">We work remotely across Uruguay.</p>
   <h2>Ask for a quote</h2>
   <QuoteForm lang="en" preset="hours" />
 </Simple>

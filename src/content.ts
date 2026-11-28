@@ -218,10 +218,10 @@ export const tools: Record<Lang, { key: "diagnosis" | "audit" | "estimate" | "ro
 
 export const faq: Record<Lang, { q: string; a: string }[]> = {
   es: [
-    { q: "¿Cuánto tarda un proyecto?", a: "La primera versión, 72 horas desde que acordamos su alcance. Después: un sitio, de 2 a 3 semanas; una tienda, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
+    { q: "¿Cuánto tarda un proyecto?", a: "La primera versión, 72 horas desde que acordamos su alcance. Después: un sitio, de 2 a 3 semanas; una app, de 4 a 6; un sistema a medida, de 2 a 4 meses. La fecha queda escrita en la propuesta." },
     { q: "¿Cómo se paga?", a: "Nada antes de ver la primera versión funcionando. Si decide avanzar, 50 % al continuar y 50 % en la entrega; los proyectos más grandes se pagan por hitos. Aceptamos transferencia, Mercado Pago y tarjeta, también en 3 cuotas. Facturamos en dólares; los clientes de Uruguay suman IVA (22 %)." },
     { q: "¿Por qué no publican una lista de precios?", a: "Porque dos proyectos que parecen iguales rara vez lo son: cambian las funciones, las integraciones, el contenido y el plazo. En lugar de un precio genérico que después crece, medimos su proyecto, se lo mostramos funcionando y le enviamos un precio cerrado que no cambia salvo que usted amplíe el alcance. Si quiere una referencia antes de hablar, el estimador le da un rango para su caso." },
-    { q: "¿Tienen descuentos o beneficios?", a: `Sí, permanentes y por escrito: ${offers.starterSupportMonths} meses de soporte incluidos con cada sitio o tienda, ${offers.annualFreeMonths} meses sin cargo pagando el soporte anual, un mes gratis para usted y para la empresa que nos recomiende, condiciones especiales para emprendimientos nuevos, ONG y socios de cámaras con convenio, y hasta ${offers.codeOnlyInstallments} cuotas sin interés si se lleva solo el código. Están todos en la página de beneficios.` },
+    { q: "¿Tienen descuentos o beneficios?", a: `Sí, permanentes y por escrito: ${offers.starterSupportMonths} meses de soporte incluidos con cada sitio o app, ${offers.annualFreeMonths} meses sin cargo pagando el soporte anual, un mes gratis para usted y para la empresa que nos recomiende, condiciones especiales para emprendimientos nuevos, ONG y socios de cámaras con convenio, y hasta ${offers.codeOnlyInstallments} cuotas sin interés si se lleva solo el código. Están todos en la página de beneficios.` },
     { q: "¿Qué son las condiciones de lanzamiento?", a: `Los primeros ${launch.clients} clientes reciben un descuento sobre su cotización y el primer mes de soporte gratis, a cambio de que publiquemos el caso y un testimonio.` },
     { q: "¿Quién es dueño del código y del dominio?", a: "Usted. El dominio se registra a su nombre y lo desarrollado para su proyecto es suyo. Si incluimos módulos de nuestra biblioteca, recibe también su código fuente con una licencia perpetua para usarlo y modificarlo. Al terminar le entregamos el código, los accesos y los manuales." },
     { q: "¿Trabajan con la tecnología que ya usamos?", a: "Sí. Elegimos la tecnología según su problema y lo que su empresa ya usa, y la acordamos con usted en la propuesta. Como las reglas de su negocio quedan separadas de la tecnología, también se pueden integrar con sus sistemas actuales." },
@@ -230,10 +230,10 @@ export const faq: Record<Lang, { q: string; a: string }[]> = {
     { q: "¿Trabajan con empresas de fuera de Uruguay?", a: "Sí. Trabajamos en forma remota, facturamos en dólares y nuestro horario se superpone con el de la costa este de Estados Unidos." },
   ],
   en: [
-    { q: "How long does a project take?", a: "The first version, 72 hours from agreeing on its scope. Then a website takes 2 to 3 weeks, a store 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
+    { q: "How long does a project take?", a: "The first version, 72 hours from agreeing on its scope. Then a website takes 2 to 3 weeks, an app 4 to 6, a custom system 2 to 4 months. The date is written into the proposal." },
     { q: "How do payments work?", a: "Nothing before you see the first version working. If you go ahead, 50 % to continue and 50 % on delivery; larger projects are paid by milestones. We bill in US dollars." },
     { q: "Why don't you publish a price list?", a: "Because two projects that look alike rarely are: features, integrations, content and timelines differ. Instead of a generic price that grows later, we size your project, show it to you working and send a fixed price that won't change unless you widen the scope. If you want a reference before we talk, the estimator gives you a range for your case." },
-    { q: "Do you offer discounts?", a: `Yes, standing and in writing: ${offers.starterSupportMonths} months of support included with every website or store, ${offers.annualFreeMonths} months free on annual support, a free month for you and for any company you refer, terms for new businesses, non-profits and partner chambers, and up to ${offers.codeOnlyInstallments} interest-free instalments if you take the code only. They are all on the offers page.` },
+    { q: "Do you offer discounts?", a: `Yes, standing and in writing: ${offers.starterSupportMonths} months of support included with every website or app, ${offers.annualFreeMonths} months free on annual support, a free month for you and for any company you refer, terms for new businesses, non-profits and partner chambers, and up to ${offers.codeOnlyInstallments} interest-free instalments if you take the code only. They are all on the offers page.` },
     { q: "Who owns the code?", a: "You do. What we build for your project is yours. If it includes modules from our library, you also get their source code with a perpetual licence to use and change it. At hand-over you get the code, every credential and the manuals." },
     { q: "Can you work with the technology we already use?", a: "Yes. We pick the technology for your problem and what your company already runs, and agree on it in the proposal. Because your business rules are kept separate from the technology, they also integrate with your existing systems." },
     { q: "What does the warranty cover?", a: "For 60 days after go-live we fix, at no cost, anything delivered that doesn't work as the approved scope says. Changes and new features are quoted separately or covered by a support plan." },
@@ -279,7 +279,7 @@ export const firstVersion = {
     es: [
       { q: "¿Cómo funciona la propuesta?", a: "Desarrollamos una primera versión funcional de su sitio, aplicación o sistema para que la vea y la pruebe antes de decidir si quiere avanzar. Usted no paga nada hasta entonces." },
       { q: "¿En cuánto tiempo puedo ver la primera versión?", a: "En 72 horas desde que acordamos por escrito, después de la llamada, qué va a incluir." },
-      { q: "¿Qué tipo de proyectos desarrollan?", a: "Sitios web, tiendas en línea, aplicaciones web y móviles, sistemas de gestión, portales para clientes, automatizaciones e integraciones entre sistemas. Si su idea es muy grande, la primera versión cubre la parte más importante." },
+      { q: "¿Qué tipo de proyectos desarrollan?", a: "Sitios web, apps web y móviles, sistemas de gestión, portales para clientes, automatizaciones e integraciones entre sistemas. Si su idea es muy grande, la primera versión cubre la parte más importante." },
       { q: "¿Qué incluye la primera versión y qué no?", a: "Incluye las funciones principales acordadas, funcionando con datos de ejemplo y accesible con un enlace privado. Todavía no incluye la carga de sus datos reales, la publicación en tiendas de aplicaciones ni servicios de terceros con costo." },
       { q: "¿Tengo que pagar antes de verla funcionando?", a: "No. Ni anticipo ni tarjeta. Si no lo convence, no sigue y no nos debe nada. Hacemos una primera versión por cliente y proyecto." },
       { q: "¿Qué pasa con mi idea si no seguimos?", a: "Es suya y es confidencial: no la usamos ni la compartimos. Si lo pide, borramos la versión y sus datos." },
@@ -287,7 +287,7 @@ export const firstVersion = {
     en: [
       { q: "How does the offer work?", a: "We build a first working version of your website, app or system so you can see it and try it before deciding whether to go ahead. You pay nothing until then." },
       { q: "How soon can I see the first version?", a: "Within 72 hours of agreeing in writing, after the call, on what it will include." },
-      { q: "What kind of projects do you build?", a: "Websites, online stores, web and mobile apps, back-office systems, customer portals, automations and integrations. If your idea is big, the first version covers its most important part." },
+      { q: "What kind of projects do you build?", a: "Websites, web and mobile apps, back-office systems, customer portals, automations and integrations. If your idea is big, the first version covers its most important part." },
       { q: "What does the first version include, and what not?", a: "The main agreed features, working with sample data and reachable through a private link. It doesn't yet include loading your real data, publishing to app stores or paid third-party services." },
       { q: "Do I have to pay before seeing it work?", a: "No. No deposit, no card. If it doesn't convince you, you stop there and owe us nothing. We build one first version per client and project." },
       { q: "What happens to my idea if we don't continue?", a: "It's yours and it stays confidential: we don't use it or share it. If you ask, we delete the version and your data." },
@@ -363,12 +363,12 @@ export const security: Record<Lang, string[]> = {
 /** Ways to work with us, from a fixed-price project to a dedicated developer. */
 export const engagement: Record<Lang, { icon: string; name: string; best: string; text: string; terms: string[] }[]> = {
   es: [
-    { icon: "package-check", name: "Proyecto llave en mano", best: "Sitios, tiendas y sistemas con un alcance claro.", text: "Nos encargamos de todo, de la especificación a la puesta en producción.", terms: ["Precio cerrado", "Primera versión gratis en 72 horas", "Garantía de 60 días"] },
+    { icon: "package-check", name: "Proyecto llave en mano", best: "Sitios, apps y sistemas con un alcance claro.", text: "Nos encargamos de todo, de la especificación a la puesta en producción.", terms: ["Precio cerrado", "Primera versión gratis en 72 horas", "Garantía de 60 días"] },
     { icon: "refresh-cw", name: "Evolución mensual", best: "Productos que crecen mes a mes después de la entrega.", text: "Un plan con plazos de respuesta y horas de mejoras por mes.", terms: ["Plazos de respuesta por escrito", "Sin permanencia mínima", "Informe de horas usadas"] },
     { icon: "users", name: "Desarrolladores dedicados", best: "Equipos y agencias del exterior que necesitan más capacidad.", text: "Desarrolladores que se suman a su equipo, en su horario y con sus herramientas.", terms: ["Por hora o tiempo completo", "Horario compatible con EE. UU.", "Dos semanas de prueba sin penalidad"] },
   ],
   en: [
-    { icon: "package-check", name: "Turnkey project", best: "Websites, stores and systems with a clear scope.", text: "We take care of everything, from the specification to go-live.", terms: ["Fixed price", "Free first version in 72 hours", "60-day warranty"] },
+    { icon: "package-check", name: "Turnkey project", best: "Websites, apps and systems with a clear scope.", text: "We take care of everything, from the specification to go-live.", terms: ["Fixed price", "Free first version in 72 hours", "60-day warranty"] },
     { icon: "refresh-cw", name: "Monthly evolution", best: "Products that keep growing after launch.", text: "A plan with response times and improvement hours every month.", terms: ["Written response times", "No minimum term", "Report of hours used"] },
     { icon: "users", name: "Dedicated developers", best: "Teams and agencies abroad that need more capacity.", text: "Developers who join your team, in your hours and with your tools.", terms: ["Hourly or full time", "Overlap with US hours", "Two-week trial, no penalty"] },
   ],
@@ -451,11 +451,11 @@ export const modular: Record<Lang, { intro: string; points: { icon: string; titl
 /** What the company is, in the footer and wherever a short presentation is needed. */
 export const about: Record<Lang, { short: string; facts: string[] }> = {
   es: {
-    short: "The Meowpany es un estudio de ingeniería de software de Montevideo. Diseñamos y desarrollamos sitios web, tiendas en línea y software a medida para pymes de Uruguay, y sumamos desarrolladores a equipos de Estados Unidos. Cada proyecto sigue un proceso documentado de 9 etapas, con precio cerrado, y empieza con una primera versión funcional gratis en 72 horas.",
-    facts: ["100 % remoto desde Montevideo", "Español e inglés", "Cotizaciones en dólares"],
+    short: "The Meowpany es un estudio de ingeniería de software con base en Uruguay. Desarrolla sitios web, apps y sistemas a medida para pymes y organizaciones de todo el país, y suma desarrolladores a equipos del exterior.",
+    facts: ["100 % remoto en todo el país", "Español e inglés", "Cotizaciones en dólares"],
   },
   en: {
-    short: "The Meowpany is a software engineering studio in Montevideo, Uruguay. We design and build websites, online stores and custom software, and add developers to teams in the United States. Every project follows a documented 9-stage process at a fixed price, and starts with a free first working version within 72 hours.",
-    facts: ["Fully remote from Montevideo", "Spanish and English", "1 to 2 hours ahead of US Eastern"],
+    short: "The Meowpany is a software engineering studio based in Uruguay. It builds websites, apps and custom systems for businesses and organizations across the country, and adds developers to teams abroad.",
+    facts: ["Fully remote across the country", "Spanish and English", "1 to 2 hours ahead of US Eastern"],
   },
 };

@@ -49,31 +49,31 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: light;
 }
-/* Dark mode uses a dusty rose instead of the full hood pink: on charcoal the brand pink glares.
-   Buttons go deep rose with white text; pink text is a soft tint. */
+/* Dark mode uses a clean, premium palette: white tones on deep charcoal instead of dusty rose.
+   Buttons are light with dark ink, and accent marks stay subtle, not pink. */
 :root[data-theme="dark"] {
-  --brand: #c98aa3;
-  --primary: #e0a7bd;
-  --primary-hover: #f0c8d7;
-  --primary-ink: #ffffff;
-  --button: #9b4f70;
-  --button-hover: #ad5d80;
-  --button-glow: rgb(0 0 0 / 45%);
-  --glow: rgb(201 138 163 / 8%);
-  --selection: rgb(201 138 163 / 32%);
-  --brand-soft: rgb(201 138 163 / 11%);
-  --brand-line: rgb(201 138 163 / 28%);
-  --ink: #eeeaef;
-  --ink-2: #c5bfc8;
-  --muted: #938d97;
+  --brand: #ffffff;
+  --primary: #ffffff;
+  --primary-hover: #ffffff;
+  --primary-ink: #111013;
+  --button: #f5f4f5;
+  --button-hover: #fbfafa;
+  --button-glow: rgb(255 255 255 / 14%);
+  --glow: rgb(40 44 49 / 14%);
+  --selection: rgb(255 255 255 / 22%);
+  --brand-soft: rgb(255 255 255 / 14%);
+  --brand-line: rgb(255 255 255 / 32%);
+  --ink: #f7f6f7;
+  --ink-2: #d7d4db;
+  --muted: #9a959d;
   --bg: #1e1c20;
   --soft: #252227;
   --line: #36323a;
   --line-strong: #48434b;
   --surface-dark: #161417;
   --ok: #5cc28c;
-  --error: #f08a80;
-  --shadow: 0 1px 3px rgb(0 0 0 / 30%), 0 8px 24px -12px rgb(0 0 0 / 50%);
+  --error: #c1463e;
+  --shadow: 0 1px 3px rgb(0 0 0 / 32%), 0 8px 24px -12px rgb(0 0 0 / 54%);
   color-scheme: dark;
 }
 
@@ -163,8 +163,8 @@ strong { font-weight: 650; }
   transition: background-color 160ms var(--ease), border-color 160ms var(--ease), box-shadow 160ms var(--ease), transform 160ms var(--ease);
 }
 .btn:active { transform: translateY(1px); }
-.btn-primary, .btn-accent { background: var(--button); color: #ffffff; box-shadow: 0 1px 0 rgb(255 255 255 / 14%) inset, 0 6px 16px -6px var(--button-glow); }
-.btn-primary:hover, .btn-accent:hover { background: var(--button-hover); color: #ffffff; }
+.btn-primary, .btn-accent { background: var(--button); color: var(--primary-ink); box-shadow: 0 1px 0 rgb(255 255 255 / 14%) inset, 0 6px 12px -6px var(--button-glow); }
+.btn-primary:hover, .btn-accent:hover { background: var(--button-hover); color: var(--primary-ink); }
 .btn-ghost { border-color: var(--line-strong); color: var(--ink); background: var(--bg); }
 .btn-ghost:hover { border-color: var(--ink-2); color: var(--ink); }
 .btn svg { width: 18px; height: 18px; }
@@ -190,11 +190,11 @@ strong { font-weight: 650; }
 
 .check-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.55rem; }
 .check-list li { display: flex; gap: 0.6rem; align-items: flex-start; }
-.check-list li::before {
-  content: ""; flex: none; width: 18px; height: 18px; margin-top: 0.22rem; border-radius: 50%;
-  background: var(--brand-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b04f76' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 11px no-repeat;
-  border: 1px solid var(--brand-line);
-}
+  .check-list li::before {
+    content: ""; flex: none; width: 18px; height: 18px; margin-top: 0.22rem; border-radius: 50%;
+    background: var(--brand-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 11px no-repeat;
+    border: 1px solid var(--brand-line);
+  }
 .dash-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; color: var(--muted); }
 .dash-list li { padding-left: 1.1rem; position: relative; }
 .dash-list li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 8px; height: 1.5px; background: var(--line-strong); }
@@ -210,6 +210,26 @@ strong { font-weight: 650; }
 
 /* On narrow phones a long label may wrap rather than push the page sideways. */
 @media (max-width: 420px) { .btn { white-space: normal; text-align: center; } }
+
+/* Phones: tighter page gutters, larger touch targets and one clear action per row. */
+@media (max-width: 640px) {
+  .wrap { width: min(100% - 32px, var(--max)); }
+  .section { padding: 2.75rem 0; }
+  .page-head { padding: 2.25rem 0 2rem; }
+  .card { padding: 1.3rem; border-radius: 16px; }
+  .btn { min-height: 48px; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .actions .btn { width: 100%; }
+  form .btn-primary { width: 100%; }
+  form [data-rows] li button { min-height: 44px; }
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+  /* The section pills scroll sideways on a phone; the fade shows there is more. */
+  .jump {
+    padding-right: 2.4rem;
+    -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, #000 86%, transparent);
+  }
+}
 
 /* Card grids never leave a hole in their last row: the number of columns follows the number of
    cards, and an odd card out spans the whole row. */
@@ -255,6 +275,26 @@ table.compare th, table.compare td { padding: 0.95rem 1rem; border-bottom: 1px s
 table.compare thead th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; background: var(--soft); }
 table.compare tbody tr:last-child > * { border-bottom: 0; }
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg); }
+
+/* A three-column reference table becomes one card per row on a phone. */
+@media (max-width: 700px) {
+  .table-wrap.cards { overflow: visible; border: 0; border-radius: 0; background: none; }
+  .cards .compare { display: block; min-width: 0; }
+  .cards .compare thead { display: none; }
+  .cards .compare tbody { display: grid; gap: 0.8rem; }
+  .cards .compare tr {
+    display: grid; gap: 0.35rem; padding: 1rem 1.1rem;
+    border: 1px solid var(--line); border-radius: 14px; background: var(--bg);
+  }
+  .cards .compare th, .cards .compare td { display: block; width: auto; padding: 0; border: 0; text-align: left; }
+  .cards .compare th[scope="row"] { font-size: 1rem; }
+  .cards .compare td { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+  .cards .compare td::before {
+    content: attr(data-label); display: block; margin-bottom: 0.1rem;
+    color: var(--muted); font-size: 0.68rem; font-weight: 650;
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+}
 
 .sources { font-size: 0.82rem; color: var(--muted); }
 .sources a { color: var(--muted); }

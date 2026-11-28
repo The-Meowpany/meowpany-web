@@ -1,25 +1,26 @@
 ---
 import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
 import { path, type Lang, t } from "../i18n";
 import { withBase } from "../lib/url";
 import { site, whatsappLink } from "../site";
-import { about as aboutCopy } from "../content";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = t(lang);
 const year = new Date().getFullYear();
 const whatsapp = whatsappLink(copy.whatsappText);
-const about = aboutCopy[lang];
+const guide = withBase("/guia/");
 ---
 <footer class="site-footer">
-  <div class="wrap cols">
+  <div class="wrap grid">
     <div class="brand">
-      <Logo size={30} tone="light" />
-      <p>{about.short}</p>
-      <ul class="facts">{about.facts.map((fact) => <li>{fact}</li>)}</ul>
-      <p class="mail"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <Logo size={28} tone="light" />
+      <p class="blurb">{copy.footer.blurb}</p>
+      <p class="meta">{copy.footer.meta}</p>
+      <a class="email" href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a>
     </div>
+
     <nav aria-label={copy.footer.services}>
       <h2>{copy.footer.services}</h2>
       <ul>
@@ -31,17 +32,7 @@ const about = aboutCopy[lang];
         <li><a href={path("quote", lang)}>{copy.quote}</a></li>
       </ul>
     </nav>
-    <nav aria-label={copy.footer.tools}>
-      <h2>{copy.footer.tools}</h2>
-      <ul>
-        <li><a href={path("diagnosis", lang)}>{copy.nav.diagnosis}</a></li>
-        <li><a href={path("audit", lang)}>{copy.nav.audit}</a></li>
-        <li><a href={path("estimate", lang)}>{copy.nav.estimate}</a></li>
-        <li><a href={path("roi", lang)}>{copy.nav.roi}</a></li>
-        <li><a href={path("book", lang)}>{copy.nav.book}</a></li>
-        {lang === "es" && <li><a href={withBase("/guia/")}>{copy.nav.guide}</a></li>}
-      </ul>
-    </nav>
+
     <nav aria-label={copy.footer.company}>
       <h2>{copy.footer.company}</h2>
       <ul>
@@ -49,35 +40,96 @@ const about = aboutCopy[lang];
         <li><a href={path("process", lang)}>{copy.nav.process}</a></li>
         <li><a href={path("work", lang)}>{copy.nav.work}</a></li>
         <li><a href={path("partners", lang)}>{copy.nav.partners}</a></li>
-        <li><a href={path("resources", lang)}>{copy.nav.resources}</a></li>
         <li><a href={path("news", lang)}>{copy.nav.news}</a></li>
         <li><a href={path("brand", lang)}>{copy.nav.brand}</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label={copy.footer.tools}>
+      <h2>{copy.footer.tools}</h2>
+      <ul>
+        <li><a href={path("resources", lang)}>{copy.nav.resources}</a></li>
+        <li><a href={path("diagnosis", lang)}>{copy.nav.diagnosis}</a></li>
+        <li><a href={path("audit", lang)}>{copy.nav.audit}</a></li>
+        <li><a href={path("estimate", lang)}>{copy.nav.estimate}</a></li>
+        <li><a href={path("roi", lang)}>{copy.nav.roi}</a></li>
+        {lang === "es" && <li><a href={guide}>{copy.nav.guide}</a></li>}
+      </ul>
+    </nav>
+
+    <nav aria-label={copy.footer.reach}>
+      <h2>{copy.footer.reach}</h2>
+      <ul>
+        <li><a href={path("book", lang)}>{copy.nav.book}</a></li>
         <li><a href={path("contact", lang)}>{copy.nav.contact}</a></li>
-        {whatsapp && <li><a href={whatsapp} rel="noopener">{copy.whatsapp}</a></li>}
+        {whatsapp && <li><a href={whatsapp} rel="noopener" target="_blank">{copy.whatsapp}</a></li>}
+        <li><a href={site.linkedin} rel="noopener" target="_blank">LinkedIn</a></li>
       </ul>
     </nav>
   </div>
+
   <div class="wrap legal">
-    <p>© {year} The Meowpany™ · {site.city}</p>
-    <p><a href={path("privacy", lang)}>{copy.footer.privacy}</a><span aria-hidden="true"> · </span><a href={path("terms", lang)}>{copy.footer.terms}</a><span aria-hidden="true"> · </span>{copy.footer.cookies}</p>
+    <p>© {year} {site.name}™. {copy.footer.rights}</p>
+    <nav aria-label={copy.footer.legal}>
+      <a href={path("privacy", lang)}>{copy.footer.privacy}</a>
+      <a href={path("terms", lang)}>{copy.footer.terms}</a>
+    </nav>
+    <p class="cookies">{copy.footer.cookies}</p>
   </div>
 </footer>
+
 <style>
-  .site-footer { background: var(--surface-dark); color: #c9c3cb; padding: 4.5rem 0 2rem; }
-  .cols { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr repeat(3, 1fr); }
-  .brand p { font-size: 0.93rem; line-height: 1.65; max-width: 30rem; margin: 1.1rem 0 0; color: #a9a2ab; }
-  .facts { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-  .facts li { font-size: 0.78rem; color: #c9c3cb; border: 1px solid #4a454c; border-radius: 999px; padding: 0.15rem 0.6rem; }
-  .brand .mail a { color: #f3f0f2; font-weight: 600; text-decoration: none; border-bottom: 1px solid #4a454c; }
-  .brand .mail a:hover { border-color: var(--brand); }
-  h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8b848d; margin: 0.3rem 0 1rem; font-weight: 650; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.15rem; }
-  ul a { color: #ddd7de; text-decoration: none; font-size: 0.94rem; display: inline-block; padding: 0.3rem 0; }
+  .site-footer {
+    background: var(--surface-dark); color: #c9c3cb;
+    border-top: 1px solid #2b272e;
+    padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(3.5rem, 6vw, 4.5rem);
+  }
+  .grid { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: clamp(2rem, 4vw, 3rem); }
+
+  .brand .blurb { max-width: 34ch; margin: 1.1rem 0 0; color: #b8b0ba; font-size: 0.92rem; line-height: 1.65; }
+  .brand .meta { margin: 0.9rem 0 0; color: #9a939c; font-size: 0.78rem; letter-spacing: 0.02em; }
+  .email {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 1.35rem; padding-bottom: 2px;
+    color: #f3f0f2; font-size: 0.9rem; font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid #3a353c;
+  }
+  .email :global(svg) { width: 15px; height: 15px; color: #b8b0ba; flex: none; }
+  .email:hover { border-color: var(--brand); }
+
+  h2 {
+    margin: 0.15rem 0 1rem; color: #8f8892;
+    font-size: 0.7rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  ul { display: grid; gap: 0.1rem; list-style: none; margin: 0; padding: 0; }
+  ul a {
+    display: inline-block; padding: 0.3rem 0;
+    color: #cfc8d2; font-size: 0.91rem; line-height: 1.4; text-decoration: none;
+  }
   ul a:hover { color: #ffffff; }
-  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid #332f35; color: #8b848d; font-size: 0.85rem; }
+  a:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 2px; }
+
+  .legal {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start;
+    gap: 0.65rem 2rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem); padding-top: 1.4rem;
+    border-top: 1px solid #2b272e;
+    color: #9a939c; font-size: 0.82rem;
+  }
   .legal p { margin: 0; }
-  .legal a { color: #a9a2ab; text-decoration: none; }
+  .legal nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .legal a { color: #b8b0ba; text-decoration: none; }
   .legal a:hover { color: #ffffff; }
-  @media (max-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
-  @media (max-width: 480px) { .cols { grid-template-columns: 1fr; } }
+
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+    .brand { grid-column: 1 / -1; }
+    .brand .blurb { max-width: 46ch; }
+  }
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+    .brand { grid-column: 1 / -1; }
+    ul a { display: flex; align-items: center; min-height: 40px; padding: 0.35rem 0; }
+    .legal nav a { display: inline-flex; align-items: center; min-height: 40px; }
+  }
 </style>

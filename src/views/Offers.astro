@@ -12,11 +12,11 @@ const { lang } = Astro.props;
 const o = offers;
 const copy = {
   es: {
-    title: "Beneficios", description: `Beneficios de The Meowpany: ${o.starterSupportMonths} meses de soporte incluidos con su sitio o tienda, ${o.annualFreeMonths} meses gratis pagando el soporte anual, referidos, condiciones para emprendimientos, ONG y cámaras, y cuotas sin interés.`,
+    title: "Beneficios", description: `Beneficios de The Meowpany: ${o.starterSupportMonths} meses de soporte incluidos con su sitio o app, ${o.annualFreeMonths} meses gratis pagando el soporte anual, referidos, condiciones para emprendimientos, ONG y cámaras, y cuotas sin interés.`,
     h1: "Más por lo mismo, por escrito en su propuesta",
     lead: "Beneficios permanentes, sin fechas de vencimiento ni letra chica. Si le corresponde alguno, lo incluimos en la propuesta y queda en el contrato.",
     cards: [
-      { icon: "package", tag: "Sitios y tiendas", title: "Paquete de arranque", text: `Su sitio web o su tienda en línea vienen con ${o.starterSupportMonths} meses de soporte incluidos: actualizaciones, copias de seguridad y respuesta con plazos escritos. No queda solo después de la entrega.`, terms: ["Plan Básico de soporte desde el día de la puesta en producción", "Después decide si sigue, cambia de plan o no"] },
+      { icon: "package", tag: "Sitios y apps", title: "Paquete de arranque", text: `Su sitio web o su app vienen con ${o.starterSupportMonths} meses de soporte incluidos: actualizaciones, copias de seguridad y respuesta con plazos escritos. No queda solo después de la entrega.`, terms: ["Plan Básico de soporte desde el día de la puesta en producción", "Después decide si sigue, cambia de plan o no"] },
       { icon: "calendar-heart", tag: "Soporte", title: "Soporte anual", text: `Pagando un plan de soporte por un año adelantado, ${o.annualFreeMonths} de los 12 meses son sin cargo.`, terms: ["Vale para los tres planes", "Se paga una sola vez, al comienzo del año"] },
       { icon: "gift", tag: "Referidos", title: "Recomiende y ganen los dos", text: `Si nos recomienda a otra empresa y contrata un proyecto, usted recibe ${o.referralFreeMonths} mes de soporte gratis y la empresa nueva también.`, terms: ["Sin límite de recomendaciones", "El mes se suma a su plan actual o al próximo que contrate"] },
       { icon: "wallet", tag: "Solo el código", title: `Hasta ${o.codeOnlyInstallments} cuotas sin interés`, text: `Si prefiere llevarse el código sin contratar soporte, puede pagar el proyecto en hasta ${o.codeOnlyInstallments} cuotas mensuales sin interés, directamente con nosotros.`, terms: ["Recibe el código, los accesos y los manuales", "Lo mantiene usted o quien usted elija"] },
@@ -39,11 +39,11 @@ const copy = {
     ctaTitle: "Vea qué le corresponde", ctaText: "En la llamada repasamos su caso y le decimos qué beneficios aplican antes de enviarle la propuesta.",
   },
   en: {
-    title: "Offers", description: `The Meowpany offers: ${o.starterSupportMonths} months of support included with your website or store, ${o.annualFreeMonths} months free on annual support, referrals, terms for startups, non-profits and chambers, and interest-free instalments.`,
+    title: "Offers", description: `The Meowpany offers: ${o.starterSupportMonths} months of support included with your website or app, ${o.annualFreeMonths} months free on annual support, referrals, terms for startups, non-profits and chambers, and interest-free instalments.`,
     h1: "More for the same price, in writing in your proposal",
     lead: "Standing offers with no expiry dates and no fine print. If one applies to you, we include it in the proposal and it goes into the contract.",
     cards: [
-      { icon: "package", tag: "Websites and stores", title: "Starter package", text: `Your website or online store comes with ${o.starterSupportMonths} months of support included: updates, backups and replies within written times. You're not left alone after launch.`, terms: ["Basic support plan from go-live day", "Then you decide whether to continue, switch plans or stop"] },
+      { icon: "package", tag: "Websites and apps", title: "Starter package", text: `Your website or app comes with ${o.starterSupportMonths} months of support included: updates, backups and replies within written times. You're not left alone after launch.`, terms: ["Basic support plan from go-live day", "Then you decide whether to continue, switch plans or stop"] },
       { icon: "calendar-heart", tag: "Support", title: "Annual support", text: `Pay for a support plan a year in advance and ${o.annualFreeMonths} of the 12 months are free.`, terms: ["Applies to all three plans", "Paid once, at the start of the year"] },
       { icon: "gift", tag: "Referrals", title: "Refer and both win", text: `Refer another company and, if it hires a project, you get ${o.referralFreeMonths} month of support free and so does the new company.`, terms: ["No limit on referrals", "The month is added to your current plan or the next one"] },
       { icon: "wallet", tag: "Code only", title: `Up to ${o.codeOnlyInstallments} interest-free instalments`, text: `If you'd rather take the code without a support plan, you can pay for the project in up to ${o.codeOnlyInstallments} interest-free monthly instalments, directly with us.`, terms: ["You get the code, credentials and manuals", "You or whoever you choose maintains it"] },

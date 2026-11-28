@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- English pages -->
+  <url>
+    <loc>https://meowpany.us.ci/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/es/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/servicios/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/servicios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/services/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/services/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/servicios/#exterior</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/hire-developers/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/casos/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/casos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/work/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/work/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/precios/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/precios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/pricing/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/pricing/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/cotizar/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/cotizar/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/quote/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/quote/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/como-trabajamos/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/como-trabajamos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/how-we-work/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/how-we-work/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/nosotros/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/nosotros/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/about/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/about/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/recursos/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/recursos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/resources/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/resources/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/contacto/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/contacto/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/contact/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/contact/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/auditoria/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/auditoria/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/audit/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/audit/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/estimar/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/estimar/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/estimate/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/estimate/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/retorno/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/retorno/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/roi/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/roi/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/agendar/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/agendar/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/book/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/book/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/marca/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/marca/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/brand/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/brand/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/novedades/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/novedades/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/news/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/news/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/privacidad/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/privacidad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/privacy/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/privacy/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/terminos/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/terminos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/terms/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/terms/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/beneficios/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/beneficios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/offers/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/offers/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/socios/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/socios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/partners/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/partners/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/diagnostico/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/diagnostico/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/diagnosis/" />
+  </url>
+  <url>
+    <loc>https://meowpany.us.ci/en/diagnosis/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <priority>0.4</priority>
+  </url>
+</urlset>

@@ -18,15 +18,16 @@ const copy = {
     stepDay: "1. Elija el día", stepTime: "2. Elija la hora", stepYou: "3. Sus datos",
     zone: "Horarios en su zona horaria", noDay: "Elija un día del calendario.", none: "No hay horarios libres ese día.",
     weekdays: ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"], prev: "Semanas anteriores", next: "Semanas siguientes",
-    chosen: "Llamada elegida", team: "en Montevideo",
-    reason: "Motivo", reasons: { prototype: "Ver mi proyecto funcionando antes de pagar", quote: "Pedir un presupuesto", other: "Otra consulta" },
+    chosen: "Llamada elegida", team: "hora de Uruguay",
+    reason: "Motivo", reasons: { prototype: "Primera versión gratis", quote: "Pedir un presupuesto", other: "Otra consulta" },
     name: "Nombre", company: "Empresa (opcional)", email: "Correo", phone: "Teléfono o WhatsApp (opcional)", topic: "Cuéntenos su idea en pocas líneas",
     submit: "Pedir esta llamada", sending: "Enviando...", required: "Elija un horario y complete su nombre y un correo válido.",
+    reassure: "La llamada de 30 minutos es sin costo y sin compromiso.",
     sentTitle: "Pedido recibido", sent: "Le escribimos en menos de un día hábil para confirmar la llamada y enviarle el enlace de la videollamada. Mientras tanto, puede reservar el horario en su calendario.",
     draftedTitle: "Falta un paso", drafted: "Abrimos su correo con el pedido ya escrito: solo tiene que enviarlo. Si no se abrió, escríbanos a",
     google: "Agregar a Google Calendar", ics: "Descargar para otro calendario", eventTitle: "Llamada con The Meowpany (por confirmar)",
     eventText: "Videollamada de 30 minutos. Le confirmamos por correo y le enviamos el enlace.",
-    note: "Llamadas de lunes a viernes, de 10:00 a 18:00 de Montevideo, con al menos 24 horas de anticipación. El horario queda reservado cuando lo confirmamos por correo.",
+    note: "Llamadas de lunes a viernes, de 10:00 a 18:00 hora de Uruguay, con al menos 24 horas de anticipación. El horario queda reservado cuando lo confirmamos por correo.",
     alt: "¿Prefiere otro canal?", altCal: "Reservar en nuestro calendario en línea",
   },
   en: {
@@ -35,15 +36,16 @@ const copy = {
     stepDay: "1. Pick a day", stepTime: "2. Pick a time", stepYou: "3. Your details",
     zone: "Times in your time zone", noDay: "Pick a day on the calendar.", none: "No free times that day.",
     weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], prev: "Earlier weeks", next: "Later weeks",
-    chosen: "Your call", team: "in Montevideo",
-    reason: "Reason", reasons: { prototype: "See my project working before paying", quote: "Get a quote", other: "Something else" },
+    chosen: "Your call", team: "Uruguay time",
+    reason: "Reason", reasons: { prototype: "Free first version", quote: "Get a quote", other: "Something else" },
     name: "Name", company: "Company (optional)", email: "Email", phone: "Phone (optional)", topic: "Tell us your idea in a few lines",
     submit: "Request this call", sending: "Sending...", required: "Pick a time and add your name and a valid email.",
+    reassure: "The 30-minute call is free and there's no commitment.",
     sentTitle: "Request received", sent: "We'll write within one business day to confirm the call and send the video link. Meanwhile, you can hold the time in your calendar.",
     draftedTitle: "One more step", drafted: "Your email app opened with the request written out: just send it. If it didn't open, email us at",
     google: "Add to Google Calendar", ics: "Download for another calendar", eventTitle: "Call with The Meowpany (to be confirmed)",
     eventText: "30-minute video call. We'll confirm by email and send the link.",
-    note: "Calls Monday to Friday, 10:00 to 18:00 Montevideo time (1 to 2 hours ahead of US Eastern), booked at least 24 hours ahead. The time is held once we confirm it by email.",
+    note: "Calls Monday to Friday, 10:00 to 18:00 Uruguay time (1 to 2 hours ahead of US Eastern), booked at least 24 hours ahead. The time is held once we confirm it by email.",
     alt: "Prefer another way?", altCal: "Book on our online calendar",
   },
 }[lang];
@@ -94,6 +96,7 @@ const copy = {
           <label>{copy.phone}<input name="phone" type="tel" autocomplete="tel" maxlength="40" /></label>
           <label>{copy.topic}<textarea name="message" rows="3" maxlength="4000"></textarea></label>
           <label hidden>Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+          <p class="reassure small muted">{copy.reassure}</p>
           <button class="btn btn-primary" type="submit">{copy.submit}<Icon name="arrow-right" /></button>
           <p class="status" role="status" aria-live="polite" data-status></p>
         </form>
@@ -229,7 +232,7 @@ const copy = {
       phone: value("phone"), message: value("message"),
       details: {
         Reason: reason.value,
-        "Requested time (Montevideo)": `${teamTime.format(slot)} (${slot.toISOString()})`,
+        "Requested time (Uruguay)": `${teamTime.format(slot)} (${slot.toISOString()})`,
         "Requested time (visitor)": `${dayTitle.format(slot)} ${time.format(slot)} ${visitorZone}`,
       },
     });
@@ -283,6 +286,7 @@ const copy = {
   .times :global(.time:hover) { border-color: var(--primary); color: var(--primary); }
   .times :global(.time[aria-checked="true"]) { background: var(--button); border-color: var(--button); color: #ffffff; }
   form.pane { display: grid; gap: 0.8rem; max-width: none; }
+  .reassure { margin: 0; }
   form.pane label { display: grid; gap: 0.3rem; font-size: 0.92rem; }
   form.pane .btn { margin-top: 0.4rem; }
   .chosen { display: grid; gap: 0.15rem; padding: 0.85rem 1rem; border-radius: var(--radius); background: var(--brand-soft); border: 1px solid var(--brand-line); }
@@ -298,5 +302,12 @@ const copy = {
   .done .actions { justify-content: center; }
   .note { margin-top: 1.5rem; max-width: 60rem; }
   @media (max-width: 1020px) { .agenda { grid-template-columns: 1fr 1fr; } form.pane { grid-column: 1 / -1; } }
-  @media (max-width: 680px) { .agenda { grid-template-columns: 1fr; } }
+  @media (max-width: 680px) {
+    .agenda { grid-template-columns: 1fr; gap: 0.8rem; }
+    .pane { padding: 1.2rem; }
+    .arrows button { width: 44px; height: 44px; }
+    .days :global(.day) { min-height: 44px; }
+    .times :global(.time) { min-height: 44px; }
+    form.pane .btn { width: 100%; }
+  }
 </style>

@@ -1,5 +1,5 @@
-// Business details shown across the site. The WhatsApp number is the founder's personal line, and the
-// site says so wherever it appears; while it is empty the WhatsApp buttons are hidden.
+// Business details shown across the site. The WhatsApp number is the founder's personal line,
+// presented here as the company's direct WhatsApp channel; while it is empty, the buttons are hidden.
 export const site = {
   name: "The Meowpany",
   // The public contact address: an alias of the company Gmail (see inbox below).
@@ -7,7 +7,7 @@ export const site = {
   whatsapp: "59892955928", // International format without "+" or spaces.
   whatsappDisplay: "+598 92 955 928",
   linkedin: "https://www.linkedin.com/company/meowpany",
-  city: "Montevideo, Uruguay",
+  city: "Uruguay",
 };
 
 // The site is static, so the forms rely on services that work straight from the browser. Every key

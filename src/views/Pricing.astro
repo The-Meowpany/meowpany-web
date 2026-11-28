@@ -13,9 +13,9 @@ const { lang } = Astro.props;
 const ui = t(lang);
 const copy = {
   es: {
-    title: "Presupuestos", description: "Cómo se fija el precio de un sitio, una tienda o un sistema en The Meowpany: cotización según los requisitos de cada proyecto, precio cerrado por escrito y nada que pagar antes de ver la primera versión funcionando.",
+    title: "Presupuestos", description: "Cómo se fija el precio de un sitio, una app o un sistema a medida en The Meowpany: cotización según los requisitos de cada proyecto y precio cerrado por escrito.",
     h1: "Cada proyecto tiene su precio, y lo conoce antes de pagar",
-    lead: "No trabajamos con una lista de precios: un sitio de tres páginas y una tienda conectada con su facturación no cuestan lo mismo. Medimos lo que su proyecto necesita, se lo mostramos funcionando y recién ahí le enviamos un precio cerrado por escrito.",
+    lead: "No trabajamos con una lista de precios: un sitio de tres páginas y una app conectada con su facturación no cuestan lo mismo. Medimos lo que su proyecto necesita, se lo mostramos funcionando y recién ahí le enviamos un precio cerrado por escrito.",
     stepsTitle: "Cómo llega a su precio",
     steps: [
       { icon: "messages-square", title: "Conversamos", text: "Treinta minutos, sin costo, para entender qué quiere resolver y con qué trabaja hoy." },
@@ -40,25 +40,24 @@ const copy = {
       "Una demostración cada 2 semanas y garantía de 60 días.",
     ],
     payTitle: "Cómo se paga", pay: [
-      "La primera versión funcional es gratis.",
       "Si decide avanzar: 50 % al aprobar la propuesta y 50 % en la entrega.",
       "Los proyectos más grandes se pagan por hitos acordados en el contrato.",
       "Transferencia bancaria, Mercado Pago o tarjeta, también en 3 cuotas.",
       `Si se lleva solo el código, sin soporte, hasta ${offers.codeOnlyInstallments} cuotas mensuales sin interés.`,
     ],
     launchTitle: "Beneficios",
-    launchText: `Su sitio o tienda viene con ${offers.starterSupportMonths} meses de soporte incluidos, el soporte anual tiene ${offers.annualFreeMonths} meses sin cargo y, si nos recomienda, ganan los dos. Los primeros ${launch.clients} clientes tienen además un descuento sobre su cotización.`,
+    launchText: `Su sitio o app viene con ${offers.starterSupportMonths} meses de soporte incluidos, el soporte anual tiene ${offers.annualFreeMonths} meses sin cargo y, si nos recomienda, ganan los dos. Los primeros ${launch.clients} clientes tienen además un descuento sobre su cotización.`,
     offers: "Ver todos los beneficios",
     referenceTitle: "¿Quiere una referencia ahora?",
     referenceText: "Describa su sistema en el estimador: calcula un rango orientativo para su proyecto con el mismo método que usamos internamente.",
     estimate: "Estimar mi proyecto",
     supportTitle: "Planes de soporte", supportLead: `Opcionales, mes a mes y sin permanencia mínima. Pagando el año por adelantado, ${offers.annualFreeMonths} meses son sin cargo.`,
-    ctaTitle: "Pida su cotización", ctaText: "Primero le mostramos su proyecto funcionando; después le enviamos el precio cerrado.",
+    ctaTitle: "Pida su cotización", ctaText: "Cuéntenos qué necesita y le enviamos una propuesta con alcance y precio cerrado.",
   },
   en: {
-    title: "Pricing", description: "How The Meowpany prices a website, store or system: a quote built from each project's requirements, a fixed price in writing, and nothing to pay before you see the first version working.",
+    title: "Pricing", description: "How The Meowpany prices a website, app or custom system: a quote built from each project's requirements and a fixed price in writing.",
     h1: "Every project has its own price, and you know it before you pay",
-    lead: "We don't work from a price list: a three-page website and a store wired into your invoicing don't cost the same. We size what your project needs, show it to you working, and only then send a fixed price in writing.",
+    lead: "We don't work from a price list: a three-page website and an app wired into your invoicing don't cost the same. We size what your project needs, show it to you working, and only then send a fixed price in writing.",
     stepsTitle: "How you get to your price",
     steps: [
       { icon: "messages-square", title: "We talk", text: "Thirty minutes, free, to understand what you want to solve and how you work today." },
@@ -83,20 +82,19 @@ const copy = {
       "A demo every 2 weeks and a 60-day warranty.",
     ],
     payTitle: "Payment", pay: [
-      "The first working version is free.",
       "If you go ahead: 50 % when you approve the proposal and 50 % on delivery.",
       "Larger projects are paid by milestones set in the contract.",
       `Code only, without support: up to ${offers.codeOnlyInstallments} interest-free monthly instalments.`,
       "Invoices in US dollars.",
     ],
     launchTitle: "Offers",
-    launchText: `Your website or store comes with ${offers.starterSupportMonths} months of support included, annual support has ${offers.annualFreeMonths} months free and, if you refer someone, you both win. Our first ${launch.clients} clients also get a discount on their quote.`,
+    launchText: `Your website or app comes with ${offers.starterSupportMonths} months of support included, annual support has ${offers.annualFreeMonths} months free and, if you refer someone, you both win. Our first ${launch.clients} clients also get a discount on their quote.`,
     offers: "See every offer",
     referenceTitle: "Want a reference right now?",
     referenceText: "Describe your system in the estimator: it computes an indicative range for your project with the same method we use internally.",
     estimate: "Estimate my project",
     supportTitle: "Support plans", supportLead: `Optional, month to month, no minimum term. Pay a year in advance and ${offers.annualFreeMonths} months are free.`,
-    ctaTitle: "Ask for your quote", ctaText: "First we show you your project working; then we send the fixed price.",
+    ctaTitle: "Ask for your quote", ctaText: "Tell us what you need and we'll send a proposal with the scope and a fixed price.",
   },
 }[lang];
 ---

@@ -14,7 +14,7 @@ const links = lang === "es"
   ? (["services", "process", "pricing", "news"] as const)
   : (["services", "hire", "pricing", "news"] as const);
 // Only in the phone menu.
-const extra = (["firstVersion", "offers", "diagnosis", "about", "quote"] as const);
+const extra = (["firstVersion", "offers", "diagnosis", "work", "about", "contact", "quote"] as const);
 const isCurrent = (href: string) => withoutBase(current) === withoutBase(href);
 const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as keyof typeof copy.nav]);
 ---
@@ -114,6 +114,7 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
   /* The blur lives on a pseudo-element: on the header itself it would make the header the
      containing block of the fixed mobile menu and clip it. */
   .site-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid transparent; transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease); }
+  :global(body.menu-open) { overflow: hidden; }
   .site-header::before {
     content: ""; position: absolute; inset: 0; z-index: -1;
     background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: saturate(180%) blur(14px);
@@ -164,10 +165,12 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
   .toggle[aria-expanded="true"] .bars::after { transform: translateY(-4.5px) rotate(-45deg); }
 
   @media (max-width: 880px) {
+    /* Opaque on phones: blurred page headings ghosting through the bar look like a rendering bug. */
+    .site-header::before { background: var(--bg); backdrop-filter: none; }
     .toggle { display: inline-flex; }
     .nav {
-      display: none; position: fixed; inset: 64px 0 0 0; background: var(--bg); padding: 1rem 20px 2rem;
-      flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 1.5rem; overflow-y: auto;
+      display: none; position: fixed; inset: 64px 0 0 0; background: var(--bg); padding: 1rem 20px calc(2rem + env(safe-area-inset-bottom));
+      flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 1.5rem; overflow-y: auto; overscroll-behavior: contain;
     }
     .nav.open { display: flex; animation: menu-in 220ms var(--ease); }
     .nav ul { flex-direction: column; margin: 0; gap: 0; }
@@ -176,6 +179,10 @@ const label = (key: string) => (key === "quote" ? copy.quote : copy.nav[key as k
     .nav ul a::after { display: none; }
     .end { flex-wrap: wrap; justify-content: center; margin-top: auto; }
     .end .btn { flex-basis: 100%; min-height: 50px; font-size: 1rem; }
+    .toggle { min-height: 44px; }
+    .theme { width: 44px; height: 44px; }
+    .lang { min-height: 40px; padding: 0 0.7rem; }
+    .langs { padding: 2px; }
   }
   @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 </style>

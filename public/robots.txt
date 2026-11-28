@@ -1,4 +1,43 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://meowpany.us.ci/sitemap-index.xml
+# Sitemaps
+Sitemap: https://meowpany.us.ci/sitemap.xml
+
+# Hide admin and private routes
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /panel/
+
+# Hide thank you and confirmation pages
+Disallow: /gracias/
+Disallow: /confirmation/
+Disallow: /success/
+
+# Hide search pages
+Disallow: /*?s=
+
+# Hide login and auth pages
+Disallow: /login/
+Disallow: /signup/
+Disallow: /logout/
+
+# Hide API routes (except forms)
+Disallow: /api/
+
+# Allow critical assets
+Allow: /public/
+Allow: /favicon.svg
+Allow: /brand/
+
+# Specific bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 10
+
+# Max image preview
+# This is handled via meta tag in the layout, but set here as fallback

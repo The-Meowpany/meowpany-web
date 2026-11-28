@@ -1,5 +1,6 @@
 ---
 // How we compare with the usual alternatives.
+import Icon from "./Icon.astro";
 import { comparison } from "../content";
 import type { Lang } from "../i18n";
 
@@ -13,15 +14,96 @@ const last = data.columns.length - 1;
     <thead><tr>{data.columns.map((c, i) => <th scope="col" class:list={{ us: i === last }}>{c}</th>)}</tr></thead>
     <tbody>
       {data.rows.map((row) => (
-        <tr>{row.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td class:list={{ us: i === last }}>{cell}</td>))}</tr>
+        <tr>{row.map((cell, i) => (
+          i === 0 ? <th scope="row">{cell}</th> : (
+            <td class:list={{ us: i === last }}>
+              {i === last && <span class="tick"><Icon name="check" /></span>}
+              <span>{cell}</span>
+            </td>
+          )
+        ))}</tr>
       ))}
     </tbody>
   </table>
 </div>
+
+<div class="mobile-compare reveal">
+  {data.rows.map((row) => (
+    <article class="mobile-card">
+      <h3>{row[0]}</h3>
+      {row.slice(1).map((cell, i) => (
+        <div class:list={["mobile-row", { us: i === last - 1 }]}>
+          <span class="mobile-label">{data.columns[i + 1]}</span>
+          <span class="mobile-value">
+            {i === last - 1 && <span class="tick"><Icon name="check" /></span>}
+            {cell}
+          </span>
+        </div>
+      ))}
+    </article>
+  ))}
+</div>
+
 <p class="sources" style="margin-top:0.9rem">{data.note}</p>
+
 <style>
-  .versus th[scope="row"] { font-weight: 600; min-width: 13rem; }
-  .versus td { color: var(--muted); font-size: 0.94rem; }
-  .versus .us { background: var(--brand-soft); color: var(--ink); font-weight: 600; }
-  .versus thead .us { color: var(--primary); }
+  /* One fixed grid for the five columns: the criteria on the left, the four options centred. */
+  .versus { table-layout: fixed; min-width: 760px; }
+  .versus th[scope="row"] {
+    width: 26%; padding-left: 1.25rem; padding-right: 1.25rem;
+    text-align: left; vertical-align: middle; font-weight: 650; font-size: 0.95rem;
+  }
+  .versus thead th { width: 18.5%; text-align: center; vertical-align: middle; padding-block: 1.05rem; }
+  .versus thead th:first-child { width: 26%; text-align: left; }
+  .versus td {
+    text-align: center; vertical-align: middle; padding: 1rem 0.85rem;
+    color: var(--muted); font-size: 0.92rem; line-height: 1.45;
+  }
+  /* Our column: tinted, boxed and in ink, so the difference is visible at a glance. */
+  .versus .us {
+    background: color-mix(in srgb, var(--brand) 14%, var(--bg));
+    color: var(--ink); font-weight: 600;
+    box-shadow: inset 2px 0 0 var(--brand-line), inset -2px 0 0 var(--brand-line);
+  }
+  /* Dark ink on the brand fill: the column reads as the answer and keeps AA contrast in both themes. */
+  .versus thead .us {
+    background: var(--brand); color: var(--surface-dark); font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .versus td.us .tick {
+    display: inline-grid; place-items: center; width: 16px; height: 16px;
+    margin-right: 0.35rem; vertical-align: -2px; color: var(--brand);
+  }
+  .versus td.us .tick :global(svg) { width: 14px; height: 14px; stroke-width: 3; }
+  .sources { text-align: center; }
+
+  /* Phones read the comparison as one card per criterion, not as a table that scrolls sideways. */
+  .mobile-compare { display: none; }
+  @media (max-width: 860px) {
+    .table-wrap { display: none; }
+    .mobile-compare { display: grid; gap: 0.8rem; }
+    .mobile-card { border: 1px solid var(--line); border-radius: 14px; background: var(--bg); padding: 1rem 1.05rem; }
+    .mobile-card h3 { margin: 0 0 0.35rem; font-size: 0.98rem; line-height: 1.35; }
+    .mobile-row {
+      display: grid; gap: 0.12rem; padding: 0.5rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .mobile-label {
+      color: var(--muted); font-size: 0.68rem; font-weight: 650;
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+    .mobile-value { color: var(--ink-2); font-size: 0.92rem; line-height: 1.45; }
+    .mobile-row.us {
+      margin: 0.2rem -0.4rem 0; padding: 0.55rem 0.4rem;
+      border-top-color: transparent; border-radius: 8px;
+      background: color-mix(in srgb, var(--brand) 10%, var(--bg));
+    }
+    .mobile-row.us .mobile-label { color: var(--primary); }
+    .mobile-row.us .mobile-value { color: var(--ink); font-weight: 600; }
+    .mobile-row .tick {
+      display: inline-grid; place-items: center; width: 16px; height: 16px;
+      margin-right: 0.35rem; vertical-align: -2px; color: var(--brand);
+    }
+    .mobile-row .tick :global(svg) { width: 14px; height: 14px; stroke-width: 3; }
+  }
 </style>

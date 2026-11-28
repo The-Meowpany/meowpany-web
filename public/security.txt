@@ -1,0 +1,12 @@
+# Meowpany Security Contact
+contact: mailto:themeowpany+contacto@gmail.com
+
+# Preferred security.txt version
+section: https://meowpany.us.ci/.well-known/security
+
+# Security policies
+policy: https://meowpany.us.ci/terminos/
+policy: https://meowpany.us.ci/privacidad/
+
+# Assurance
+timestamp: 2026-11-28T00:00:00Z

@@ -1,23 +1,29 @@
 ---
-// A floating WhatsApp button on every page. The number is the founder's personal line, so the
-// button says who answers. It only renders once site.whatsapp holds a number.
+// A floating WhatsApp button on every page. It only renders once site.whatsapp holds a number.
 import Icon from "./Icon.astro";
 import { type Lang, t } from "../i18n";
 import { whatsappLink } from "../site";
+import { withoutBase } from "../lib/url";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const copy = t(lang);
 const href = whatsappLink(copy.whatsappText);
+// On phones the floating button would sit over the primary action of a form or a tool.
+const formPages = new Set([
+  "/agendar", "/cotizar", "/contacto", "/diagnostico", "/estimar", "/auditoria",
+  "/en/book", "/en/quote", "/en/contact", "/en/diagnosis", "/en/estimate", "/en/audit",
+]);
+const onFormPage = formPages.has(withoutBase(Astro.url.pathname).replace(/\/$/, ""));
 ---
 {href && (
-  <a class="wa-float" href={href} rel="noopener" target="_blank" aria-label={copy.whatsappNote} title={copy.whatsappNote}>
+  <a class:list={["wa-float", { "form-page": onFormPage }]} href={href} rel="noopener" target="_blank" aria-label={copy.whatsappNote} title={copy.whatsappNote}>
     <Icon name="message-circle" /><span>{copy.whatsappShort}</span>
   </a>
 )}
 <style>
   .wa-float {
-    position: fixed; right: clamp(1rem, 3vw, 1.75rem); bottom: clamp(1rem, 3vw, 1.75rem); z-index: 40;
+    position: fixed; right: clamp(1rem, 3vw, 1.75rem); bottom: calc(clamp(1rem, 3vw, 1.75rem) + env(safe-area-inset-bottom)); z-index: 40;
     display: inline-flex; align-items: center; gap: 0.5rem; min-height: 52px; padding: 0 1.15rem 0 1rem;
     border-radius: 999px; background: #1f9d55; color: #fff; font-weight: 650; text-decoration: none;
     box-shadow: 0 10px 30px -10px rgb(0 0 0 / 45%);
@@ -26,6 +32,7 @@ const href = whatsappLink(copy.whatsappText);
   }
   .wa-float:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -10px rgb(0 0 0 / 50%); }
   .wa-float :global(svg) { width: 22px; height: 22px; }
+  @media (max-width: 640px) { .wa-float.form-page { display: none; } }
   @media (max-width: 560px) { .wa-float span { display: none; } .wa-float { padding: 0; width: 54px; justify-content: center; } }
   @media print { .wa-float { display: none; } }
 </style>

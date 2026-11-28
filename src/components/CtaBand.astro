@@ -1,48 +1,87 @@
 ---
 import Icon from "./Icon.astro";
 import { path, type Lang, t } from "../i18n";
-import { whatsappLink } from "../site";
-import { withBase } from "../lib/url";
 
-interface Props { lang: Lang; title: string; text: string }
-const { lang, title, text } = Astro.props;
+interface Props { lang: Lang; title: string; text: string; note?: { text: string; href: string; label: string } }
+const { lang, title, text, note } = Astro.props;
 const copy = t(lang);
-const whatsapp = whatsappLink(copy.whatsappText);
 ---
 <section class="cta">
   <div class="wrap">
     <div class="panel reveal">
-      <img class="mark mark-light" src={withBase("/brand/mark.svg")} width="76" height="60" alt="" />
-      <img class="mark mark-dark" src={withBase("/brand/mark-dark.svg")} width="76" height="60" alt="" />
-      <div class="text">
-        <h2>{title}</h2>
-        <p>{text}</p>
+      <div class="main">
+        <div class="copy">
+          <p class="kicker">{copy.ctaKicker}</p>
+          <h2>{title}</h2>
+          <p class="lede">{text}</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-primary" href={`${path("book", lang)}?for=prototype`}>{copy.seeItWorking}<Icon name="arrow-right" /></a>
+          <a class="link" href={path("quote", lang)}>{copy.quote}<Icon name="arrow-right" /></a>
+        </div>
       </div>
-      <div class="buttons">
-        <a class="btn btn-primary" href={`${path("book", lang)}?for=prototype`}>{copy.seeItWorking}<Icon name="arrow-right" /></a>
-        <a class="btn btn-ghost on-dark" href={path("quote", lang)}>{copy.quote}</a>
-        {whatsapp && <a class="btn btn-ghost on-dark" href={whatsapp} rel="noopener"><Icon name="message-circle" />{copy.whatsapp}</a>}
-      </div>
+
+      {note && (
+        <div class="offer">
+          <span class="offer-label">{copy.ctaLaunch}</span>
+          <p>{note.text}</p>
+          <a href={note.href}>{note.label}<Icon name="arrow-right" /></a>
+        </div>
+      )}
     </div>
   </div>
 </section>
+
 <style>
-  .cta { padding: clamp(3rem, 7vw, 5.5rem) 0; }
-  /* Same cat as the rest of the page: it follows the theme. */
-  .mark-dark { display: none; }
-  .mark { animation: float 5s var(--ease) infinite; transform-origin: 50% 80%; }
-  :global([data-theme="dark"]) .mark-light { display: none; }
-  :global([data-theme="dark"]) .mark-dark { display: block; }
+  .cta { padding: clamp(2.75rem, 6vw, 4.5rem) 0; }
   .panel {
-    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem;
-    padding: clamp(1.75rem, 4vw, 3rem); border-radius: 24px; color: #f3f0f2;
-    background: radial-gradient(120% 140% at 0% 0%, rgb(202 103 142 / 28%), transparent 55%), var(--surface-dark);
-    border: 1px solid #332f35;
+    padding: clamp(1.35rem, 4vw, 2.75rem);
+    border: 1px solid var(--line); border-radius: var(--radius-lg);
+    background: var(--soft);
   }
-  h2 { color: #ffffff; margin-bottom: 0.35em; font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
-  .text p { color: #c9c3cb; margin: 0; max-width: 36rem; }
-  .buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: flex-end; }
-  .on-dark { background: transparent; color: #ffffff; border-color: #4a454c; }
-  .on-dark:hover { border-color: #ffffff; color: #ffffff; }
-  @media (max-width: 860px) { .panel { grid-template-columns: 1fr; } .buttons { justify-content: flex-start; } }
+  .main { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+  .copy { max-width: 42rem; }
+  .kicker {
+    margin: 0 0 0.55rem; color: var(--primary);
+    font-size: 0.72rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  h2 { margin: 0 0 0.45rem; color: var(--ink); font-size: clamp(1.55rem, 2.6vw, 2.1rem); }
+  .lede { margin: 0; color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.25rem; flex: none; margin: 0; }
+  .link {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    color: var(--ink); font-size: 0.94rem; font-weight: 600; text-decoration: none;
+    padding-bottom: 2px; border-bottom: 1px solid var(--line-strong);
+  }
+  .link:hover { color: var(--primary); border-color: var(--brand); }
+  .link :global(svg) { width: 16px; height: 16px; }
+
+  .offer {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.45rem 1rem;
+    margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.86rem;
+  }
+  .offer-label {
+    color: var(--ink-2); font-size: 0.7rem; font-weight: 650;
+    text-transform: uppercase; letter-spacing: 0.09em;
+  }
+  .offer p { margin: 0; flex: 1; min-width: 15rem; }
+  .offer a {
+    display: inline-flex; align-items: center; gap: 0.25rem; margin-left: auto;
+    color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .offer a:hover { color: var(--primary); }
+  .offer a :global(svg) { width: 14px; height: 14px; }
+
+  @media (max-width: 860px) {
+    .main { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+    .actions { flex-direction: column; align-items: stretch; gap: 0.85rem; }
+    .actions .btn { width: 100%; }
+    .link { justify-content: center; border-bottom: 0; }
+    .offer a { margin-left: 0; }
+  }
+  @media (max-width: 560px) {
+    .panel { padding: 1.3rem; }
+    .offer { margin-top: 1.25rem; }
+  }
 </style>

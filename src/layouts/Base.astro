@@ -6,6 +6,7 @@ import WhatsAppFloat from "../components/WhatsAppFloat.astro";
 import PartnerBar from "../components/PartnerBar.astro";
 import { alternate, type Lang, t } from "../i18n";
 import { site } from "../site";
+import { services } from "../content";
 import { withBase } from "../lib/url";
 
 interface Props {
@@ -33,6 +34,14 @@ const schema = {
   areaServed: ["UY", "US"],
   address: { "@type": "PostalAddress", addressLocality: "Montevideo", addressCountry: "UY" },
   sameAs: [site.linkedin],
+  // Additional type definitions for SEO
+  makesOffer: services[lang].map((service) => ({
+    "@type": "Service",
+    name: service.title,
+    description: service.summary,
+    areaServed: "UY",
+    provider: { "@id": "#organization" }
+  })) || undefined,
 };
 
 // GitHub Pages cannot send response headers, so the content policy travels in the page itself.
@@ -65,6 +74,12 @@ const contentPolicy = [
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="x-default" href={esUrl} />
     <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preconnect" href="https://www.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://web3forms.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://www.linkedin.com" />
+    <link rel="apple-touch-icon" href={withBase("/brand/mark.svg")} sizes="180x180" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
     <script is:inline>
       // Theme and dismissed notices are settled before the first paint, so nothing flashes.
       (() => {

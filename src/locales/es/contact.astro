@@ -9,10 +9,10 @@ const whatsapp = whatsappLink("Hola, quiero consultar por un proyecto.");
   <div class="channels balance">
     <a class="card channel" href={`mailto:${site.email}`}><strong>Correo</strong><span>{site.email}</span><small class="muted">Consultas generales. Menos de un día hábil.</small></a>
     <a class="card channel" href={path("book", "es")}><strong>Llamada de 30 minutos</strong><span>Agendar</span><small class="muted">Por videollamada, sin compromiso.</small></a>
-    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>WhatsApp directo</strong><span>{site.whatsappDisplay}</span><small class="muted">Es el número personal de quien fundó The Meowpany, que responde en persona. Consultas rápidas en horario laboral.</small></a>}
+    {whatsapp && <a class="card channel" href={whatsapp} rel="noopener"><strong>WhatsApp</strong><span>{site.whatsappDisplay}</span><small class="muted">Atención directa en horario laboral. Consultas rápidas.</small></a>}
     <a class="card channel" href={site.linkedin} rel="noopener"><strong>LinkedIn</strong><span>The Meowpany</span><small class="muted">Empresas y clientes del exterior.</small></a>
   </div>
-  <p class="muted small">Trabajamos en forma remota desde Montevideo, sin local de atención al público. Si prefiere reunirse en persona, vamos a su empresa.</p>
+  <p class="muted small">Trabajamos en forma remota en todo el país, sin local de atención al público. Si prefiere reunirse en persona, vamos a su empresa.</p>
   <h2>Pedir una cotización</h2>
   <QuoteForm lang="es" preset="website" />
 </Simple>

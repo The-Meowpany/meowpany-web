@@ -53,7 +53,9 @@ const text = copy.text.replace("{rate}", String(commissions.closer));
   .link :global(svg) { width: 14px; height: 14px; transition: transform 200ms var(--ease); }
   .go:hover .link :global(svg) { transform: translateX(3px); }
   .go:hover .text { color: var(--ink); }
-  .close { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+  .close { position: relative; flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+  /* The icon stays small, the tap area does not. */
+  .close::before { content: ""; position: absolute; inset: -8px; }
   .close:hover { background: var(--bg); color: var(--ink); }
   .close :global(svg) { width: 15px; height: 15px; }
   @keyframes bar-in { from { opacity: 0; transform: translateY(-100%); } }
