@@ -194,4 +194,7 @@ const copy = {
   .icon :global(svg) { width: 21px; height: 21px; }
   .soft .icon { background: var(--bg); }
   .drivers { display: grid; gap: 1rem; }
+  /* The four steps are cards on their own: the shared .steps frame would draw a second card around them. */
+  .steps { gap: 1rem; border: 0; border-radius: 0; background: none; overflow: visible; }
+  .steps li { border: 1px solid var(--line); margin: 0; }
 </style>
