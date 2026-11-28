@@ -20,7 +20,6 @@ export const pagePairs: PagePair[] = [
   { es: routes.estimate.es, en: routes.estimate.en },
   { es: routes.roi.es, en: routes.roi.en },
   { es: routes.book.es, en: routes.book.en },
-  { es: routes.brand.es, en: routes.brand.en },
   { es: routes.news.es, en: routes.news.en },
   { es: routes.privacy.es, en: routes.privacy.en },
   { es: routes.terms.es, en: routes.terms.en },

@@ -20,7 +20,6 @@ export const routes = {
   roi: { es: "/retorno/", en: "/en/roi/" },
   book: { es: "/agendar/", en: "/en/book/" },
   firstVersion: { es: "/#primera-version", en: "/en/#first-version" },
-  brand: { es: "/marca/", en: "/en/brand/" },
   news: { es: "/novedades/", en: "/en/news/" },
   privacy: { es: "/privacidad/", en: "/en/privacy/" },
   terms: { es: "/terminos/", en: "/en/terms/" },
@@ -35,7 +34,7 @@ export const ui = {
   es: {
     tagline: "Ingeniería de software a medida",
     skip: "Saltar al contenido",
-    nav: { services: "Servicios", work: "Casos", pricing: "Presupuestos", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis", brand: "Marca", news: "Novedades", offers: "Beneficios", partners: "Programa de socios", diagnosis: "Diagnóstico gratis", guide: "Guía para vender en línea" },
+    nav: { services: "Servicios", work: "Casos", pricing: "Presupuestos", process: "Cómo trabajamos", resources: "Recursos", hire: "Equipo para el exterior", about: "Nosotros", contact: "Contacto", audit: "Auditoría gratis", estimate: "Estimar mi proyecto", roi: "Calcular el retorno", book: "Agendar llamada", firstVersion: "Primera versión gratis", news: "Novedades", offers: "Beneficios", partners: "Programa de socios", diagnosis: "Diagnóstico gratis", guide: "Guía para vender en línea" },
     quote: "Cotizar",
     ctaKicker: "Siguiente paso",
     ctaLaunch: "Lanzamiento",
@@ -69,7 +68,7 @@ export const ui = {
   en: {
     tagline: "Custom software engineering",
     skip: "Skip to content",
-    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version", brand: "Brand", news: "News", offers: "Offers", partners: "Partner program", diagnosis: "Free diagnosis", guide: "Guide to selling online in Uruguay (Spanish)" },
+    nav: { services: "Services", work: "Work", pricing: "Pricing", process: "How we work", resources: "Resources", hire: "Hire developers", about: "About", contact: "Contact", audit: "Free audit", estimate: "Estimate my project", roi: "Calculate the return", book: "Book a call", firstVersion: "Free first version", news: "News", offers: "Offers", partners: "Partner program", diagnosis: "Free diagnosis", guide: "Guide to selling online in Uruguay (Spanish)" },
     quote: "Get a quote",
     ctaKicker: "Next step",
     ctaLaunch: "Launch",

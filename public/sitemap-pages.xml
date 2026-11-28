@@ -174,18 +174,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://meowpany.us.ci/marca/</loc>
-    <lastmod>2026-11-28</lastmod>
-    <priority>0.5</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="https://meowpany.us.ci/marca/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://meowpany.us.ci/en/brand/" />
-  </url>
-  <url>
-    <loc>https://meowpany.us.ci/en/brand/</loc>
-    <lastmod>2026-11-28</lastmod>
-    <priority>0.4</priority>
-  </url>
-  <url>
     <loc>https://meowpany.us.ci/novedades/</loc>
     <lastmod>2026-11-28</lastmod>
     <priority>0.7</priority>
